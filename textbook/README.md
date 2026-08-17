@@ -6,7 +6,7 @@ A student who studies **only** these books, types every lab, and builds the eigh
 
 **How references work.** Each day file explains the ideas in full. Links to MDN, Microsoft, Git, or Node at the end of a chapter are for **rechecking later**, not for learning the first time. If a sentence in this book and an official page disagree, note it — and still be able to explain the idea from the book.
 
-Months 1–9 are written to that standard. Do not skip a theory block because a URL looks official.
+Months 1–14 are written to that standard. Do not skip a theory block because a URL looks official.
 
 **When these books are on Git.** Students will open the Markdown files in a browser (GitHub, GitHub Pages, or another Markdown site). That is why every day uses **relative links** (`day-02.md`, `../../README.md`), tables, and **Mermaid** diagrams that GitHub can draw. If you publish the repo, keep the `textbook/` folder structure; do not flatten files or the links break.
 
@@ -31,6 +31,11 @@ Months 1–9 are written to that standard. Do not skip a theory block because a 
 | 7 | [month-07](month-07/README.md) | TanStack Query, RHF, Zod, state architecture · Project 4 finish |
 | 8 | [month-08](month-08/README.md) | Python language + tooling · Project 5 CLI |
 | 9 | [month-09](month-09/README.md) | FastAPI, Pydantic, OpenAPI · Project 6A in-memory API |
-| 10–18 | *not written yet* (one month at a time) | |
+| 10 | [month-10](month-10/README.md) | SQL and PostgreSQL · Project 6 schema / raw SQL |
+| 11 | [month-11](month-11/README.md) | SQLAlchemy, Alembic, Redis · Project 6B |
+| 12 | [month-12](month-12/README.md) | Full-stack integration · Project 7 start |
+| 13 | [month-13](month-13/README.md) | Authentication, authorization, security |
+| 14 | [month-14](month-14/README.md) | Testing, quality, reliability |
+| 15–18 | *not written yet* | |
 
 Start: [month-01/week-01/day-01.md](month-01/week-01/day-01.md) if you have not passed Month 1.

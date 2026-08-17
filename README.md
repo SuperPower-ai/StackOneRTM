@@ -10,6 +10,8 @@ Live site (after GitHub Pages is enabled):
 
 **https://superpower-ai.github.io/StackOneRTM/**
 
+Months **1–14** are in print. Months **15–18** are forthcoming.
+
 | Page | URL |
 |---|---|
 | Home | https://superpower-ai.github.io/StackOneRTM/ |
@@ -46,7 +48,7 @@ npm run preview
 3. Build the eight numbered projects from `full_stack_project_requirements_2026/` — never from a pasted solution.
 4. Do not start month N+1 until that month’s gate is true.
 
-Months **1–9** are in print. Months **10–18** are forthcoming.
+Months **1–14** are in print. Months **15–18** are forthcoming.
 
 ## Repository layout
 

@@ -1,0 +1,31 @@
+---
+import type { NavWeek } from "../lib/catalog";
+
+type Props = {
+  weeks: NavWeek[];
+  currentSlug: string;
+};
+
+const { weeks, currentSlug } = Astro.props;
+const base = import.meta.env.BASE_URL;
+if (weeks.length === 0) return;
+---
+
+<nav class="week-strip" aria-label="Days this month">
+  {weeks.map((week) => (
+    <div class="week-strip-row">
+      <span>Week {week.week}</span>
+      <div>
+        {week.days.map((day) => (
+          <a
+            href={`${base}${day.slug}/`}
+            aria-current={currentSlug === day.slug ? "page" : undefined}
+            title={day.title}
+          >
+            {day.day}
+          </a>
+        ))}
+      </div>
+    </div>
+  ))}
+</nav>

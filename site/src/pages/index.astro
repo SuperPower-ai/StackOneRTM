@@ -2,83 +2,119 @@
 import Base from "../layouts/Base.astro";
 import Header from "../components/Header.astro";
 import { MONTHS } from "../data/months";
-import { firstDaySlug, loadAllDocs } from "../lib/catalog";
+import { firstDaySlug, isPublished, loadAllDocs } from "../lib/catalog";
 
 const base = import.meta.env.BASE_URL;
 const start = `${base}${firstDaySlug()}/`;
 const docs = loadAllDocs();
 const dayCount = docs.filter((d) => d.kind === "day").length;
 const monthCount = docs.filter((d) => d.kind === "month").length;
+const phases = [...new Set(MONTHS.map((month) => month.phase))];
 ---
 
-<Base title="Full-Stack Mastery Textbook" description="An 18-month university-style textbook for the browser. Months 1–9 are in print. Read one page a day, type every lab, and build the eight projects from the specifications — never from pasted solutions.">
+<Base
+  title="Full-Stack Mastery Textbook"
+  description="An 18-month university-style textbook in the browser. Months 1–14 are in print: from the machine on your desk through tests that catch a real break. One page a day. Type every lab."
+>
   <Header current="home" />
   <main class="home" id="content">
-    <section class="hero-home">
-      <p class="eyebrow">Eighteen months · One page a day</p>
-      <h1>A modern textbook for becoming a full-stack engineer.</h1>
-      <p class="lede">
-        Read it like an article. Study it like a course. Months 1–9 are complete:
-        machine to FastAPI. You type every lab. The eight numbered projects live in
-        the specifications — this book never hands you those solutions.
-      </p>
-      <div class="cta-row">
-        <a class="btn btn-primary" href={start}>Begin Month 1, Day 1</a>
-        <a class="btn btn-ghost" href={`${base}projects/`}>Project specifications</a>
-        <a class="btn btn-ghost" href={`${base}roadmap/`}>Full roadmap</a>
+    <section class="hero-split">
+      <div class="hero-home">
+        <p class="eyebrow">A calm daily textbook · 18 months</p>
+        <h1>Study like a course. Read it like a well-made book.</h1>
+        <p class="lede">
+          One URL is one study day. The chapter explains the idea in full sentences,
+          then you type the lab. Months 1–14 are on the shelf. Projects stay in the
+          specifications — this site never pastes those solutions.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href={start}>Start with Day 1</a>
+          <a class="btn btn-ghost" href={`${base}projects/`}>Project specs</a>
+          <a class="btn btn-ghost" href={`${base}roadmap/`}>Full roadmap</a>
+        </div>
       </div>
+      <aside class="desk-card" aria-label="Your place in the book">
+        <p class="desk-kicker">Your desk</p>
+        <h2>Come back to the same page.</h2>
+        <p>
+          The site remembers the last chapter you opened on this browser.
+          Gates still matter: if a month’s gate is false, stay there.
+        </p>
+        <a class="btn btn-primary" data-home-continue hidden href={start}>Continue where you left off</a>
+        <a class="btn btn-ghost desk-fallback" href={start}>If you are new, open Day 1</a>
+        <ul class="desk-points">
+          <li>Press <kbd>/</kbd> to search any day</li>
+          <li>Light and dark stay on this device</li>
+          <li>Type labs. Do not paste project apps</li>
+        </ul>
+      </aside>
     </section>
 
     <section class="stats" aria-label="Program size">
       <div class="stat"><b>18</b><span>months in the program</span></div>
-      <div class="stat"><b>{monthCount}</b><span>months in print now</span></div>
-      <div class="stat"><b>{dayCount}</b><span>daily textbook chapters</span></div>
+      <div class="stat"><b>{monthCount}</b><span>months you can open now</span></div>
+      <div class="stat"><b>{dayCount}</b><span>daily chapters</span></div>
       <div class="stat"><b>8</b><span>projects you build yourself</span></div>
     </section>
 
-    <h2 class="section-title" id="how">How to read this book</h2>
+    <h2 class="section-title" id="how">How this book treats you</h2>
     <div class="rules">
       <article class="rule">
-        <h3>One URL, one study day</h3>
-        <p>Order is mandatory. Do not skip a gate because the calendar moved.</p>
+        <span class="rule-n">01</span>
+        <h3>You are a student, not a tourist</h3>
+        <p>Order is mandatory. A gate that is false means stay. The calendar does not promote you.</p>
       </article>
       <article class="rule">
-        <h3>The book is the lesson</h3>
-        <p>Theory is in the chapter. End-of-page links are for later rechecking, not first learning.</p>
+        <span class="rule-n">02</span>
+        <h3>The chapter is the lesson</h3>
+        <p>Theory lives here. End-of-page links are for later rechecking, not first learning.</p>
       </article>
       <article class="rule">
-        <h3>Type the labs</h3>
-        <p>Do not paste. If you cannot explain a line, it is not yours yet.</p>
+        <span class="rule-n">03</span>
+        <h3>Your hands do the work</h3>
+        <p>Type every lab. If you cannot explain a line, it is not yours yet.</p>
       </article>
       <article class="rule">
-        <h3>Projects are separate</h3>
-        <p>Specifications are here. Complete project source is never in this textbook.</p>
+        <span class="rule-n">04</span>
+        <h3>Projects are yours</h3>
+        <p>Specifications are on this site. Complete project source is never in the textbook.</p>
       </article>
     </div>
 
     <h2 class="section-title" id="months">The eighteen months</h2>
-    <div class="month-grid">
-      {MONTHS.map((month) =>
-        month.status === "published" ? (
-          <a class="month-card" href={`${base}${month.slug}/`}>
-            <span class="n">Month {String(month.number).padStart(2, "0")} · {month.phase}</span>
-            <h3>{month.title}</h3>
-            <p>{month.blurb}</p>
-            <span class="badge">In print</span>
-          </a>
-        ) : (
-          <div class="month-card disabled">
-            <span class="n">Month {String(month.number).padStart(2, "0")} · {month.phase}</span>
-            <h3>{month.title}</h3>
-            <p>{month.blurb}</p>
-            <span class="badge wait">Forthcoming</span>
+    <p class="section-lead">
+      Open a month only when the previous gate is true. Forthcoming months stay visible so you can see the path.
+    </p>
+    {
+      phases.map((phase) => (
+        <section class="phase-block" aria-labelledby={`phase-${phase.replace(/\s+/g, "-").toLowerCase()}`}>
+          <h3 class="phase-title" id={`phase-${phase.replace(/\s+/g, "-").toLowerCase()}`}>{phase}</h3>
+          <div class="month-grid">
+            {MONTHS.filter((month) => month.phase === phase).map((month) => {
+              const live = isPublished(month.number);
+              return live ? (
+                <a class="month-card" href={`${base}${month.slug}/`}>
+                  <span class="n">Month {String(month.number).padStart(2, "0")}</span>
+                  <h3>{month.title}</h3>
+                  <p>{month.blurb}</p>
+                  <span class="badge">Open the month</span>
+                </a>
+              ) : (
+                <div class="month-card disabled">
+                  <span class="n">Month {String(month.number).padStart(2, "0")}</span>
+                  <h3>{month.title}</h3>
+                  <p>{month.blurb}</p>
+                  <span class="badge wait">After the current gate</span>
+                </div>
+              );
+            })}
           </div>
-        )
-      )}
-    </div>
+        </section>
+      ))
+    }
   </main>
   <footer class="site-footer">
     <span>Full-Stack Mastery Textbook · 2026</span>
-    <span>Warm paper, signal blue, one chapter at a time.</span>
+    <span>Paper, ink, and one honest next page.</span>
   </footer>
 </Base>

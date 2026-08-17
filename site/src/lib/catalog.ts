@@ -196,14 +196,24 @@ export function buildNav(): NavMonth[] {
         }));
       if (days.length) weeks.push({ week: w, days });
     }
+    const hasContent = docs.some((d) => d.month === info.number);
     return {
       number: info.number,
       slug: info.slug,
       title: info.title,
-      status: info.status,
+      status: hasContent ? "published" : info.status,
       weeks,
     };
   });
+}
+
+export function isPublished(month: number): boolean {
+  return loadAllDocs().some((d) => d.month === month);
+}
+
+export function readingMinutes(text: string): number {
+  const words = text.split(/\s+/).filter(Boolean).length;
+  return Math.max(8, Math.round(words / 180));
 }
 
 export function searchIndex(): SearchHit[] {

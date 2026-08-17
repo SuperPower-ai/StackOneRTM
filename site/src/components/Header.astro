@@ -18,13 +18,14 @@ const catalog = searchIndex();
   </button>
   <a class="brand" href={base}>
     <span class="brand-mark">Mastery</span>
-    <span class="brand-sub">Full-Stack · 2026</span>
+    <span class="brand-sub">Daily textbook</span>
   </a>
   <nav class="header-nav" aria-label="Site">
     <a href={base} aria-current={current === "home" ? "page" : undefined}>Home</a>
-    <a href={`${base}month-01/`} aria-current={current === "read" ? "page" : undefined}>Textbook</a>
+    <a href={`${base}month-01/`} aria-current={current === "read" ? "page" : undefined}>Read</a>
     <a href={`${base}projects/`} aria-current={current === "projects" ? "page" : undefined}>Projects</a>
     <a href={`${base}roadmap/`} aria-current={current === "roadmap" ? "page" : undefined}>Roadmap</a>
+    <a class="continue-link" data-continue-link hidden href={base}>Continue</a>
     <button class="search-open" type="button" data-search-open>
       Search <span><kbd>/</kbd></span>
     </button>
@@ -37,8 +38,9 @@ const catalog = searchIndex();
 </header>
 
 <dialog class="dialog" data-search-dialog aria-label="Search the textbook">
-  <form class="search-box" method="dialog">
-    <input type="search" data-search-input placeholder="Search months, days, and projects…" autocomplete="off" />
+  <form class="search-box" method="dialog" onsubmit="return false">
+    <p class="search-hint">Jump to a month, day, or project. Press <kbd>Esc</kbd> to close.</p>
+    <input type="search" data-search-input placeholder="Try “postgres”, “Month 12”, or a day title" autocomplete="off" />
     <ul class="search-hits" data-search-hits></ul>
   </form>
 </dialog>

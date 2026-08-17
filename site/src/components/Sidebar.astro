@@ -13,9 +13,10 @@ const currentMonth = Number(currentSlug.match(/^month-(\d+)/)?.[1] || 0);
 ---
 
 <aside class="sidebar" id="sidebar">
-  <h2>Chapters</h2>
+  <h2>Your path</h2>
+  <p class="sidebar-note">One page a day. Stay until the gate is true.</p>
   {nav.map((month) => (
-    <details class="nav-month" open={month.number === currentMonth || (!currentMonth && month.number === 1)}>
+    <details class:list={["nav-month", month.status !== "published" && "is-soon"]} open={month.number === currentMonth || (!currentMonth && month.number === 1)}>
       <summary>
         <span class="nav-num">{String(month.number).padStart(2, "0")}</span>
         {month.status === "published" ? (

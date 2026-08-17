@@ -88,7 +88,7 @@ export const MONTHS: MonthInfo[] = [
     title: "SQL and PostgreSQL",
     blurb: "Relational modeling and SQL you can trust.",
     phase: "Python and backend",
-    status: "forthcoming",
+    status: "published",
   },
   {
     number: 11,
@@ -96,7 +96,7 @@ export const MONTHS: MonthInfo[] = [
     title: "SQLAlchemy, Alembic, Redis",
     blurb: "ORM, migrations, and a cache — still earned, not copied.",
     phase: "Python and backend",
-    status: "forthcoming",
+    status: "published",
   },
   {
     number: 12,
@@ -104,7 +104,7 @@ export const MONTHS: MonthInfo[] = [
     title: "Full-Stack Integration",
     blurb: "One product: browser, API, and database in conversation.",
     phase: "Full-stack application",
-    status: "forthcoming",
+    status: "published",
   },
   {
     number: 13,
@@ -112,7 +112,7 @@ export const MONTHS: MonthInfo[] = [
     title: "Authentication, Authorization, Security",
     blurb: "Sessions, tokens, permissions, and threat models.",
     phase: "Full-stack application",
-    status: "forthcoming",
+    status: "published",
   },
   {
     number: 14,
@@ -120,7 +120,7 @@ export const MONTHS: MonthInfo[] = [
     title: "Testing, Quality, Reliability",
     blurb: "Tests that protect a real system, not a tutorial.",
     phase: "Full-stack application",
-    status: "forthcoming",
+    status: "published",
   },
   {
     number: 15,

@@ -111,4 +111,4 @@ Same as Month 1. Week 4 Day 7 is the Month 9 exam + gate.
 
 Open [week-01/day-01.md](week-01/day-01.md).
 
-When Month 9’s gate is true, Month 10 (SQL / PostgreSQL) is next — not written until this month is done.
+When Month 9’s gate is true, continue with [Month 10 — SQL and PostgreSQL](../month-10/README.md).

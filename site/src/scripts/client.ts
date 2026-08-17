@@ -113,12 +113,18 @@ function bindSearch() {
       ? catalog.filter((item) => `${item.title} ${item.kicker || ""} ${item.href}`.toLowerCase().includes(q))
       : catalog.filter((item) => item.kind === "month")
     ).slice(0, 12);
+    const kindLabel: Record<string, string> = {
+      month: "Month",
+      day: "Day",
+      project: "Project",
+      "projects-index": "Projects",
+    };
     list.innerHTML = hits
       .map(
         (hit) =>
-          `<li><a href="${base}${hit.href}/"><strong>${hit.title}</strong><small>${hit.kicker || hit.kind}</small></a></li>`,
+          `<li><a href="${base}${hit.href}/"><strong>${hit.title}</strong><small>${hit.kicker || kindLabel[hit.kind] || hit.kind}</small></a></li>`,
       )
-      .join("");
+      .join("") || `<li class="search-empty">Nothing matches yet. Try “join”, “session”, or “Month 10”.</li>`;
   };
 
   const open = () => {
@@ -154,3 +160,36 @@ bindToc();
 bindNav();
 bindSearch();
 bindTheme();
+rememberPlace();
+showContinue();
+
+function rememberPlace() {
+  const article = document.querySelector<HTMLElement>("[data-read-slug]");
+  if (!article?.dataset.readSlug) return;
+  localStorage.setItem(
+    "fsm-continue",
+    JSON.stringify({
+      slug: article.dataset.readSlug,
+      title: article.dataset.readTitle || article.dataset.readSlug,
+    }),
+  );
+}
+
+function showContinue() {
+  try {
+    const raw = localStorage.getItem("fsm-continue");
+    if (!raw) return;
+    const saved = JSON.parse(raw) as { slug: string; title: string };
+    document.querySelectorAll<HTMLAnchorElement>("[data-continue-link], [data-home-continue]").forEach((link) => {
+      link.hidden = false;
+      link.href = `${base}${saved.slug}/`;
+      if (link.hasAttribute("data-home-continue")) {
+        link.hidden = false;
+        link.textContent = `Continue: ${saved.title}`;
+        document.querySelector(".desk-fallback")?.setAttribute("hidden", "hidden");
+      }
+    });
+  } catch {
+    /* ignore */
+  }
+}

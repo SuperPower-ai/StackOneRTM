@@ -1,0 +1,31 @@
+---
+import type { NavWeek } from "../lib/catalog";
+
+type Props = {
+  weeks: NavWeek[];
+  monthTitle: string;
+};
+
+const { weeks, monthTitle } = Astro.props;
+const base = import.meta.env.BASE_URL;
+if (weeks.length === 0) return;
+---
+
+<section class="chapter-grid" aria-label={`Days in ${monthTitle}`}>
+  <h2 class="chapter-grid-title">This month, day by day</h2>
+  {weeks.map((week) => (
+    <div class="chapter-week">
+      <h3>Week {week.week}</h3>
+      <ol>
+        {week.days.map((day) => (
+          <li>
+            <a href={`${base}${day.slug}/`}>
+              <em>Day {day.day}</em>
+              <span>{day.title}</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </div>
+  ))}
+</section>

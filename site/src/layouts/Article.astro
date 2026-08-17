@@ -4,8 +4,11 @@ import Header from "../components/Header.astro";
 import Sidebar from "../components/Sidebar.astro";
 import Toc from "../components/Toc.astro";
 import PrevNext from "../components/PrevNext.astro";
+import WeekStrip from "../components/WeekStrip.astro";
+import ChapterGrid from "../components/ChapterGrid.astro";
 import type { DocRecord } from "../lib/catalog";
 import type { TocItem } from "../lib/markdown";
+import { buildNav, readingMinutes } from "../lib/catalog";
 import { monthInfo } from "../data/months";
 
 type Props = {
@@ -21,7 +24,9 @@ const { doc, html, toc, prev, next, section = "read" } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const withBase = (slug: string) => `${base}${slug.replace(/^\/+/, "")}${slug.endsWith("/") ? "" : "/"}`;
 const info = doc.month ? monthInfo(doc.month) : undefined;
-const crumbs: { href: string; label: string }[] = [{ href: base, label: "Textbook" }];
+const monthNav = doc.month ? buildNav().find((m) => m.number === doc.month) : undefined;
+const minutes = readingMinutes(`${doc.title} ${doc.body}`);
+const crumbs: { href: string; label: string }[] = [{ href: base, label: "Home" }];
 if (doc.kind === "roadmap") crumbs.push({ href: withBase("roadmap"), label: "Roadmap" });
 if (doc.kind === "projects-index" || doc.kind === "project") {
   crumbs.push({ href: withBase("projects"), label: "Projects" });
@@ -35,10 +40,19 @@ if (doc.month) {
 if (doc.week) crumbs.push({ href: withBase(doc.slug), label: `Week ${doc.week}` });
 if (doc.day) crumbs.push({ href: withBase(doc.slug), label: `Day ${doc.day}` });
 
+const monthDays = monthNav?.weeks.flatMap((week) => week.days) ?? [];
+const dayIndex = monthDays.findIndex((day) => day.slug === doc.slug);
+const place =
+  doc.week && doc.day
+    ? `Week ${doc.week} · Day ${doc.day}`
+    : doc.kind === "month"
+      ? "Month index"
+      : undefined;
 const chips = [
-  doc.meta["Phase"],
+  place,
+  dayIndex >= 0 ? `${dayIndex + 1} of ${monthDays.length} this month` : undefined,
   doc.meta["Week rhythm today"],
-  doc.meta["Study time"],
+  `${minutes} min read`,
   info?.phase,
 ].filter((value, index, all): value is string => Boolean(value) && all.indexOf(value) === index);
 ---
@@ -49,7 +63,13 @@ const chips = [
   <div class="shell">
     <Sidebar currentSlug={doc.slug} />
     <div class="article-wrap">
-      <article class="article" id="content" data-pagefind-body>
+      <article
+        class="article"
+        id="content"
+        data-pagefind-body
+        data-read-slug={doc.slug}
+        data-read-title={doc.kicker || doc.title}
+      >
         <nav class="crumbs" aria-label="Breadcrumb">
           {crumbs.map((c, i) => (
             <>
@@ -67,8 +87,12 @@ const chips = [
               {chips.map((chip) => <span class="chip">{chip}</span>)}
             </div>
           )}
+          {monthNav && <WeekStrip weeks={monthNav.weeks} currentSlug={doc.slug} />}
         </header>
         <div class="content" set:html={html} />
+        {doc.kind === "month" && monthNav && (
+          <ChapterGrid weeks={monthNav.weeks} monthTitle={doc.title} />
+        )}
         <PrevNext prev={prev} next={next} />
       </article>
     </div>
