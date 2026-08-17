@@ -217,3 +217,85 @@ Write `RECITE.txt` with one honest sentence per line.
 - [ ] not product dump  
 
 If a line is mush, re-read this file only.
+
+---
+
+# Extra lecture — load then compare
+
+401 first. Load the row. Compare `owner_id`. Deny without leaking the other gardener’s label. PATCH the fields you allow. Create sets owner from the **user**, not the JSON.
+
+Garden plots. Two users. pytest. Not the product. Not `X-User-Id` in production.
+
+If list is filtered but PATCH is not, you are not done.  
+If PATCH is checked but create accepts `owner_id` from the body, you are not done.
+
+Ignore body `owner_id` on PATCH unless transfer is a documented feature (today it is not).
+
+Statuses: PATCH 200 own; 401 none; 403 or 404 other. Document in `ROUTES.txt`.
+
+```powershell
+uv run pytest -q
+uv run uvicorn main:app --reload --host 127.0.0.1 --port 8000
+```
+
+`curl.exe` with two headers for two users. Predict deny **before** you run. `PREDICT.txt`.
+
+Lab: `~\fullstack-lab\month-13\week-04\day-03\`. Day 4 will make the deny test ceremonial. Today you still write **one** deny test so memory day is real.
+
+SQL extra belt: `where(Plot.id == plot_id, Plot.owner_id == user.id)` then 404 if no row.
+
+---
+
+# Spec table
+
+| Method | Path | Rules |
+|---|---|---|
+| POST | `/plots` | 201; owner = current user |
+| GET | `/plots` | only own |
+| GET | `/plots/{id}` | own 200; other 403/404 |
+| PATCH | `/plots/{id}` | own 200; other denied; no owner change |
+
+Tests: two users; B denied on A’s id; B’s list empty of A’s plot.
+
+`NOT-PRODUCT.txt`. Lab auth header or session sketch.
+
+`lookups.txt` if you opened Day 2 after 25 minutes.
+
+`~\fullstack-lab\month-13\week-04\day-03\`. `uv init --name lab-garden-plots`.
+
+The best AuthZ looks like three lines and a test. Clever “signed ids” without a check still fail when the id leaks.
+
+Do not return the other user’s plot in 403 `detail`.
+
+`PREDICT.txt` before two-user curl. If B’s PATCH is 200, the memory day failed — add the compare before you commit.
+
+`uv run pytest -q`. Bind `127.0.0.1`. `curl.exe` optional. Day 4 makes the deny test ceremonial; today you still write one deny test.
+
+POST body `owner_id` of someone else still stores **you**. GET list as B does not include A. PATCH without header is 401.
+
+`~\fullstack-lab\month-13\week-04\day-03\`. Garden plots. Not the product.
+
+Create ignores forged `owner_id`. List filters. PATCH compares. One deny test today; four tomorrow.
+
+If you skip the deny test because “Day 4 will do it,” memory day failed. Write it today.
+
+`lookups.txt`. `NOT-PRODUCT.txt`. Two users in pytest. Garden plots.
+
+PATCH without a user is 401, not “not owner.” Order of checks: AuthN, load, compare.
+
+Day 4 will demand four tests. Today’s one deny test is the seed. Do not skip it.
+
+Garden plots. Two users. Owner from session. Wrong user denied. That is memory day.
+
+Commit. Do not paste Project 7. Day 4 is the ceremonial deny suite.
+
+
+
+
+
+
+
+
+
+
+

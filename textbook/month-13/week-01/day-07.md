@@ -281,3 +281,25 @@ Write `RECITE.txt` with one honest sentence per line.
 
 `uv run pytest -q`. Debug A–E in sentences.
 If any answer is an exploit recipe, delete it and write a defense.
+
+---
+
+# Extra lecture — the week is one chain
+
+Hash without a session is a stored secret that never logs anyone in.
+A session without flags is a handle page script can read.
+Flags without generic 401 still leak who exists.
+AUTH.md without code is a plan; code without AUTH.md is a tutorial leftover.
+
+**Dummy hash:** if the mini skipped it, name it in retro as Week 1 debt.
+**JWT:** if exam-01 still says “JWT because FastAPI,” rewrite from this synthesis.
+**localStorage:** if design.md still likes it for a 30-day token, rewrite.
+
+Heralds (or your Day 7 noun) live in `~\fullstack-lab\month-13\week-01\day-07\mini`. Not Project 7. `uv run pytest -q`. Bind `127.0.0.1` if you run Uvicorn. `curl.exe` for Set-Cookie.
+
+Week 2 is OAuth **words**, reset **tokens**, verify **inbox proof**. Not a reason to skip hashing.
+Do not start Week 2 if the mini is red.
+
+If two 401 bodies differ by a space, they differ. Compare `json()` equality.
+If session value is `"1"`, randomness failed. `secrets.token_urlsafe`.
+

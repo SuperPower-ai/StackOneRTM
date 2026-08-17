@@ -241,3 +241,40 @@ Notes are the noun. PostgreSQL is the record. `model_dump` is v2.
 - [ ] key version  
 - [ ] fakeredis reload caveat  
 - [ ] not ops-api
+
+If a line is mush, re-read the recap in **this** file only.
+
+---
+
+## Office hours (memory day)
+
+**X-Cache always MISS.** You SET after return, or FastAPI created two redis clients, or `--reload` restarted fakeredis between curls. Hold the server still. Print the key in a debug log **without** printing payloads that might be secret — `text` is fine here.
+
+**X-Cache always HIT empty after POST.** Wrong key on DEL, or GET builds JSON from cache before POST returns, or you GET a different path (`/note` vs `/notes`). Grep the key string. There should be **one**.
+
+**JSON decode error on HIT.** You SET Python `str(list)` instead of `json.dumps`. Use `model_dump()` then dumps. Bump `v2` if you change Out.
+
+**IntegrityError on POST, then empty cache.** You deleted the key **before** commit. Commit first; on failure skip DEL.
+
+Windows: `curl.exe`, `body.json`, `$env:DATABASE_URL`. `psql -d month11_w3d3 -c "SELECT id, text FROM notes;"`. Bind 127.0.0.1. `select()` not `Query()`.
+
+If Postgres insert works and cache never HIT, you may be reconstructing the list from SQL every time because `get` returns None — FakeRedis not shared with the app. Depends injection, same object.
+
+---
+
+## Predicted curl statuses
+
+| Step | X-Cache | Body |
+|---|---|---|
+| GET empty first | MISS | `[]` |
+| GET empty second (same process) | HIT | `[]` |
+| POST valid | — | 201 + id |
+| GET after POST | MISS then list with text | 200 |
+
+If step 4 is HIT `[]`, invalidation failed. If POST is 200, `status_code=201`.
+
+`STAMPEDE.txt` two sentences. `REDIS.md` fakeredis vs process. `RELOAD.txt` if you reloaded.
+
+Windows: `uv run uvicorn main:app --reload --host 127.0.0.1 --port 8000` then **stop reload experiments** during the HIT sequence, or accept fakeredis reset.
+
+Notes are the noun. No Mongo. No `Query()`. `model_dump` for the cached payload.

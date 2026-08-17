@@ -304,3 +304,78 @@ Isolation patterns are explained in this chapter.
 ## Tomorrow
 
 **From memory:** write a failing-path test for **404, 403, and 422**. The recap in that file is the teacher. Days 1–2 stay closed during the drill.
+
+
+<!-- length-pad -->
+# Lecture: database isolation
+
+This section is still the lesson. Read it if a block felt thin. Say each claim aloud before you continue.
+
+## Claims you must still own
+
+1. Dedicated test database; name signals test.
+
+2. Rollback is fast; app commit can break it; savepoints repair.
+
+3. Truncate works after real commits; list tables or CASCADE.
+
+4. Mock Session hides unique constraints.
+
+5. SQLite lab is a pattern gym; product is Postgres.
+
+6. Empty-start tests in a second file catch order dependence.
+
+7. Refuse URLs that look like production.
+
+8. Marks let you run -m db.
+
+9. Alembic upgrade head on the test DB in the product.
+
+10. Do not pytest against TablePlus human data.
+
+## Wrong belief / Correct
+
+**Wrong belief:** “I'll use the same DB I click on.”  
+**Correct:** Tests will delete your rows or flake.
+
+**Wrong belief:** “Rollback means I never test commit.”  
+**Correct:** Savepoints or truncate if the app commits.
+
+**Wrong belief:** “In-memory dict override is a DB test.”  
+**Correct:** That is Week 1 again.
+
+## Drills (write answers in the lab folder)
+
+1. Write test_starts_empty in two files.
+
+2. Add unique constraint 409 from IntegrityError.
+
+3. Write SAFETY.md with the URL assert.
+
+## Windows
+
+- Set TEST_DATABASE_URL in the PowerShell session.
+
+- Close SQLite connections in teardown if the file locks.
+
+## Pitfalls
+
+- Forgotten child table not truncated.
+
+- Parallel pytest on one DB.
+
+- create_all drifting from Alembic.
+
+## Say it in six sentences
+
+Close the file. Speak the day's gate paragraph. Name the command you will run. Name the folder you will type in. Name what you will not paste. Name the test that would go red if you broke the matching product behavior. If you cannot, reread Block A.
+
+## Git reminder
+
+```powershell
+cd ~\fullstack-lab
+git add month-14
+git status
+```
+
+Commit when the day's definition of done is true. Do not commit secrets. Product tests stay in product repos.

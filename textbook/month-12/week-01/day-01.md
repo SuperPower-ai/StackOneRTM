@@ -341,3 +341,63 @@ Fetch and Vite env are explained in this chapter. These pages are for later chec
 
 - [MDN: Using the Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch)
 - [Vite: Env variables](https://vitejs.dev/guide/env-and-mode.html)
+
+---
+
+# Lab notebook — files you should actually have
+
+```
+month-12/week-01/day-01/
+  lab-api/          (or you pointed at 6B)
+    main.py
+  lab-client/       Vite react-ts
+    .env
+    .env.example
+    src/api/client.ts
+    src/api/types.ts
+    src/api/projects.ts   (or your noun)
+    src/App.tsx           no fetch(
+```
+
+`npm create vite@latest lab-client -- --template react-ts` — extra `--` required on Windows npm. Later this month: `npm install react-router` and `import { BrowserRouter } from "react-router"`. Query is Day 4: `useQuery({ queryKey, queryFn })` with **`isPending`**, not a homemade `loading` boolean you forget to clear.
+
+If the stub returns Pydantic models, serialize with **`model_dump()`**. Do not call `.dict()`.
+
+Prove HTTP with **`curl.exe`** before you blame React:
+
+```powershell
+curl.exe -s http://127.0.0.1:8000/projects
+```
+
+**Wrong belief:** “The client can `as Project[]` because I wrote the API.”  
+**Correct:** treat `response.json()` as `unknown` and narrow. Day 5 tests will punish the cast.
+
+**Wrong belief:** “I’ll add Axios so I do not think about `ok`.”  
+**Correct:** Axios still needs a wrapper. `fetch` plus `ApiError` is enough.
+
+```mermaid
+sequenceDiagram
+  participant P as Page
+  participant A as api.getJson
+  participant F as fetch
+  participant S as FastAPI
+  P->>A: listProjects()
+  A->>F: GET VITE_API_BASE/projects
+  F->>S: HTTP
+  S-->>F: 200 JSON
+  F-->>A: unknown
+  A-->>P: Project[] or ApiError
+```
+
+## Recite-back checklist
+
+Write `RECITE.txt`.
+
+- [ ] one client module owns fetch
+- [ ] VITE_API_BASE is public
+- [ ] throw on !ok
+- [ ] JSON unknown then type
+- [ ] curl.exe proved the stub
+- [ ] Vite extra --
+- [ ] no secrets in the bundle
+- [ ] Query sits on this client tomorrow-plus-two

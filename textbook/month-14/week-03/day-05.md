@@ -243,3 +243,149 @@ Light a11y testing is explained in this chapter.
 ## Tomorrow
 
 **Independent:** component tests for **your** list/detail — MSW, role and name, loading/empty/error, light axe if it fits.
+
+
+<!-- length-pad -->
+# Lecture: light axe plus names
+
+This section is still the lesson. Read it if a block felt thin. Say each claim aloud before you continue.
+
+## Claims you must still own
+
+1. Axe is a smoke alarm.
+
+2. Keep getByRole tests.
+
+3. Unlabeled input must go red.
+
+4. Fix markup, not skip label rules.
+
+5. Contrast in jsdom is limited; you may disable THAT rule with a note.
+
+6. Axe misses keyboard traps and confusing copy.
+
+7. Green axe is not Month 2 done forever.
+
+8. status vs alert live regions.
+
+9. Dialog named via aria-labelledby.
+
+10. One axe test on login and one on list is enough this week.
+
+11. Icon buttons need aria-label.
+
+12. index.html lang=en.
+
+## Wrong belief / Correct
+
+**Wrong belief:** “jest-axe replaces RTL queries.”  
+**Correct:** Both.
+
+**Wrong belief:** “Disable label rules because placeholders.”  
+**Correct:** Never.
+
+**Wrong belief:** “We ran axe so we are accessible.”  
+**Correct:** Humans and keyboards still matter.
+
+## Drills (write answers in the lab folder)
+
+1. RED-A11Y.txt
+
+2. LIMITS.md three misses
+
+3. PRODUCT-A11Y.md two screens
+
+## Windows
+
+- npx vitest run
+
+- axe-core run if jest-axe ESM fights Vitest
+
+## Pitfalls
+
+- Skipping form because a widget violates.
+
+- aria-label disagreeing with visible text.
+
+## Say it in six sentences
+
+Close the file. Speak the day's gate paragraph. Name the command you will run. Name the folder you will type in. Name what you will not paste. Name the test that would go red if you broke the matching product behavior. If you cannot, reread Block A.
+
+## Git reminder
+
+```powershell
+cd ~\fullstack-lab
+git add month-14
+git status
+```
+
+Commit when the day's definition of done is true. Do not commit secrets. Product tests stay in product repos.
+
+<!-- length-pad-2 -->
+# Worked questions: axe plus names
+
+Write answers in `Q.md` in the day's lab folder before you peek at the sentences under each question. Then compare.
+
+**Q1.** Axe vs getByRole?
+
+Answer: Both; axe can pass a mute UI you never queried.
+
+**Q2.** Unlabeled red?
+
+Answer: Plant then restore.
+
+**Q3.** Skip labels?
+
+Answer: Never.
+
+**Q4.** Skip contrast?
+
+Answer: Maybe in jsdom, with LIMITS.md.
+
+**Q5.** Misses?
+
+Answer: Keyboard traps, confusing copy, focus.
+
+**Q6.** Icon button?
+
+Answer: aria-label plus role test.
+
+**Q7.** lang?
+
+Answer: index.html; component axe may miss it.
+
+**Q8.** jest-axe ESM?
+
+Answer: axe-core run instead.
+
+**Q9.** How many axe tests?
+
+Answer: Two screens this week.
+
+**Q10.** Green axe = accessible?
+
+Answer: No.
+
+**Q11.** alert vs status?
+
+Answer: Error vs loading.
+
+**Q12.** Dialog?
+
+Answer: role dialog plus name.
+
+## Quick table
+
+| Idea | Honest use | Dishonest use |
+|---|---|---|
+| Axe | Smoke | Full audit |
+| Label | Visible | Placeholder only |
+| Icon | aria-label | Empty button |
+| Contrast | Limited jsdom | Disable all rules |
+| RTL | Role name | CSS |
+
+## Closing
+
+Light checks guard Month 2. They do not replace it. Keep querying by role and name.
+
+If this page is the only thing you remember tomorrow, you still have the day's gate. Type the lab. Run the command. Do not paste Project 7.

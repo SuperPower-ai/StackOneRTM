@@ -232,3 +232,49 @@ Fail-open vs fail-closed is an availability decision. IP is a weak id. fakeredis
 This is defense and reliability. It is not a weapon. 6B may skip Redis entirely if you cannot name a problem — Day 6.
 
 Six curls against localhost. Then git.
+
+---
+
+## Recite-back checklist
+
+Write `RECITE.txt`.
+
+- [ ] INCR then EXPIRE when n==1  
+- [ ] 429 on **my** 127.0.0.1 POST  
+- [ ] rows still in Postgres  
+- [ ] fail-open vs fail-closed named  
+- [ ] IP is a weak identity  
+- [ ] not an attack tool  
+- [ ] reload resets fakeredis  
+- [ ] not ops-api  
+
+**Retry-After.** You may set `response.headers["Retry-After"] = "60"` on 429. Optional. LIMITS.md should know the header exists even if you skip it.
+
+**Counting GET.** Do not 429 `/health`. Limit **POST** (or a named expensive route). Health checks from a load balancer must not eat the budget — another reason `/health` stays cheap (Week 4).
+
+Windows: six `curl.exe` POSTs, no reload in between. `psql` count suggestions. `X-Count` header if you cannot see 429. Bind 127.0.0.1.
+
+If all six are 429, your window leftover from a previous run — fakeredis still in process. Restart **once**, then six curls. If you use real Redis, `DEL lab:rl:suggest` between experiments, not `FLUSHALL`.
+
+---
+
+## Predicted statuses (six POSTs, limit 5, fresh key)
+
+| # | Status |
+|---|---|
+| 1–5 | 201 |
+| 6 | 429 |
+
+GET `/suggestions` 200 includes the five rows (not six). GET `/health` never 429.
+
+If 1–6 are 201, print `X-Count`. If 1 is 429, leftover key — DEL the lab key.
+
+`LIMITS.md` must say this is **defense** of localhost. No scripts aimed elsewhere.
+
+Windows: `body.json` + `curl.exe`. Database `month11_w3d4`. `select()` on GET. `model_dump` on Out. Bind 127.0.0.1.
+
+Do not log request bodies that might later contain secrets. Suggestions `body` is lab-public.
+
+**Health is not limited.** If `/health` 429s, you wrapped the wrong router. Fix before 6B.
+
+The six curls are the lab. A seventh curl after 60s should 201 again if TTL ended — optional proof in `WINDOW.txt`.

@@ -239,3 +239,62 @@ Write `RECITE.txt` with one honest sentence per line.
 - [ ] mini not the product  
 
 If a line is mush, re-read this file only.
+
+---
+
+# Extra lecture — 2FA is a second lock, not a product dump
+
+Students download a complete TOTP sample and cannot explain enrollment. This week’s bar is **tokens you wrote** plus **sentences** about a second factor.
+
+SMS is a factor with known telecom risks. TOTP apps are the concept to name. WebAuthn is the stronger later path.
+
+Recovery codes: hashed, one-time, shown **once**. Never log codes.
+
+Enrollment is a **sensitive** moment: session must already be authenticated. An unauthorized person might **try** to add **their** TOTP to a victim. **Prevent:** only enable 2FA while logged in; confirm password again.
+
+Beacon mini in `~\fullstack-lab\month-13\week-02\day-07\mini`. No TOTP implementation required in the mini.
+
+Debug A: reset 404 for unknown email → generic 200.  
+Debug D: `VITE_GOOGLE_CLIENT_SECRET` → secret on server only.
+
+If debug A still wants 404 for unknown email, rewrite A.
+
+Week 3 is output encoding and CSRF — defense only. Do not start it if the token mini is red.
+
+---
+
+# Mini spec reminder (beacon keepers)
+
+| Method | Path | Rules |
+|---|---|---|
+| POST | `/register` | 201; create verify token; mailbox |
+| POST | `/verify` | token; set verified; expiry fail |
+| POST | `/reset/request` | generic 200 |
+| POST | `/reset/confirm` | new password; expiry fail |
+
+No OAuth in the mini. No TOTP code dump. `exam-01.md` includes **six honest sentences** on 2FA.
+
+Debug keys after you write: A generic 200; B hash at rest; C no auto-link, store `sub`; D secret on server; E never log factors.
+
+`GAP.txt` vs AUTH.md. Break expiry test; restore; `exam-05-fail.txt`.
+
+`design.md`: why email match is not link.
+
+```powershell
+cd ~\fullstack-lab
+mkdir month-13\week-02\day-07\mini -Force
+uv init --name lab-beacon-tokens
+```
+
+`uv run pytest -q`. Bind `127.0.0.1` if you run Uvicorn.
+
+`exam-01.md` must include TOTP in two sentences or the 2FA block is theater. SMS is weaker; name it; do not implement SMS.
+
+Beacon keepers mini. Hashed tokens. Generic request. Days 1–6 closed during the build.
+
+If debug A still wants 404 for unknown email, rewrite A from this file’s synthesis.
+
+
+
+
+

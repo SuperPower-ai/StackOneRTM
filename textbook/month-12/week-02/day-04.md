@@ -294,3 +294,99 @@ Optimistic is a bet that the server will echo your paint. Unique fields, server-
 Detail key includes id. List prefix still matters. `enabled` guards undefined ids.
 
 v5 object API. `isPending` on detail first load. Mutation `isPending` on Save. `gcTime` not `cacheTime`.
+
+---
+
+# RISK.md template (fill in your words)
+
+Title: **when I will not paint success first**
+
+Pick one:
+
+1. **Phantom id** — optimistic create with `id: -1` makes `GET /lockers/-1` and a Query key that will never match the server id.  
+2. **409 snap-back** — two lockers cannot share `code`. The list shows a duplicate, then it vanishes. The user already walked away.  
+3. **Normalized field** — server `casefold`s `code`. You painted `A1 `; GET returns `a1`. Clipboard copies the wrong value.  
+4. **Lost update** — two tabs edit `label`. Optimism hides the other tab’s value until rollback, which the user may never see.
+
+Rollback restores **cache**. It does not un-send, un-charge, or un-confuse.
+
+Course default for unique `code`: **pessimistic**. PATCH, wait 200, `invalidateQueries({ queryKey: ["lockers", id] })` and prefix `["lockers"]`.
+
+```ts
+enabled: lockerId !== undefined
+queryKey: ["lockers", lockerId]
+```
+
+Narrow `useParams()` from `"react-router"`. No `as string`.
+
+Pydantic PATCH: **`model_dump(exclude_unset=True)`**.
+
+**Wrong belief:** “onSettled invalidate makes optimistic free.”  
+**Correct:** the user already saw the lie. Use optimism only when the named risk is acceptable.
+
+## Recite-back
+
+- [ ] detail id in key
+- [ ] enabled when parsed
+- [ ] invalidate detail + list
+- [ ] named risk in RISK.md
+- [ ] exclude_unset on PATCH
+
+---
+
+# Pessimistic sequence (memorize)
+
+1. User clicks Save. Mutation `isPending` true. Button disabled.  
+2. PATCH `/lockers/1`.  
+3. 200 + Out body.  
+4. `invalidateQueries({ queryKey: ["lockers", 1] })`.  
+5. `invalidateQueries({ queryKey: ["lockers"] })`.  
+6. Detail refetch. List refetch. User sees server truth.
+
+Optimistic inserts a `setQueryData` between 1 and 2 and a rollback on error. Only if RISK.md says the field is cosmetic.
+
+404 detail: `ApiError.status === 404` → “Locker not found,” not an empty form that POSTs by accident.
+
+`npm install react-router`. `Link` from list to `/lockers/${id}`.
+
+Office hours extra: **forgot `cancelQueries` when optimistic** — in-flight GET overwrites paint. Another reason to stay pessimistic on `code`.
+
+---
+
+# Office hours extra — 409 vs 422 on edit
+
+422: `code` missing or wrong type. Pydantic.  
+409: `code` well-formed but taken by another locker. Your loop, `ignore_id` for the same row.
+
+Optimistic `code` turns 409 into a snap-back. RISK.md should have already forbidden it.
+
+Detail first load: `isPending`. Save: mutation `isPending`. Do not mix.
+
+`model_dump(exclude_unset=True)` so PATCH `{"label": "x"}` does not null `code`.
+
+---
+
+# Recite-back extra
+
+enabled when id parsed. Path id wins over body id. 404 not an upsert. RISK.md names phantom id or 409 or lost update. Optional cosmetic optimistic with rollback test tomorrow.
+
+```powershell
+curl.exe -s http://127.0.0.1:8000/lockers/1
+curl.exe -s -X PATCH http://127.0.0.1:8000/lockers/1 -H "Content-Type: application/json" --data-binary @patch.json
+```
+
+NETWORK.txt: GET, PATCH, GET. Unique `code` 409 on a second locker. CORS 5173. `npm install react-router`. Import `useParams` from `"react-router"`.
+
+---
+
+# Closing card
+
+Windows: `curl.exe`. Vite: `npm create vite@latest name -- --template react-ts`. Router: `npm install react-router` and import from `"react-router"`. FastAPI `--host 127.0.0.1 --port 8000`. CORS `allow_origins=["http://127.0.0.1:5173"]` not `*`. `VITE_API_BASE` in `.env` — no secrets. Query v5: `useQuery({ queryKey, queryFn })`, `useMutation({ mutationFn })`, `isPending` first load, `gcTime` not `cacheTime`, `placeholderData: keepPreviousData` when paging, `invalidateQueries({ queryKey })` after writes. Pydantic v2 `model_dump()`. JSON `unknown` then DTO. No `any`. No `fetch` in components. No Project 7 dump.
+
+```mermaid
+flowchart LR
+  UI[UI states] --> Q[Query]
+  Q --> C[client]
+  C --> API[FastAPI]
+  API --> ST[(store)]
+```

@@ -281,3 +281,100 @@ Write `RECITE.txt` with one honest sentence per line.
 - [ ] no exploit  
 
 If a line is mush, re-read this file only.
+
+---
+
+# Extra lecture — design is a table, not a vendor
+
+SendGrid does not expire tokens for you. Your row does.
+
+Do not put tokens in Redis **only** “because they expire” unless you already operate Redis — Postgres `expires_at` is honest.
+
+**Lookup:** hash the submitted token, find by `token_hash`. Do not store raw. Do not scan all rows comparing plaintext.
+
+**SHA-256 of high-entropy tokens** + `hmac.compare_digest` is the usual split: **argon2 for passwords**, **fast hash for random tokens**. Write that split in SCHEMA.md so you do not “optimize” passwords next.
+
+**UTC** timezone-aware datetimes. Naive vs aware comparisons will lie.
+
+**Cleanup:** expired rows do not stay forever. Consume still checks expiry even if cleanup is late.
+
+Never commit a real SMTP password. Week 3 Day 5: `.env.example` empty keys.
+
+Studio passes, not the product. `~\fullstack-lab\month-13\week-02\day-04\`.
+
+If you can consume yesterday’s token, expiry is a comment not a check. Write the check. Test it harder on Day 5.
+
+No phishing. No SMTP tricks. Defense only.
+
+`uv run pytest -q` is the proof. FastAPI wrapper is optional.
+
+---
+
+# Worked session — columns you can teach
+
+Write `SCHEMA.md` with every column in a table. If you used a dict, the keys **are** the columns. A classmate should be able to write Alembic from that page.
+
+**purpose** values: `verify_email`, `reset_password`. A reset token on the verify route is **refuse**.
+
+**TTL:** verify ~24h, reset ~30 min — your numbers, written down.
+
+**Index:** unique `token_hash`. Index `(user_id, purpose)` for invalidate-all.
+
+**Create returns raw once** to the email port. Tests read MAILBOX, not the DB plaintext.
+
+**Consume:** missing / used / expired / wrong purpose → `None` / generic HTTP fail. Success sets `used_at` and `email_verified_at`.
+
+Project 7: `PROJECT7-TOKENS.md` — table name, TTLs, one table vs two (one + purpose is enough).
+
+`CLEANUP.md`: expired rows do not live forever.
+
+UTC. `datetime.now(timezone.utc)`.
+
+If SQLAlchemy 2.0 mapped columns are foggy, the sketch in this file is enough. Do not invent seven tables.
+
+Lab: `~\fullstack-lab\month-13\week-02\day-04\`. `uv init --name lab-studio-verify`.
+
+No email exploit. No live vendor. Fake port only.
+
+Tomorrow’s tests inject time. Today the **row** must already have `expires_at` you can mutate.
+
+---
+
+# What someone might try (concepts only)
+
+- **Try** to reuse a token from an old email. **Prevent:** `used_at` or delete.  
+- **Try** a token after a week. **Prevent:** `expires_at`.  
+- **Try** a **reset** token on the **verify** endpoint. **Prevent:** `purpose`.  
+- **Try** to flood inboxes. **Prevent:** rate limit (Week 3); invalidate previous unused tokens.
+
+No script to brute-force tokens. Length of `token_urlsafe(32)` is the guess defense.
+
+**SQLAlchemy sketch** is in Block A of this file if you still have it. Dict lab is enough. Columns must appear in SCHEMA.md either way.
+
+Alembic for Project 7 may wait until Day 6. Today: design + consume/expiry in a mini.
+
+`uv run pytest -q` must include: happy consume; second consume fails; expiry by past `expires_at`.
+
+Invalidate previous unused tokens of the same purpose when issuing a new one — document that choice. One table plus `purpose` beats two confused tables.
+
+Project 7 notes stay notes. No dump. No live SMTP.
+
+`SCHEMA.md` is the day’s contract. If a classmate cannot implement Alembic from it, it is too thin.
+
+UTC timestamps. `used_at` null until success. `purpose` is not a comment — the consume function **checks** it.
+
+Lab: `~\fullstack-lab\month-13\week-02\day-04\`. `uv run pytest -q`.
+
+Day 5 injects time. If `expires_at` is not a real datetime you can set in the past, Day 5 will stall. Fix the column type today.
+
+Hash lookup by `token_hash`, never a table scan of raw secrets. Raw exists once, in the mail port, in tests.
+
+No email exploit. No phishing kit. SCHEMA.md + pytest expiry is the lab.
+
+
+
+
+
+
+
+

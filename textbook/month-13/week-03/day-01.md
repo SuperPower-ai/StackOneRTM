@@ -317,3 +317,63 @@ Write `RECITE.txt` with one honest sentence per line.
 - [ ] Project 7 grep notes  
 
 If a line is mush, re-read this file only.
+
+---
+
+# Extra lecture — the lab is encoding, not a CTF
+
+A course that pastes exploit strings trains muscle memory to **attack**. This course trains **escape**, **safe children**, **grep for innerHTML**.
+
+If a classmate asks for “just one payload to see it,” refuse and show the `<b>` **text** test instead: the angle brackets remain **visible characters**.
+
+**Stored / reflected / DOM** are **names** of where the untrusted string enters. You do not need a kit for each.
+
+**Markdown:** convert then sanitize, or disable raw HTML. Name the choice.
+
+**JSON is not HTML.** `{ "name": "<b>x</b>" }` is not XSS until a consumer treats it as markup. React `{name}` will not. `dangerouslySetInnerHTML` will.
+
+**CSP** with `default-src 'self'` is a starting idea. Vite/React may need nonces later. Do not ship a lying policy that allows everything and call it CSP.
+
+Grep Project 7 for `dangerouslySetInnerHTML`, `innerHTML`, `eval(`. Record hits in `PROJECT7-XSS.md`.
+
+Lab: `~\fullstack-lab\month-13\week-03\day-01\`. `html.escape` in Python is enough if Vite would eat the hour.
+
+If ENCODE.txt contains a script sample, delete the sample.
+
+HttpOnly helps **cookie string theft via `document.cookie`**. XSS can still act **as the user** in the page. Encoding still matters.
+
+---
+
+# Worked session — prove text stays text
+
+**Python track:** `html.escape` around a name; test that user text `"<b>x</b>"` does **not** produce a raw HTML tag in the output string — entities appear instead. That input is a **harmless encoding check**, not an exploit.
+
+**React track:** `{label}` with the same characters; `getByText` finds the brackets; no bold element from that string.
+
+Do not assign `innerHTML`. Do not use `dangerouslySetInnerHTML` for user comments.
+
+**OpenAPI:** do not put untrusted HTML in descriptions.
+
+**Wrong belief:** “I’ll strip all punctuation at register and XSS is gone.”  
+**Correct:** you punish real names and still miss Markdown or admin HTML.
+
+**Wrong belief:** “CSP means I can skip encoding.”  
+**Correct:** defense in depth. Encoding first.
+
+Write `CSP-INTENT.md`: backup net; no lying allow-all policy.
+
+`~\fullstack-lab\month-13\week-03\day-01\`. `uv add --dev pytest` for the Python track.
+
+If you find `dangerouslySetInnerHTML` on user data in Project 7, remove it or sanitize with **DOMPurify** and write why HTML is required.
+
+Contexts differ: HTML body, attribute, URL, JS string. This course’s default: do not enter HTML/JS contexts with string concatenation. Use React text or a template that escapes.
+
+`textContent` in vanilla JS for untrusted text (Month 2 habit). `innerHTML` is the trap.
+
+Do not collect payload lists. Do not paste event-handler strings into production fields. The `<b>` encoding check is the allowed proof.
+
+`~\fullstack-lab\month-13\week-03\day-01\`. `uv run pytest -q` on the escape tests.
+
+
+
+

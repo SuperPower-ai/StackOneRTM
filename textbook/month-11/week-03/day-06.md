@@ -204,3 +204,77 @@ If you cache, you invalidate. If you INCR, you 429 your **own** door. If you ski
 This file does not contain your keys. Write yours.
 
 fakeredis keeps tests honest on Windows. A process is for production-shaped deploys you do not have to finish today.
+
+---
+
+## Recite-back checklist
+
+Write `RECITE.txt` in the lab folder.
+
+- [ ] CHOICE.md named a problem or an honest none  
+- [ ] ARCHITECTURE.md has keys **or** later-triggers  
+- [ ] SoR sentence is Postgres  
+- [ ] fail-open/closed named if Redis is used  
+- [ ] `.env.example` REDIS_URL or omitted-on-purpose  
+- [ ] fakeredis tests or explicit no-client  
+- [ ] no users-only-in-Redis  
+- [ ] no Mongo  
+
+**If you implement cache:** grep POST/PATCH/DELETE for `delete(` / `unlink`. If the write path has no DEL, the paragraph is a lie. Fix the code or the paragraph.
+
+**If you implement INCR:** only **your** routes, `127.0.0.1` in dev. Document 429 in CONTRACT.md. Tests with FakeRedis and a low limit.
+
+**If you decline:** three later-triggers must be **observable** (p95 GET, write storms, a real ephemeral job). “When we scale” is not a trigger.
+
+Windows: do not install Docker for this paragraph. WSL/Memurai/existing Docker/fakeredis. Commit ARCHITECTURE.md in ops-api.
+
+Forbidden: copying Day 3 notes into 6B as the product. Your nouns, your keys.
+
+---
+
+## Architecture paragraph quality (examples of shape, not your domain)
+
+Too vague: “Redis caches stuff.”
+
+Specific enough: “GET `/v1/items` (unfiltered) uses key `ops:items:list:v1`, TTL 30s. POST/PATCH/DELETE `/v1/items` commits Postgres then DELs that key. Fail-open if Redis is down. Items remain in PostgreSQL. Tests use fakeredis.”
+
+Replace `items` with **your** resource. If you cannot fill that paragraph, you are not ready to add a client.
+
+**INCR shape:** “POST `/v1/items` INCR `ops:rl:items:{ip}` TTL 60 limit 30 → 429. Fail-open. CONTRACT.md lists 429. Not used as SoR.”
+
+**None shape:** “No Redis in 6B. Add if GET `/v1/items` p95 exceeds X ms under load we can measure, or if we see write storms on POST. Until then Postgres + indexes (Month 10 notes) are enough.”
+
+Write the one that is true. Commit it.
+
+Windows: no new Docker. `.env.example` placeholder. Secrets out of git.
+
+---
+
+## What Block C looks like when you decline Redis
+
+Spend the hour on a **real** 6B gap: `selectinload` on a nested list, `TEST_DATABASE_URL` fixture, or removing `create_all` from startup. Point PROGRESS.md at that work. Architecture still gets the “none + later-triggers” section. That pairing is a pass. Redis-without-a-problem is a fail.
+
+If you **use** Redis, fakeredis test names: `test_cache_invalidates_on_post` or `test_post_429_on_sixth`. Green on Windows without 6379.
+
+Do not add pymongo. Do not FLUSHALL in a handler. Do not log cache values that contain tokens.
+
+CHOICE.md first. ARCHITECTURE.md second. Code third. That order is the independent day.
+
+If ARCHITECTURE.md could be copied onto any tutorial, rewrite until an endpoint path appears. The gate is *your* 6B, not a stack slogan.
+
+Keep Mongo out. Keep passwords out of git. Keep Postgres as the record even when Redis is fast.
+
+---
+
+## Predicted 6B outcomes (tick one in CHOICE.md)
+
+| Outcome | Evidence |
+|---|---|
+| Cache wired | key + DEL on write + fakeredis test |
+| INCR wired | 429 in CONTRACT + fakeredis test |
+| Design only | ARCHITECTURE.md specific, no client |
+| Decline | later-triggers + Postgres work in PROGRESS.md |
+
+Any outcome that cannot fill the evidence column is unfinished. Day 7 will review the paragraph, not your feelings about Redis.
+
+Windows: `~/ops-api` commit message in your words. Lab CHOICE.md in fullstack-lab. `curl.exe` not required if you declined. `uv run pytest -q` required if you wired a client.

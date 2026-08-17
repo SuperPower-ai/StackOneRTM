@@ -19,7 +19,7 @@ const openCount = nav.filter((month) => month.status === "published").length;
   {nav.map((month) => {
     const live = month.status === "published";
     const dayCount = month.weeks.reduce((sum, week) => sum + week.days.length, 0);
-    const fresh = live && month.number >= 10;
+    const fresh = live && month.number >= 15;
     return (
       <details class:list={["nav-month", !live && "is-soon"]} open={month.number === currentMonth || (!currentMonth && month.number === 1)}>
         <summary>

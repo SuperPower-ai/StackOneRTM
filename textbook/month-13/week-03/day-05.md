@@ -246,3 +246,55 @@ Write `RECITE.txt` with one honest sentence per line.
 - [ ] no secret in the commit  
 
 If a line is mush, re-read this file only.
+
+---
+
+# Extra lecture — public is public
+
+`VITE_` ships to every browser. `.env` is local and gitignored. `.env.example` is empty names. Rotate if git ever saw a secret.
+
+Session secrets are random and long (`secrets.token_urlsafe(32)`). Logs do not print tokens. Two repos do not share the API secret via zip.
+
+Lab: `~\fullstack-lab\month-13\week-03\day-05\`. If `git add .env`, undo before you push. Rotate.
+
+**Wrong belief:** “I’ll put `VITE_JWT_SECRET` so the SPA can decode tokens.”  
+**Correct:** `/me` returns public claims. Secrets stay on the server.
+
+Grep `VITE_` that is not a public URL/flag. Grep committed `*.pem`.
+
+Default `"changeme"` in code is a bug. Production must refuse to boot without a real `SESSION_SECRET`.
+
+Docker later: secrets at **runtime**, not `ENV SECRET=` in a committed Dockerfile.
+
+`git check-ignore -v .env` — write the result in `GITIGNORE-PROOF.txt`.
+
+Month 5 already searched `dist/` for `VITE_`. Today the forbidden list includes **signing keys**.
+
+---
+
+# Classes of config (table)
+
+| Kind | Example | Where |
+|---|---|---|
+| Public | `VITE_API_BASE` | Frontend env |
+| Secret | `DATABASE_URL`, `SESSION_SECRET`, `SMTP_PASSWORD` | Server `.env` |
+| Not config | User password | Hashed; never stored |
+
+`.env.example` has empty keys. README says copy to `.env`.
+
+Never log `DATABASE_URL` with password, `Authorization`, or `Set-Cookie` values.
+
+If a secret hit git: **rotate first**. History rewrite is messy.
+
+Frontend and backend repos: **each** has env. Do not copy the API secret into the web repo.
+
+`Settings` with pydantic-settings; missing secret fails fast (except documented test env).
+
+`AUDIT.md`: table of env vars, public vs secret.
+
+`~\fullstack-lab\month-13\week-03\day-05\`. `uv add pydantic-settings`.
+
+`GITIGNORE-PROOF.txt` is required. If `.env` is not ignored, fix `.gitignore` before you commit anything else.
+
+
+

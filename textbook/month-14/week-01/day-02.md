@@ -369,3 +369,78 @@ Write `SAY.md` in the lab if you still swap the four words. One paragraph. Then 
 ## Tomorrow
 
 **From memory:** classify eight example tests into pyramid layers. Days 1–2 stay closed during the drill. The recap in that file is the teacher.
+
+
+<!-- length-pad -->
+# Lecture: doubles you can draw
+
+This section is still the lesson. Read it if a block felt thin. Say each claim aloud before you continue.
+
+## Claims you must still own
+
+1. A port is a small interface at the edge of your process.
+
+2. A fake is a working stand-in with memory you can print.
+
+3. A stub returns a canned value; you assert the unit's output.
+
+4. A mock fails unless expected calls happen; use it when the call itself is the requirement.
+
+5. A spy records calls; wrapping a real SMTP mailer is dangerous.
+
+6. Do not mock the FastAPI route under test.
+
+7. Do not fake Postgres in every API test.
+
+8. dependency_overrides must close over the same FakeMailer instance you assert.
+
+9. MagicMock will swallow typos; a typed FakeMailer will not.
+
+10. MSW is the HTTP fake for component tests next week, not a Python MagicMock of fetch.
+
+## Wrong belief / Correct
+
+**Wrong belief:** “I'll patch smtplib in every test.”  
+**Correct:** Put a MailPort in the app and fake it.
+
+**Wrong belief:** “MagicMock is a fake.”  
+**Correct:** A fake is a small class with .sent or a dict store.
+
+**Wrong belief:** “Faking the repository makes API tests honest and fast.”  
+**Correct:** You will miss IntegrityError and missing commit.
+
+## Drills (write answers in the lab folder)
+
+1. Draw MailPort, SmtpMailer, FakeMailer, and the service.
+
+2. Write one test that proves blank email sends nothing using .sent == [].
+
+3. Write BOUNDARY.md for your product neighbors.
+
+## Windows
+
+- uv run pytest -q from the lab folder.
+
+- Keep modules next to tests for this gym if uv init src layout confuses you.
+
+## Pitfalls
+
+- Module-level FakeMailer leaking .sent.
+
+- patching PermitNotifier.owner_created — that is the subject.
+
+- Closing over FakeMailer() inside lambda so asserts miss.
+
+## Say it in six sentences
+
+Close the file. Speak the day's gate paragraph. Name the command you will run. Name the folder you will type in. Name what you will not paste. Name the test that would go red if you broke the matching product behavior. If you cannot, reread Block A.
+
+## Git reminder
+
+```powershell
+cd ~\fullstack-lab
+git add month-14
+git status
+```
+
+Commit when the day's definition of done is true. Do not commit secrets. Product tests stay in product repos.

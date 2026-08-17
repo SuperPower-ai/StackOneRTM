@@ -252,6 +252,48 @@ Write `INVARIANTS.md`: three bullets that must remain true after any allowed see
 
 ---
 
+# LEFT JOIN + WHERE: a full worked story
+
+You start with every project (left). You attach tickets (right). Empty Harbor’s ticket columns are NULL. Then `WHERE t.status = 'open'` asks “is NULL equal to open?” Unknown. The row is dropped. Empty Harbor vanishes. You thought you filtered tickets; you **deleted** projects from the result.
+
+Correct patterns:
+
+1. `LEFT JOIN w2_tickets t ON t.project_id = p.id AND t.status = 'open'` then `COUNT(t.id)`.  
+2. CTE of open tickets, then LEFT JOIN that CTE to projects.
+
+Both keep zeros. Write which you shipped as report 07.
+
+## Pack hygiene
+
+- One `SELECT` per file, or clearly commented multiple result sets.  
+- No `DROP TABLE` in a report file.  
+- No `DELETE` in a report file.  
+- Seed stays in Day 1 / Day 4 files; reports assume seed.
+
+Write `HYGIENE.md`: three rules you will not break in Week 4’s ops-api pack.
+
+## pytest optional assertion shape
+
+```python
+assert any(row[0] == "Empty Harbor" and row[1] == 0 for row in rows)
+```
+
+If titles differ, use the title you inserted. If the row is missing, the test **fails** — that is a LEFT JOIN bug, not a pytest bug.
+
+---
+
+Write `TEAMMATE.md`: three sentences a classmate needs to rerun the pack (database name, seed files, which invariant proves LEFT JOIN).
+
+---
+
+Write `SEED-COUNTS.md`: `SELECT COUNT(*) FROM w2_tickets;` after seed, used when asserting total vs page length.
+
+---
+
+Write `EMPTY-HARBOR.md`: does report 02 include a row with ticket_count 0? yes/no.
+
+---
+
 ## Optional review links
 
 Query packing is explained in this chapter. These pages are for later checking, not for first learning.

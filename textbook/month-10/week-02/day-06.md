@@ -194,6 +194,108 @@ Write `GRAIN.md`: one line per report file: “one row per ___.” If two files 
 
 ---
 
+# Seed sketches that make zeros real
+
+A parent with no children is not a failed seed. It is a **fixture**. Name it in QUESTIONS.md (“Quiet warehouse,” “Empty clinic”) so expected notes can point at a title.
+
+A parent with two children is the HAVING fixture.
+
+A NULL optional FK is the IS NULL fixture.
+
+If all parents have children, report 1 cannot show zeros. You will “fix” the SQL by INNER JOIN and think you passed. You did not.
+
+Write `FIXTURES.md`: three named rows you inserted for those cases.
+
+## Window check
+
+After `rn = 1`, `COUNT(*)` of the result should equal the number of parents **that have at least one child**. If it equals all parents, you LEFT JOINed ranks incorrectly or every parent has a child. If it is more than the number of parents, PARTITION BY is wrong (not unique ranks).
+
+Write that check as a SQL comment on the window file.
+
+## CTE check
+
+If the CTE is `SELECT * FROM t`, delete it. If the CTE filters or ranks or aggregates, keep it. Name it after the step: `open_items`, `ranked_events`, `child_counts`.
+
+---
+
+# Independent reporting: typed skeleton comments (you fill)
+
+```sql
+-- 01: children per parent including zeros
+-- Grain: one row per <parent>
+-- SELECT parent.title, COUNT(child.id)
+-- FROM parent LEFT JOIN child ...
+-- GROUP BY parent.id, parent.title
+
+-- 02: latest child per parent
+-- WITH ranked AS (
+--   SELECT ..., ROW_NUMBER() OVER (PARTITION BY parent_id ORDER BY created_at DESC, id DESC) AS rn
+-- FROM child)
+-- SELECT * FROM ranked WHERE rn = 1
+
+-- 03: ILIKE search
+-- WHERE title ILIKE '%...%'  -- if Python, placeholder
+
+-- 04: IS NULL optional FK
+-- WHERE assignee_id IS NULL
+```
+
+These comments are not runnable product SQL. Your files are. If you paste this skeleton unchanged, Day 6 fails.
+
+## Transfer from Week 2 Day 5
+
+LEFT JOIN + WHERE on the child status drops zeros. You already wrote LEFT-WHERE.md on lab tickets. Reproduce the **correct** pattern on **your** schema as one of the four files. If you do not, zeros will vanish and you will not notice until Week 4 exam.
+
+## What “four questions” is not
+
+Four filters on the same listing (`status=open`, `status=done`, …) are one question. Four grains are four questions. GRAIN.md is how you prove variety.
+
+Write `VARIETY.md`: four grains listed. If two are the same, replace one.
+
+---
+
+# Quiet parent name
+
+Pick a title that cannot be confused with Atlas. `Quiet Harbor` if you want a cousin of Empty Harbor **on your nouns**, or `No-Items Bin` for inventory. Put that exact string in expected notes.
+
+Write `QUIET.md`: the title, and which report file must show n=0 for it.
+
+## IN vs JOIN for “children of these parents”
+
+`WHERE parent_id IN (SELECT id FROM parents WHERE …)` is a subquery. JOIN is often clearer. Both can be right. Do not N+1. If you write a Python loop, you failed Block C even if results look right.
+
+---
+
+# Report file names
+
+`01_counts.sql` is better than `query.sql`. README links those names. If you have `untitled.sql`, rename.
+
+Write `NAMES.md`: list of report files.
+
+## Expected note template copy
+
+Grain / columns / join / invariant / not asserted. Four files, four notes. A single EXPECTED.md with four headings is allowed if README says so.
+
+---
+
+Write `FOUR-GRAINS.md`: paste GRAIN.md here if it lived only in your head.
+
+---
+
+Write `CTE-NAME.md`: the CTE identifier you used (not x).
+
+---
+
+Write `QUIET-TITLE.md`: exact quiet-parent title string.
+
+---
+
+## Closing note
+
+Do not copy w2_ report files into ops-api. GRAIN.md must name **your** parents.
+
+---
+
 ## Optional review links
 
 Reporting SQL is explained in Days 1–5. These pages are for later checking, not for first learning.

@@ -176,9 +176,129 @@ Lab: **reporting pack** (3–5 queries: JOIN, GROUP, CTE, window) on **YOUR** Pr
 
 ---
 
+# Keyset SQL shapes (you type them)
+
+First page:
+
+```sql
+SELECT id, title, created_at
+FROM w4_tickets
+ORDER BY created_at DESC, id DESC
+LIMIT 10;
+```
+
+Next page, expanded form (clearer than tuple comparison if you get syntax muddled):
+
+```sql
+SELECT id, title, created_at
+FROM w4_tickets
+WHERE created_at < %s
+   OR (created_at = %s AND id < %s)
+ORDER BY created_at DESC, id DESC
+LIMIT 10;
+```
+
+In `psql` you may paste literals from page 1’s last row instead of `%s`. In Python, three placeholders, same timestamp twice for the OR form. Never f-string the timestamp.
+
+Tuple form (PostgreSQL):
+
+```sql
+WHERE (created_at, id) < (%s, %s)
+```
+
+Direction must match ORDER BY. If you ORDER DESC, the comparison is `<` for “older than last.” If you ORDER ASC, you use `>`. Getting this backward returns the wrong half of the table. Write a prediction in DRIFT.md before you run page 2.
+
+## N+1 counting
+
+If `nplusone.py` calls `execute` 1 + N times for N projects, print that number. The good path calls `execute` **twice** (projects, then tickets ANY) or **once** (JOIN). If you JOIN, remember fan-out: 50 projects × 80 tickets is not 50 rows. For a JSON API later you group in Python **or** you aggregate in SQL. Today: count round trips.
+
+psycopg list:
+
+```python
+cur.execute(
+    "SELECT id, project_id, title FROM w4_tickets WHERE project_id = ANY(%s)",
+    (project_ids,),
+)
+```
+
+`project_ids` is a Python list. That is still parameterized. Do not `WHERE project_id IN (1,2,3)` built with `",".join`.
+
+## total for Month 9 envelopes
+
+```sql
+SELECT COUNT(*) FROM w4_tickets WHERE status = 'open';
+```
+
+That number is `total`. `LIMIT 20` does not change it. Returning `total: 20` because the page has 20 items is the Month 9 bug in SQL clothing.
+
+Write `ENVELOPE.md`: eight sentences mapping skip/limit vs keyset to JSON `{items, total}`. Keyset may omit total or compute COUNT separately.
+
+---
+
+# Drift experiment (type it)
+
+Page 1 OFFSET 0 LIMIT 10. Note the first title. Insert a ticket with `created_at = now()`, title `Z-NEW`. Page 1 OFFSET again: `Z-NEW` appears at the top; the old last item of page 1 may fall to page 2 — **duplicate/skip** for a user who had page 1 open. Keyset page 2 using the **old** last key should not include `Z-NEW` if Z-NEW is newer than that key (it is newer, so it belongs on page 1). That is the point: keyset is stable **relative to a cursor**, not to “page numbers.”
+
+Write the titles in DRIFT.md.
+
+## OFFSET EXPLAIN sentence
+
+“The plan still has to find 20 rows to discard before returning 10, or it uses a top-N sort of a larger set. Cost grows as OFFSET grows. I will not use OFFSET 100000 in a product list.”
+
+You may not see a dramatic difference at OFFSET 20 on 4000 rows. Say so. The **principle** still holds. Try OFFSET 3000 LIMIT 10 vs keyset from a late cursor if you want a bigger gap — optional.
+
+## N+1 file must show the loop
+
+```python
+# bad: N+1
+for pid in project_ids:
+    cur.execute(
+        "SELECT id FROM w4_tickets WHERE project_id = %s",
+        (pid,),
+    )
+```
+
+That is parameterized and still N+1. Placeholders do not fix round trips. Write that sentence in n_plus_one.md.
+
+---
+
+# Keyset direction checklist
+
+ORDER BY created_at DESC, id DESC  
+Next page: rows **older** than the cursor → comparison `<`  
+Previous page (optional stretch): comparison `>` and reverse order, then reverse in the client  
+
+If page 2 is empty, you compared the wrong way or used the first row as cursor instead of the last. Write which row you used in PLANS.md.
+
+Write `CURSOR.md`: the (created_at, id) pair you copied from page 1.
+
+---
+
+Write `LIMIT10.md`: OFFSET 20 vs keyset page 2 — did titles match? yes/no/why.
+
+---
+
+Write `EXECUTE-COUNT.md`: loop execute count vs ANY execute count.
+
+---
+
+Write `PAGE1-TITLES.md`: first three titles from OFFSET page 1.
+
+---
+
+Write `DRIFT-NEW.md`: Z-NEW title used yes/no.
+
+---
+
+## Closing note
+
+Keyset uses the last row of page 1 as the cursor. OFFSET 20 is not the same cursor.
+
+---
+
 ## Optional review links
 
-The recap in this file is the teacher.
+The recap in this file is the teacher. These pages are for later checking, not for first learning.
 
 - [PostgreSQL: LIMIT OFFSET](https://www.postgresql.org/docs/current/queries-limit.html)
 - [PostgreSQL: EXPLAIN](https://www.postgresql.org/docs/current/sql-explain.html)

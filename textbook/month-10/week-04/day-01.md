@@ -300,6 +300,77 @@ git commit -m "Month 10 Week 4 Day 1: B-tree and composite indexes."
 
 ---
 
+# B-tree picture in words
+
+A B-tree is a balanced tree of sorted keys. Looking up `project_id = 12` is log-ish in the number of distinct keys, then you follow pointers to heap tuples. You do not draw every node. You need: **sorted**, **balanced**, **good for equality and ranges**, **default index type**.
+
+Hash indexes exist for equality. GiST/GIN exist for full text and JSONB. **Not this month’s gate.** If you `CREATE INDEX … USING gin`, you are off the path unless you can teach it. Stay on B-tree.
+
+## Covering / INCLUDE (optional name)
+
+`CREATE INDEX … ON t (project_id) INCLUDE (status)` can enable index-only scans for those columns. Optional. If you do not create one, write “I know INCLUDE exists; I did not need it for 4000 rows.”
+
+## Fillfactor and bloat (one paragraph)
+
+Updates that change indexed columns make new index entries. Dead tuples wait for VACUUM. You will not tune fillfactor today. You will not panic at table size in a lab. You **will** remember that indexes are not free at write time when Month 11’s ORM issues UPDATE storms.
+
+## FK index justification paragraph
+
+When you `DELETE FROM w4_projects WHERE id = 1`, PostgreSQL must check `w4_tickets` for children (RESTRICT). Without an index on `tickets.project_id`, that check can seq-scan tickets. That is a write-path reason for the index, independent of your SELECT reports. Put that sentence in WHY.md.
+
+Write `FK-INDEX.md` if you did not already cover it in WHY.md.
+
+## generate_series notes
+
+`generate_series(1, 4000)` is a set-returning function. The INSERT SELECT uses `g` as a row. Modulo maps tickets onto 50 projects. `% 4` makes about a quarter `done` — **low-ish selectivity** for status, which is why we skip a status index. If your modulo is different, say so.
+
+---
+
+# Why not index title for ILIKE
+
+B-tree walks from a known prefix. `'%Ticket'` starts with a wildcard; there is no prefix to walk. The planner seq-scans and applies the ILIKE filter. `pg_trgm` GIN indexes can help similarity search later. Not the gate. NO-ILIKE.md should say this in your words.
+
+## Composite vs two indexes
+
+`(project_id, created_at DESC)` serves list-by-project-newest. A separate `(created_at)` might help global newest-first across all projects. Create the second only if you have that report. BUDGET.md: do you?
+
+## Identity columns and indexes
+
+The PK index is on `id`. You do not CREATE INDEX on id. `\d` already shows `w4_tickets_pkey`. If you created `w4_tickets_id_idx`, drop it.
+
+Write `DUP-PK.md` only if you made that mistake; otherwise skip.
+
+## Analyze after load
+
+```sql
+ANALYZE w4_tickets;
+ANALYZE w4_projects;
+```
+
+Day 2 will thank you. Do it today after generate_series.
+
+---
+
+# Status index temptation
+
+About 75% open if `% 4` marks done. A status index is low selectivity. Skip it. If EXPLAIN on `WHERE status = 'done'` still seq-scans, that matches the lesson. Do not “fix” it unless you write a partial index `WHERE status = 'done'` and can explain it — optional stretch only.
+
+Write `STATUS.md`: skipped, with the fraction open you measured (`SELECT status, COUNT(*) FROM w4_tickets GROUP BY status`).
+
+---
+
+Write `G-SERIES.md`: ticket count from `SELECT COUNT(*) FROM w4_tickets;` (expect 4000).
+
+---
+
+Write `STATUS-COUNTS.md`: paste the GROUP BY status counts.
+
+---
+
+Write `FK-CHILD.md`: did you index the child FK column? yes/no/postponed.
+
+---
+
 ## Optional review links
 
 Indexes are explained in this chapter. These pages are for later checking, not for first learning.

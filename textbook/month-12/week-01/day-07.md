@@ -275,3 +275,43 @@ Write `RECITE.txt` with one honest sentence per line.
 - [ ] mini not ops-web
 
 If any debug answer says “Chrome is wrong,” rewrite it from the synthesis.
+
+---
+
+# Mini README (pegs)
+
+How a classmate runs it:
+
+```powershell
+cd mini
+uv run uvicorn main:app --reload --host 127.0.0.1 --port 8000
+```
+
+Other terminal:
+
+```powershell
+cd peg-web
+npm run dev -- --host 127.0.0.1 --port 5173
+```
+
+`.env` `VITE_API_BASE=http://127.0.0.1:8000`. Open 127.0.0.1, not localhost, unless both origins are allowed.
+
+**Wrong belief:** “Week review is optional reading.”  
+**Correct:** the mini is the proof. exam-01.md is the speech. Debug A–E are the myths.
+
+CORS myths to leave in `design.md`:
+
+1. CORS is not a lock on curl.  
+2. `*` is not a lab shortcut.  
+3. 5173 vs localhost is an origin bug, not a React bug.  
+4. Preflight is OPTIONS; if OPTIONS dies, POST never happens.  
+5. CORS is not login.
+
+Query myths:
+
+1. Query does not replace the client.  
+2. `isPending` ≠ `isFetching`.  
+3. `gcTime` ≠ `staleTime` ≠ `cacheTime`.  
+4. Mocking `useQuery` is not a test.
+
+Week 2 will POST and `invalidateQueries({ queryKey: ["pegs"] })`. If fetch still lives in a component, repair today.

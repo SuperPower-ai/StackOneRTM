@@ -316,3 +316,78 @@ Fixtures are explained in this chapter.
 ## Tomorrow
 
 **Database isolation:** transaction rollback vs truncate vs a dedicated test database. You will not mock `Session.commit` as a lifestyle.
+
+
+<!-- length-pad -->
+# Lecture: conftest and factories
+
+This section is still the lesson. Read it if a block felt thin. Say each claim aloud before you continue.
+
+## Claims you must still own
+
+1. pytest matches fixture names, not types.
+
+2. Do not import conftest.
+
+3. yield teardown runs even if the test failed.
+
+4. Clear dependency_overrides in teardown.
+
+5. Function scope is default; session-scoped mutable fakes flake.
+
+6. Factories take overrides; they must not swallow 409.
+
+7. A factory that asserts 201 is a sharp edge — keep the assert.
+
+8. Two users means a factory, not one fixture named user.
+
+9. pythonpath = ['.'] when imports fail.
+
+10. autouse is invisible; last resort.
+
+## Wrong belief / Correct
+
+**Wrong belief:** “Everything should be autouse so tests stay short.”  
+**Correct:** The signature is the documentation.
+
+**Wrong belief:** “A factory is a fixture with a fancier name.”  
+**Correct:** Factories are functions; fixtures inject.
+
+**Wrong belief:** “Session-scope the FakeMailer for speed.”  
+**Correct:** It will collect .sent from every test.
+
+## Drills (write answers in the lab folder)
+
+1. Run uv run pytest --fixtures and find client.
+
+2. Write a 409 test that does not use make_hold for the colliding POST.
+
+3. Delete a useless alias fixture and write WHY-NOT.md.
+
+## Windows
+
+- uv run pytest -q from the lab root.
+
+- uv run pytest --fixtures
+
+## Pitfalls
+
+- Name mismatch clinet.
+
+- Circular client/app fixtures.
+
+- Hardcoded factory code A1 twice.
+
+## Say it in six sentences
+
+Close the file. Speak the day's gate paragraph. Name the command you will run. Name the folder you will type in. Name what you will not paste. Name the test that would go red if you broke the matching product behavior. If you cannot, reread Block A.
+
+## Git reminder
+
+```powershell
+cd ~\fullstack-lab
+git add month-14
+git status
+```
+
+Commit when the day's definition of done is true. Do not commit secrets. Product tests stay in product repos.

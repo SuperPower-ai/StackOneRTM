@@ -6,7 +6,7 @@ A student who studies **only** these books, types every lab, and builds the eigh
 
 **How references work.** Each day file explains the ideas in full. Links to MDN, Microsoft, Git, or Node at the end of a chapter are for **rechecking later**, not for learning the first time. If a sentence in this book and an official page disagree, note it — and still be able to explain the idea from the book.
 
-Months 1–14 are written to that standard. Do not skip a theory block because a URL looks official.
+Months 1–18 are written to that standard. Do not skip a theory block because a URL looks official.
 
 **When these books are on Git.** Students will open the Markdown files in a browser (GitHub, GitHub Pages, or another Markdown site). That is why every day uses **relative links** (`day-02.md`, `../../README.md`), tables, and **Mermaid** diagrams that GitHub can draw. If you publish the repo, keep the `textbook/` folder structure; do not flatten files or the links break.
 

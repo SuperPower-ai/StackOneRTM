@@ -375,3 +375,24 @@ Git versions files. Alembic versions databases. `alembic_version` is the commit 
 Hooks are the noun. ops-api waits for Day 6. Autogenerate waits for Day 2. Downgrade is a development tool, not a production personality.
 
 Read the SQL. Then git add `alembic/versions`.
+
+---
+
+## Recite-back checklist
+
+Write `RECITE.txt`.
+
+- [ ] A migration is replayable DDL (and sometimes DML)  
+- [ ] `alembic_version` is a pointer  
+- [ ] `env.py` imports models and reads the URL from the environment  
+- [ ] `op.create_table` is not a Python class  
+- [ ] `upgrade head` / `downgrade -1` both ran  
+- [ ] no password in `alembic.ini`  
+- [ ] `create_all` is not the 6B path  
+- [ ] not ops-api  
+
+If a line is mush, re-read Block A of **this** file only.
+
+**Windows:** `$env:DATABASE_URL` must be set in the **same** PowerShell that runs `uv run alembic`. `psql -d month11_w2d1 -c "\dt"` is the camera. `uv run alembic current` should match the id in `alembic_version` after upgrade.
+
+If `alembic` is not found, you ran it outside `uv run`. If `psycopg` is missing, `uv add` it in this project — Alembic uses SQLAlchemy’s engine, which still needs the driver.

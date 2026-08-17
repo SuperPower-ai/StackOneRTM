@@ -272,3 +272,21 @@ Write `RECITE.txt`.
 - [ ] downgrade run once  
 - [ ] no unread autogen dump  
 - [ ] not ops-api
+
+If a line is mush, re-read the recap in **this** file only.
+
+---
+
+## Office hours (memory day)
+
+**`alter_column` fails with “column already NOT NULL.”** You combined steps and ran twice. `alembic current` first. Do not edit an applied file; write a no-op or a new revision that checks.
+
+**Backfill updated 0 rows.** Wrong table name, or you already filled, or you ran UPDATE before add_column committed. `SELECT status FROM badges;`.
+
+**Downgrade drops the table.** Your `down_revision` chain jumped too far (`downgrade base`). Use `-1` and count. `history` is a map.
+
+**Model `Mapped[str]` while DB still nullable.** Inserts of `""` succeed; `None` may become NULL and still be legal. Align after step 6. `MODEL.txt` is the honesty file.
+
+Windows: `$env:DATABASE_URL`, `uv run alembic upgrade head`, `psql -d month11_w2d3 -c "\d badges"`. No `Query()`. No ops-api. Badges are the noun.
+
+**Server default vs UPDATE.** If you used `server_default` in one Alembic op and skipped UPDATE, write in `STORY.md` whether **existing** rows received the value (PostgreSQL `ADD COLUMN ... DEFAULT` fills them). Then still write the three-beat story in English so 6B computed fills have a home.

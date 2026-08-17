@@ -235,3 +235,148 @@ List-create-list. Playwright **or** curl+UI doc. 127.0.0.1. CORS 5173. 201. Inva
 “It worked in Chrome” is not a file. Playwright is a file. Track B is a file plus curl. Month 14 will make Playwright ordinary. Today you prove you **can** record the join.
 
 Query and TestClient remain the fast net. E2E is the slow net for the path that makes money (create appears).
+
+---
+
+# Track A vs Track B (decide in TRACK.md)
+
+**A Playwright** — one test, `getByRole` / `getByLabel`, `http://127.0.0.1:5173/`, both servers up. Chromium only. No POM framework. No visual diffs.
+
+**B curl + UI protocol** — `HAPPYPATH.md` with commands **and** what you saw in the browser (empty, create, title). CORS sentence: curl is not enough alone; you opened Chrome.
+
+Month 14 will make Playwright ordinary. Today thin is honest.
+
+```ts
+test("create sticker appears", async ({ page }) => {
+  await page.goto("http://127.0.0.1:5173/");
+  await page.getByLabel(/title/i).fill("Hello sticker");
+  await page.getByRole("button", { name: /add/i }).click();
+  await expect(page.getByText("Hello sticker")).toBeVisible();
+});
+```
+
+Timeouts usually mean: Uvicorn down, Vite down, CORS localhost mismatch, or spinner forever (`queryFn` not throwing / wrong base URL).
+
+**Wrong belief:** “I’ll test 422, 409, and XSS in Playwright today.”  
+**Correct:** pytest/RTL for those. E2E is the money path: create appears.
+
+README: how to start both servers. `RED.txt`: break the button name, show fail, restore.
+
+Do not commit huge browser binaries if Playwright gitignores them. Do not record real passwords. Do not write attack cases.
+
+127.0.0.1 everywhere to match `allow_origins`.
+
+```mermaid
+flowchart LR
+  H[Human or Playwright] --> V[5173]
+  V --> A[8000]
+  A --> V
+  H --> TITLE[sees new title]
+```
+
+---
+
+# Server startup notes (README)
+
+```powershell
+# terminal 1
+uv run uvicorn main:app --reload --host 127.0.0.1 --port 8000
+# terminal 2
+npm run dev -- --host 127.0.0.1 --port 5173
+```
+
+Playwright `baseURL: "http://127.0.0.1:5173"`. Do not mix localhost.
+
+Track B HAPPYPATH.md sections: start, curl empty, open UI, create, curl nonempty, CORS origin header optional extra.
+
+Thin: one flow. pytest keeps 422. RTL keeps loading.
+
+Month 14: fixtures, auth storage state, trace viewer. Not today.
+
+If Playwright install fails on the lab machine, Track B is **not** a fail. TRACK.md says why. Still do the UI steps.
+
+RED.txt required. Definition of done: evidence file exists.
+
+---
+
+# What “thin” refuses
+
+- Page objects spanning five files  
+- Screenshot comparison  
+- Testing every 422 in the browser  
+- Running against production  
+- Recording an attack  
+
+What thin wants: one green path, one README, one RED.txt.
+
+Playwright config `use.baseURL`. Test uses relative `goto("/")` if set. Host 127.0.0.1.
+
+If create is too fast to see loading, still assert the **title**. Loading is RTL’s job.
+
+Track B: numbered steps. Each step: command or UI action, expected status or text. Sign your name and date in HAPPYPATH.md so you remember you actually ran it.
+
+**Wrong belief:** “Track B is cheating.”  
+**Correct:** Month 14 is Playwright-deep. A lying Playwright config is worse than honest curl+UI.
+
+CORS: if the UI create works, the browser accepted Allow-Origin. Mention that in Track B. curl with Origin is extra proof of the header, not of JS.
+
+Commit evidence. Do not commit `test-results` blobs if huge — follow Playwright gitignore.
+
+Definition of done still: TRACK.md, evidence, RED.txt, README servers.
+
+---
+
+# Recite-back
+
+- [ ] TRACK A or B
+- [ ] one happy path
+- [ ] 127.0.0.1
+- [ ] RED.txt
+- [ ] README two servers
+- [ ] Month 14 is deeper
+- [ ] curl is not CORS alone
+
+Playwright install is optional. Track B is a documented UI pass plus `curl.exe` statuses. Either track must include a **browser**. Both servers on 127.0.0.1. Title 3–40 still dual-validated; E2E uses a legal title.
+
+Tomorrow: no `any` on the client. `tsc --noEmit`. Parse `unknown`.
+
+---
+
+# Closing card
+
+Windows: `curl.exe`. Vite: `npm create vite@latest name -- --template react-ts`. Router: `npm install react-router` and import from `"react-router"`. FastAPI `--host 127.0.0.1 --port 8000`. CORS `allow_origins=["http://127.0.0.1:5173"]` not `*`. `VITE_API_BASE` in `.env` — no secrets. Query v5: `useQuery({ queryKey, queryFn })`, `useMutation({ mutationFn })`, `isPending` first load, `gcTime` not `cacheTime`, `placeholderData: keepPreviousData` when paging, `invalidateQueries({ queryKey })` after writes. Pydantic v2 `model_dump()`. JSON `unknown` then DTO. No `any`. No `fetch` in components. No Project 7 dump.
+
+```mermaid
+flowchart LR
+  UI[UI states] --> Q[Query]
+  Q --> C[client]
+  C --> API[FastAPI]
+  API --> ST[(store)]
+```
+
+---
+
+# Git
+
+```powershell
+cd ~\fullstack-lab
+git add month-12
+git commit -m "Month 12 Day 4: thin happy path evidence."
+```
+
+Playwright traces stay out of git if large. TRACK.md names A or B. Month 14 deepens E2E. Today one path is enough.
+
+Thin E2E is one path. pytest still owns 422. RTL still owns loading. Month 14 owns depth. `127.0.0.1` matches CORS. TRACK.md is required even if Playwright installed cleanly.
+
+Start both servers before the spec. If create is instant, still assert the new title. Do not test XSS here. Do not record real passwords.
+
+```powershell
+uv run uvicorn main:app --reload --host 127.0.0.1 --port 8000
+npm run dev -- --host 127.0.0.1 --port 5173
+```
+
+Then Playwright or the HAPPYPATH.md protocol. One title appearing is the claim.
+
+Definition of done: TRACK.md, evidence, RED.txt, README.
+Thin on purpose.
+Month 14 is the deep Playwright month.

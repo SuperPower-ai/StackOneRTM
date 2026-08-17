@@ -321,3 +321,64 @@ The client throws. Query marks error. The form shows 422 without reset.
 201 is a decorator choice. 204 has no JSON. `model_dump()` is v2.
 
 One door: `api.createCoat`. One cache: `QueryClient`. One origin: 5173.
+
+---
+
+# Network tab homework (write NETWORK.txt)
+
+After one successful create you should see, in order:
+
+1. `OPTIONS /coats` (maybe) — preflight if JSON POST  
+2. `POST /coats` — **201**  
+3. `GET /coats` — 200 with the new row  
+
+If 3 is missing, `onSuccess` did not `invalidateQueries({ queryKey: ["coats"] })`.  
+If 2 is 200, FastAPI forgot `status_code=201`.  
+If 1 fails, CORS `allow_methods` / `allow_headers`.
+
+```ts
+const queryClient = useQueryClient();
+const create = useMutation({
+  mutationFn: createCoat,
+  onSuccess: () => {
+    void queryClient.invalidateQueries({ queryKey: ["coats"] });
+  },
+});
+```
+
+Prefix `["coats"]` also marks `["coats", { q: "xl", page: 2 }]` stale next week. Do not invalidate `"coats"` as a string.
+
+**Wrong belief:** “I’ll `setQueryData` to append the POST body and skip GET.”  
+**Correct:** the server assigned `id` and maybe normalized `size`. Invalidation is honest. `setQueryData` is Day 4’s scalpel.
+
+Mutation **`isPending`** disables the button. List **`isPending`** is only first load. Two different hooks.
+
+204 delete: do not `response.json()`. Handle empty body in `request()`.
+
+```powershell
+curl.exe -s -D - -X POST http://127.0.0.1:8000/coats -H "Content-Type: application/json" -H "Origin: http://127.0.0.1:5173" --data-binary @body.json
+```
+
+Pydantic Out: **`model_dump()`**. Create vs Out if ids are server-assigned.
+
+## Recite-back
+
+- [ ] useMutation object API
+- [ ] invalidateQueries object + prefix
+- [ ] POST 201
+- [ ] mutation isPending ≠ query isPending
+- [ ] no fetch in the form
+
+---
+
+# CRUD.md bullets (required)
+
+- Methods implemented (POST required; PATCH or DELETE in Block C)
+- Exact `queryKey` prefix
+- Why not optimistic today (server assigns id; unique fields exist)
+- 201 on create; 204 on delete if present
+- Preflight note for JSON POST
+
+If the list is paginated already, prefix invalidation still works. You do not list every page key.
+
+Windows: `--data-binary @body.json` if PowerShell eats quotes. `curl.exe`, not `curl`.

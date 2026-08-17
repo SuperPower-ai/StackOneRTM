@@ -269,3 +269,34 @@ Two URLs. Session-scoped upgrade. Function-scoped rollback. Overrides cleared. `
 Windows PowerShell: set TEST URL in the same session as `uv run pytest`. `psql` `\d notices` on the **test** database after pytest — columns should exist; rows should be gone if you rolled back (or leftover if you committed — then fix the fixture).
 
 Honesty in TESTS.md is part of the grade of the day.
+
+---
+
+## Recite-back checklist
+
+Write `RECITE.txt`.
+
+- [ ] TEST_DATABASE_URL ≠ DATABASE_URL  
+- [ ] pytest calls `command.upgrade("head")`  
+- [ ] env.py cannot silently migrate dev  
+- [ ] rollback or truncate isolation  
+- [ ] `tag` (later column) exists because of a revision  
+- [ ] no import-time `create_all`  
+- [ ] overrides cleared  
+- [ ] not ops-api  
+
+**Absolute path to alembic.ini** in conftest:
+
+```python
+from pathlib import Path
+CFG = Path(__file__).resolve().parents[1] / "alembic.ini"
+cfg = Config(str(CFG))
+```
+
+Adjust `parents[n]` to **your** layout. If pytest runs from another cwd, relative `Config("alembic.ini")` fails. That failure is a **path** bug, not an Alembic bug.
+
+**Windows:** `$env:TEST_DATABASE_URL = "...month11_w2d5_test"` **and** set `DATABASE_URL` to the same value inside the fixture if `env.py` reads it. `uv run pytest -q`. `psql -d month11_w2d5_test -c "\d notices"`.
+
+If pytest created tables in `month11_w2d5` (dev), you leaked the URL. Fix before you trust 6B CI.
+
+Do not `drop database postgres`. Do not migrate Atlas production from a lab.

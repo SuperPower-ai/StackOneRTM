@@ -300,3 +300,94 @@ A port is a function you own. Console is a backend you can see. Memory is a back
 The UI creates resources. The server notifies. Keys stay on the server.
 
 Month 13 will email reset links in **design**; the port you wrote today is where that adapter will plug. Do not skip the protocol because print feels toy-like. Print is the point.
+
+---
+
+# Why a Protocol instead of print in the route
+
+A route that `print`s will grow an `smtplib` block next month in the same function. Tests will parse stdout. Production will still print when someone forgets env.
+
+```python
+class EmailSender(Protocol):
+    def send_email(self, to: str, subject: str, body: str) -> None: ...
+```
+
+`ConsoleEmailSender` prints a visible envelope. `MemoryEmailSender` appends dicts. Tests: `app.dependency_overrides[get_email_sender] = lambda: fake` then **`clear()`**.
+
+The JSON 201 is the **notice**, not `{ "email_sent": true }` as a lie. You printed. Be honest.
+
+**Wrong belief:** “I’ll put SMTP host in `VITE_SMTP_HOST` so I can test from the browser.”  
+**Correct:** `VITE_*` is public. Email is a **server** port. The UI POSTs a resource.
+
+BackgroundTasks: after the response, same process. Not Redis. Optional. The **port** is still `send_email`.
+
+```powershell
+curl.exe -s -X POST http://127.0.0.1:8000/notices -H "Content-Type: application/json" --data-binary @notice.json
+```
+
+Watch the Uvicorn terminal. Write one printed envelope in `CONSOLE.txt` (no secrets).
+
+If you add Vite: `invalidateQueries({ queryKey: ["notices"] })`. CORS 5173. No FormData today.
+
+Month 13 reset-email **design** will plug into this port. That is why console is not a toy.
+
+---
+
+# Test shape (copy, rename)
+
+```python
+def test_create_records_email() -> None:
+    fake = MemoryEmailSender()
+    app.dependency_overrides[get_email_sender] = lambda: fake
+    try:
+        r = TestClient(app).post("/notices", json={"title": "Door"})
+        assert r.status_code == 201
+        assert len(fake.messages) == 1
+        assert "Door" in fake.messages[0]["body"]
+    finally:
+        app.dependency_overrides.clear()
+```
+
+Isolation: also clear the notice store. Two tests, two emails, no leftovers.
+
+PORT.md table: console / memory / future SMTP — same method name `send_email`.
+
+No Gmail. No app passwords. No `VITE_`.
+
+---
+
+# Recite-back
+
+- [ ] Protocol send_email
+- [ ] Console in dev
+- [ ] Memory in tests
+- [ ] overrides cleared
+- [ ] no VITE mail secrets
+- [ ] 201 is the resource
+- [ ] UI does not SMTP
+
+Future SMTP implements the same method. Routes do not import smtplib. That sentence is the day.
+
+---
+
+# Office hours extra
+
+Override leak: next test still fakes. Always `finally: clear()`.  
+Asserted stdout only: allowed extra; memory backend is cleaner.  
+UI toast “email sent” on console: say “notice created.”
+
+`uv run pytest -q` must include the memory backend test. `PORT.md` three rows. No Gmail. CORS 5173 if Vite exists. Query invalidate if a list exists. `model_dump()` on NoticeOut.
+
+---
+
+# Closing card
+
+Windows: `curl.exe`. Vite: `npm create vite@latest name -- --template react-ts`. Router: `npm install react-router` and import from `"react-router"`. FastAPI `--host 127.0.0.1 --port 8000`. CORS `allow_origins=["http://127.0.0.1:5173"]` not `*`. `VITE_API_BASE` in `.env` — no secrets. Query v5: `useQuery({ queryKey, queryFn })`, `useMutation({ mutationFn })`, `isPending` first load, `gcTime` not `cacheTime`, `placeholderData: keepPreviousData` when paging, `invalidateQueries({ queryKey })` after writes. Pydantic v2 `model_dump()`. JSON `unknown` then DTO. No `any`. No `fetch` in components. No Project 7 dump.
+
+```mermaid
+flowchart LR
+  UI[UI states] --> Q[Query]
+  Q --> C[client]
+  C --> API[FastAPI]
+  API --> ST[(store)]
+```

@@ -246,6 +246,74 @@ Then implement 1–6 on the cafe tables. If your shape for (4) used WHERE `sold_
 
 ---
 
+# Cafe mini: what “zero drinks” looks like
+
+Seed cafe `Lamp` with no drinks. Count query must list Lamp with 0. If Lamp is missing, you INNER JOINed. That is the week’s entire LEFT JOIN lesson in one title.
+
+Latest-drink window will **omit** Lamp (no rows to rank). Write that gap in exam-expected.md. Optional extra: LEFT JOIN cafes to the ranked CTE to show NULL drink columns for Lamp. That extra is the same gap as Day 4 Empty Harbor + window.
+
+## Subquery vs JOIN — required paragraph prompts
+
+Use these prompts inside JOIN-VS-SUBQUERY.md:
+
+- NOT EXISTS reads like English “cafes that do not have a drink.”  
+- LEFT JOIN IS NULL is the same anti-join in set form; EXPLAIN may differ.  
+- Correlated COUNT in SELECT is easy to type and easy to N+1-ify later in an ORM.  
+- JOIN+GROUP BY is one set operation.  
+- NOT IN (SELECT cafe_id FROM drinks) is wrong if cafe_id can be NULL; your FK is NOT NULL so it might **happen** to work — still prefer NOT EXISTS.
+
+---
+
+# Cafe drinks price grain
+
+`NUMERIC` price: `SUM(price)` per cafe is a report; `AVG(price)` ignores NULL prices if you allow them. Today price is NOT NULL in a good schema. `FILTER (WHERE NOT sold_out)` on SUM is a CTE-or-FILTER extra if time remains.
+
+Window `ORDER BY price DESC, id` — `id` tie-break so two $4 drinks still have unique `rn`. Without id, ROW_NUMBER is still unique but **which** $4 drink is rn=1 is undefined besides the remaining sort. Always add id.
+
+## Debug E extra
+
+`NOT IN (SELECT cafe_id FROM exam_drinks)` with a NOT NULL FK will often match NOT EXISTS. The trap is when the subquery **can** produce NULL. Write one sentence: “I used NOT EXISTS so I do not depend on that.”
+
+## Mini file list
+
+- `01-schema.sql`  
+- `02-seed.sql`  
+- `03-queries.sql`  
+- `exam-expected.md`  
+- `exam-debug.md`  
+- `JOIN-VS-SUBQUERY.md`  
+- `DRILL.md`  
+- `SYNTHESIS.md`  
+- `RETRO.md`  
+
+If SYNTHESIS.md is empty, Block 1 did not happen.
+
+---
+
+# Debug scoring reminder
+
+A is NULL. B is LEFT+WHERE. C is GROUP BY. D is ON CONFLICT target. E is NOT IN. F is max(id). If your exam-debug.md answers those with “try again,” rewrite from the synthesis **after** your first attempt.
+
+Write `ATTEMPT.md`: “I wrote debug before the worked box: yes/no.”
+
+---
+
+Write `DRILL-DONE.md`: seven translations attempted before Block 2, yes/no.
+
+---
+
+Write `LAMP.md`: cafe with zero drinks, exact name used in seed.
+
+---
+
+Write `ANTIJOIN.md`: LEFT JOIN IS NULL or NOT EXISTS for cafes with no drinks.
+
+---
+
+Write `SYN-EMPTY.md`: SYNTHESIS.md is not empty yes/no.
+
+---
+
 ## Optional review links
 
 Repair from this synthesis first.

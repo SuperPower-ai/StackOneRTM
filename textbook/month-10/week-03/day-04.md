@@ -238,9 +238,147 @@ Tests and docs for **transactional invariants**: SCHEMA-style notes plus a rerun
 
 ---
 
+# How to write a proof that cannot lie
+
+A proof has four times:
+
+1. **Before** — SELECT the invariant (counts, balances, SUM(qty)).  
+2. **Act** — BEGIN … statements … COMMIT or ROLLBACK.  
+3. **After** — the same SELECT.  
+4. **Name** — constraint name or “ROLLBACK” as the mechanism.
+
+If you skip (1), you cannot see a no-op. If you skip (3), you are hoping. If you skip (4), you cannot teach a teammate.
+
+## Autocommit false friends
+
+If Proof 2’s parent `Bundle` **remains** after a CHECK failure, you were not in a transaction. Symptoms:
+
+- You ran two files, and the INSERT committed at the end of file 1.  
+- You used `psql -c` twice.  
+- You COMMITTED before the failing INSERT.
+
+Fix: one BEGIN at the top of **one** session, both INSERTs, then the failing statement, then ROLLBACK. Interactive `psql` is the honest tool for abort demos.
+
+## Savepoint ethics
+
+Savepoints are for “try this optional extra.” Example: attach a tag if the tag table accepts it; if not, keep the issue. Transfers, payments, stock moves, “create order+items” are **not** optional extras. If item 2 fails, item 1 and the order must vanish.
+
+Write `SAVEPOINT-ETHICS.md` (six sentences): one good use, one forbidden use (keeping a debit).
+
+## Python sketch (optional, placeholders)
+
+```python
+import os
+import psycopg
+
+def try_bundle():
+    conn = psycopg.connect(
+        host="127.0.0.1",
+        dbname="month10",
+        user="postgres",
+        password=os.environ["PGPASSWORD"],
+    )
+    try:
+        with conn.transaction():
+            cur = conn.cursor()
+            cur.execute(
+                "INSERT INTO w3l_parents (name) VALUES (%s) RETURNING id",
+                ("PyBundle",),
+            )
+            (pid,) = cur.fetchone()
+            cur.execute(
+                "INSERT INTO w3l_children (parent_id, title, qty) VALUES (%s, %s, %s)",
+                (pid, "Bad", 0),
+            )
+    except psycopg.errors.CheckViolation:
+        pass
+    finally:
+        conn.close()
+```
+
+If you run this, assert `PyBundle` is absent. Do not f-string. Do not commit this password.
+
+## Constraint SQLSTATEs (optional asserts)
+
+| Class | Meaning |
+|---|---|
+| 23503 | foreign_key_violation |
+| 23505 | unique_violation |
+| 23514 | check_violation |
+| 23502 | not_null_violation |
+
+You may `print(e.sqlstate)` in a lab test. Do not memorize as a religion; read the error text first.
+
+Write `SQLSTATE.md` if you used Python; otherwise skip.
+
+---
+
+# Proof 5 exact message
+
+You want something like: `ERROR:  current transaction is aborted, commands ignored until end of transaction block`. If you never saw it, you rolled back too fast or used autocommit. Interactive:
+
+```text
+month10=# BEGIN;
+BEGIN
+month10=# INSERT INTO w3l_children (parent_id, title, qty) VALUES (99999, 'x', 1);
+ERROR:  insert or update on table "w3l_children" violates foreign key constraint ...
+month10=# SELECT 1;
+ERROR:  current transaction is aborted ...
+month10=# ROLLBACK;
+ROLLBACK
+month10=# SELECT 1;
+ ?column?
+----------
+        1
+```
+
+Paste your analog into PROOF.md. This transcript **is** the lab.
+
+## Bundle2 FK abort
+
+Parent insert in the same BEGIN as orphan child: both gone after ROLLBACK. If you insert the parent, COMMIT, then BEGIN orphan child, the parent **stays** — that is two transactions. Design Proof 3 so both statements share one BEGIN.
+
+Write `ONE-BEGIN.md`: which proofs share a transaction.
+
+---
+
+# UNIQUE AdaTx proof design
+
+Do not use a name that already exists from a previous run. `AdaTx` plus a suffix if you rerun. Both inserts in **one** BEGIN. After ROLLBACK, `SELECT FROM w3l_parents WHERE name LIKE 'AdaTx%'` is empty for that suffix.
+
+Write `ADATX.md`: the exact name you used.
+
+## Transfer independent uses bins
+
+If you never created w3_bins on Day 3, create them in this folder for Block C. Do not skip the transfer-proof because parents/children felt enough. The decrement/increment pair is the lab feature.
+
+---
+
+Write `TRANSFER-PROOF-PATH.md`: path of the file that shows Ada/bins unchanged after failure.
+
+---
+
+Write `FIVE-PROOFS.md`: list proof numbers 1–5 done yes/no.
+
+---
+
+Write `BUNDLE-GONE.md`: SELECT count of Bundle after proof 2 (expect 0).
+
+---
+
+Write `ADATX-GONE.md`: AdaTx absent after UNIQUE abort yes/no.
+
+---
+
+## Closing note
+
+Interactive `psql` is the honest tool for the aborted-transaction message. Capture it.
+
+---
+
 ## Optional review links
 
-Abort behavior is explained in this chapter.
+Abort behavior is explained in this chapter. These pages are for later checking, not for first learning.
 
 - [PostgreSQL: Transactions](https://www.postgresql.org/docs/current/tutorial-transactions.html)
 - [PostgreSQL: SAVEPOINT](https://www.postgresql.org/docs/current/sql-savepoint.html)

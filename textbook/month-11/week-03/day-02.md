@@ -258,3 +258,26 @@ Postgres commits truth. Redis holds a copy. If the names do not match, the copy 
 fakeredis is allowed. Skip-run still explains. FLUSHALL is not invalidation. `KEYS *` is not a strategy.
 
 Specials are the noun. 6B waits for Day 6’s architecture paragraph.
+
+---
+
+## Recite-back checklist
+
+Write `RECITE.txt`.
+
+- [ ] SET with EX (TTL)  
+- [ ] key catalog is design, not `KEYS *` in production  
+- [ ] commit then DEL  
+- [ ] mismatch names leave stale copies  
+- [ ] stampede is N misses at once  
+- [ ] private data does not share a public list key  
+- [ ] FLUSHALL is forbidden as invalidation  
+- [ ] Postgres is still SoR  
+
+**Jitter (optional math):** if every key expires at 30s exactly after a deploy that SET them together, they align. `ex=30 + random.randint(0, 10)` is enough to **say**. You may skip coding it. STAMPEDE.md should mention alignment.
+
+**Negative cache:** SET a tiny `"[]"` or a sentinel for empty lists with a **short** TTL so empty-miss storms die. Invalidate on first POST. Write one sentence in POLICY.md. Do not cache 404 HTML.
+
+Windows: `uv run py -3`. fakeredis `ex=` + `time.sleep`. If you skip-run, COMMANDS.txt must include `SET ... EX` and `DEL`. Docker is not required.
+
+Do not cache `Authorization` headers as key material. Do not log the JSON if it contains secrets — specials are public-shaped on purpose.

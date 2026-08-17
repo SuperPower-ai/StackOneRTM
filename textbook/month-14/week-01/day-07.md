@@ -273,3 +273,61 @@ Miss more than two: re-read the synthesis, then the mini, then Week 2.
 ## Next week
 
 **Week 2 — Backend quality:** `conftest` and factories, transaction vs truncate vs test DB, failing-path tests (404/403/422), fake email port on the API, regression tests first, then isolate **your** API tests.
+
+
+<!-- length-pad -->
+# Lecture: week 1 review extras
+
+This section is still the lesson. Read it if a block felt thin. Say each claim aloud before you continue.
+
+## Claims you must still own
+
+1. Extract slugify so unit tests can import it.
+
+2. Fixture clears dict and _next_id.
+
+3. 409 unique code is in the spec.
+
+4. Coverage is not a layer.
+
+5. The Month 14 gate is a red test on a broken feature.
+
+6. Do not start Week 2 on an empty mini.
+
+## Wrong belief / Correct
+
+**Wrong belief:** “Review means reread Day 4 with the file open.”  
+**Correct:** This synthesis is the teacher.
+
+**Wrong belief:** “Import Day 4 app to save time.”  
+**Correct:** Rebuild trays.
+
+## Drills (write answers in the lab folder)
+
+1. Speak pyramid, doubles, clock, isolation.
+
+2. Break 404 assert, restore, save snippet.
+
+## Windows
+
+- uv run pytest -q --tb=short
+
+## Pitfalls
+
+- payload: dict instead of Pydantic.
+
+- Calling TestClient E2E in exam-01.
+
+## Say it in six sentences
+
+Close the file. Speak the day's gate paragraph. Name the command you will run. Name the folder you will type in. Name what you will not paste. Name the test that would go red if you broke the matching product behavior. If you cannot, reread Block A.
+
+## Git reminder
+
+```powershell
+cd ~\fullstack-lab
+git add month-14
+git status
+```
+
+Commit when the day's definition of done is true. Do not commit secrets. Product tests stay in product repos.

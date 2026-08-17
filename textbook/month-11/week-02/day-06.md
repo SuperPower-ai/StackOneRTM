@@ -253,3 +253,32 @@ Stamp only when true. Autogenerate only when read. Expand when NOT NULL or renam
 This file contains **no** of your table names. If a chatbot filled them, delete and write yours.
 
 PROGRESS.md tells whether HTTP already uses the Session. Week 3 will not cache a schema you cannot migrate.
+
+---
+
+## Recite-back checklist
+
+Write `RECITE.txt` in the lab folder.
+
+- [ ] BASELINE.md chose path 1, 2, or 3 honestly  
+- [ ] env.py imports **my** models  
+- [ ] baseline applied to a DB I control  
+- [ ] second revision is a column or index I can explain  
+- [ ] downgrade proven on dev or a clone  
+- [ ] MIGRATIONS.md has PowerShell commands  
+- [ ] startup `create_all` removed or scheduled  
+- [ ] no tutorial schema paste  
+
+**Clone for downgrade practice** (PostgreSQL):
+
+```powershell
+psql -U postgres -c "CREATE DATABASE opsapi_miglab TEMPLATE your_dev_db;"
+```
+
+Point `DATABASE_URL` at `opsapi_miglab`, `downgrade -1`, look, `upgrade head`. Leave the real dev DB at head. Write the database names in BASELINE.md so you do not downgrade the wrong one.
+
+If `TEMPLATE` fails because others are connected, disconnect or use `pg_dump` / `pg_restore` if you already know them. Do not invent a GUI-only backup you cannot replay.
+
+Windows: `uv run alembic current` in `~/ops-api`. `psql \dt`. No Redis today. No Mongo. No `Query()`.
+
+If autogenerate is 2000 lines, you are not required to love it — split, or handwritten creates in dependency order (parents first). Read FKs. That is Month 10 still talking.

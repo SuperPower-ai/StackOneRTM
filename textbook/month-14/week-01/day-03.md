@@ -286,3 +286,65 @@ Write `HEURISTIC.md` (six lines): your rule for choosing the layer from a descri
 ## Tomorrow
 
 **Lab:** a pure unit test **and** an HTTP integration test on a **tiny** app you type. Still not Project 7.
+
+
+<!-- length-pad -->
+# Lecture: classification heuristics
+
+This section is still the lesson. Read it if a block felt thin. Say each claim aloud before you continue.
+
+## Claims you must still own
+
+1. The most expensive real piece names the layer.
+
+2. A fake neighbor does not demote an HTTP test to unit.
+
+3. TestClient is integration (HTTP), never E2E.
+
+4. MSW list tests are component tests.
+
+5. Playwright journeys are E2E.
+
+6. Coverage percent is not a layer.
+
+7. Mocking the route is not a useful layer.
+
+8. In-memory dict plus TestClient is still HTTP integration.
+
+## Wrong belief / Correct
+
+**Wrong belief:** “T2 is E2E because it uses HTTP.”  
+**Correct:** No browser; in-process ASGI.
+
+**Wrong belief:** “T5 is E2E because it talks to an API.”  
+**Correct:** MSW is a fake HTTP server in jsdom.
+
+## Drills (write answers in the lab folder)
+
+1. Rewrite CLASSIFY.md for T4 in one sentence using 'expensive real piece'.
+
+2. Name the ninth trap without looking.
+
+## Windows
+
+- uv run pytest -q on the holds unit mini.
+
+## Pitfalls
+
+- Opening Day 1 during Block 2.
+
+- Calling coverage integration.
+
+## Say it in six sentences
+
+Close the file. Speak the day's gate paragraph. Name the command you will run. Name the folder you will type in. Name what you will not paste. Name the test that would go red if you broke the matching product behavior. If you cannot, reread Block A.
+
+## Git reminder
+
+```powershell
+cd ~\fullstack-lab
+git add month-14
+git status
+```
+
+Commit when the day's definition of done is true. Do not commit secrets. Product tests stay in product repos.

@@ -252,3 +252,44 @@ Autogenerate does not love you. It diffs. You supply the bridge with `add_column
 Mail slots are the noun. 6B Day 6 will need this when **your** schema changes under real rows.
 
 Prove with `\d` and `curl.exe`, not with a screenshot of a GUI wizard.
+
+---
+
+## Recite-back checklist
+
+Write `RECITE.txt`.
+
+- [ ] drop+add is data loss, not a rename  
+- [ ] expand adds the new column beside the old  
+- [ ] backfill copies values  
+- [ ] dual-write or dual-read during overlap  
+- [ ] CONTRACT.md moves before DROP  
+- [ ] contract downgrade needs a copy-back if you care  
+- [ ] autogenerate was not allowed to delete `label` unread  
+- [ ] not ops-api  
+
+**HTTP during overlap.** Client A sends `label`. Client B sends `title`. Both 201. If you 422 `label` too early, you did not expand — you lockstepped the API ahead of the story.
+
+**SQLAlchemy model during overlap.** You may have **both** `label` and `title` mapped. After drop, remove `label` from the class **in the same release you drop**, or the Session will INSERT a missing column. Order: stop writing label in Python → migrate drop → delete mapped_column.
+
+Windows: `uv run alembic history`, `psql \d slots`, `curl.exe` GET `/slots`. Bind 127.0.0.1. `model_dump` on Out. `select()` not `Query()`.
+
+If POST is 200, set `status_code=201`. Month 9 still applies. The ORM is not a status code.
+
+---
+
+## Predicted `\d` snapshots (write before you run)
+
+| After revision | `label` | `title` |
+|---|---|---|
+| create slots | NOT NULL | absent |
+| expand | NOT NULL | nullable |
+| backfill | still there | values copied |
+| tighten | still there | NOT NULL |
+| contract | absent | NOT NULL |
+
+If a cell surprises you, the revision order is wrong. Do not DROP `label` while GET still reads it.
+
+**curl.exe during expand:** POST `{"label":"A"}` 201; GET shows `title` filled if you dual-write or fallback. POST `{"title":"B"}` 201. After contract, POST `{"label":"C"}` is 422 if Create dropped `label`.
+
+Windows quoting: use `body.json`. Bind 127.0.0.1. Database `month11_w2d4`.

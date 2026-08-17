@@ -326,3 +326,57 @@ Write `RECITE.txt` with one honest sentence per line.
 - [ ] no gist clone  
 
 If a line is mush, re-read this file only.
+
+---
+
+# Extra lecture — you can ship Project 7 without a provider
+
+Password accounts are enough for the Month 13 gate. OAuth literacy is so you **do not** bolt on a broken button under deadline.
+
+When you later add a provider, you will read **that provider’s** docs, register **exact** redirect URIs, keep secrets on the server, check `state`, prefer PKCE for public clients, and still issue **your** session after the code exchange. You still hash **local** passwords for users who never use the button.
+
+**Never** log the authorization code or tokens.
+
+**ID token** tells the client who authenticated. It is **not** automatically your FastAPI `Authorization` for every route. Validate OIDC **on login**, then mint **your** session (AUTH.md).
+
+**Scopes:** request the minimum. Do not copy a tutorial’s “everything.”
+
+**Implicit flow** from a 2018 blog is **legacy**. Authorization code + PKCE (and a backend) is the picture.
+
+If FLOW.md is a URL list, rewrite it as a story with the four roles named.
+
+Lab: `~\fullstack-lab\month-13\week-02\day-01\`. Notes, not a clone of a dashboard tutorial. No `uv` app required unless you want a quiz dict.
+
+Redirect URI allowlist: `http://127.0.0.1:8000/...` in dev, `https` in production. No wildcard you do not understand.
+
+**Wrong belief:** “OAuth and JWT are the same.”  
+**Correct:** JWT is a **token format**. OAuth is a **protocol**. OIDC can use JWT for ID tokens. Your session cookie is none of those.
+
+---
+
+# Office hours — OAuth vocabulary bugs
+
+**“The React app is the authorization server.”** The authorization server is the **provider** (or a dedicated IdP). React is part of the **client**.
+
+**“I’ll put the client secret in Vite so the SPA can finish the flow.”** Public clients cannot keep secrets. Backend exchange (BFF) or PKCE without shipping a secret.
+
+**“I’ll send the ID token as Bearer to every FastAPI route.”** Your API trusts **your** session. OIDC is how you **create** that session.
+
+**“I’ll register redirect `*` to make demos easy.”** Tight list. Exact URIs.
+
+Write `MISTAKES.md` if you have not: five tutorial mistakes. Write `ROLES.md` if you have not: four roles with a Project 7 sentence each.
+
+`state` is a random value you check on return so an unauthorized page cannot **try** to complete a login into the victim’s browser as easily. Related to CSRF **of the OAuth flow**, not a payload lab.
+
+PKCE: the client that started the flow is the one finishing it. An unauthorized person who **intercepts a code** should not spend it easily. You do not implement PKCE by hand today.
+
+Project 7 may wait on providers. Literacy does not wait.
+
+If you already have a Google cloud project, **do not** spend this day wiring it unless leftover time. The diagram is the deliverable.
+
+Access token: call an API, short-lived. Refresh: mint new access; store hashed or in a table. ID token: who authenticated, for the client.
+
+After OIDC, issue **your** Week 1 session. That is the sentence AUTH.md needs if you add a provider later.
+
+
+

@@ -209,8 +209,9 @@ export function buildNav(): NavMonth[] {
 
 export function isPublished(month: number): boolean {
   const listed = MONTHS.find((info) => info.number === month);
-  if (listed?.status === "published") return true;
-  return loadAllDocs().some((d) => d.month === month);
+  const hasDays = loadAllDocs().some((d) => d.kind === "day" && d.month === month);
+  if (listed?.status === "published" && hasDays) return true;
+  return hasDays;
 }
 
 export function monthChapterCount(month: number): number {

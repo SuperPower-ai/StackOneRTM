@@ -249,3 +249,54 @@ Write `RECITE.txt` with one honest sentence per line.
 - [ ] mini not product  
 
 If a line is mush, re-read this file only.
+
+---
+
+# Extra lecture — rate limits are polite walls
+
+They slow guessing. They do not hash. They do not encode. They do not check `owner_id`.
+
+Lockfiles are how you **repeat** installs. Loose `*` ranges are how surprises enter. Commit `uv.lock`. Write `PINNING.md`.
+
+Mini is quay notes. JSON. Bound search. CORS 5173. 429 on **login attempts**, not only successes. Fixture resets the counter.
+
+Do not add a payload fixture “to be thorough.”
+
+Debug B: f-string `q` → bind.  
+Debug D: “CORS will stop curl” → false.  
+Debug E: rate limit only on success → limit **attempts**.
+
+Lab: `~\fullstack-lab\month-13\week-03\day-07\mini`. `uv run pytest -q`. Bind `127.0.0.1`.
+
+Week 4 is **authorization**. Hiding buttons is not enough. Do not start it if the mini is red.
+
+If debug B still likes f-strings “with escaping,” rewrite B.
+
+---
+
+# Mini reminder (quay notes)
+
+`POST /notes` stores `body`. `GET /notes` search `q` **bound**. CORS 5173. 429 after N login failures keyed by a documented lab key (email or test client id — not a lecture on spoofing IPs).
+
+`uv.lock` exists. `PINNING.md`: we commit this file.
+
+Debug A: `*` and cookies planned → no star.  
+C: `VITE_SESSION_SECRET` → server only.
+
+Break 429 threshold; fail; restore.
+
+`design.md`: why 429 does not replace argon2.
+
+`GAP.txt` from THREATS.md.
+
+`~\fullstack-lab\month-13\week-03\day-07\mini`. `uv add fastapi uvicorn sqlalchemy passlib argon2-cffi`. pytest httpx.
+
+Week 4: [../week-04/day-01.md](../week-04/day-01.md).
+
+Do not start Week 4 on a red mini. Bound search plus 429 plus tight CORS is the Week 3 proof.
+
+`PINNING.md` names the lockfile. Rate limit **attempts**. No payload fixtures.
+
+
+
+

@@ -232,3 +232,149 @@ The red-green loop is explained in this chapter.
 ## Tomorrow
 
 **Independent:** isolate **your** API tests (test DB, fixtures, fakes at boundaries). Product repo, not a paste of this lab into production.
+
+
+<!-- length-pad -->
+# Lecture: regression red then green
+
+This section is still the lesson. Read it if a block felt thin. Say each claim aloud before you continue.
+
+## Claims you must still own
+
+1. Good red is an assertion you recognize, not FixtureNotFound.
+
+2. Read tracebacks from the bottom.
+
+3. Name tests after the bug story.
+
+4. TestClient does not use pytest.raises(HTTPException).
+
+5. Characterization pins current behavior; regression pins desired.
+
+6. Snapshots of whole JSON are weak.
+
+7. If you went green immediately, revert the fix and prove red.
+
+8. The exam needs this loop on a feature break.
+
+9. Keep the test after the fix.
+
+10. Planting a bug in a lab is practice; planting on main overnight is not.
+
+## Wrong belief / Correct
+
+**Wrong belief:** “I'll fix first; tests later.”  
+**Correct:** You cannot prove the test would have caught it.
+
+**Wrong belief:** “Any new assert is a regression test.”  
+**Correct:** It must encode a specific failure.
+
+**Wrong belief:** “assert status != 500 is enough.”  
+**Correct:** 200 with the wrong body still passes.
+
+## Drills (write answers in the lab folder)
+
+1. Produce RED1.txt from whitespace codes.
+
+2. Run a second bug loop.
+
+3. Write WHY-FIRST.md.
+
+## Windows
+
+- uv run pytest -q --tb=short
+
+## Pitfalls
+
+- test_bug as a name.
+
+- Raising HTTPException around TestClient.
+
+## Say it in six sentences
+
+Close the file. Speak the day's gate paragraph. Name the command you will run. Name the folder you will type in. Name what you will not paste. Name the test that would go red if you broke the matching product behavior. If you cannot, reread Block A.
+
+## Git reminder
+
+```powershell
+cd ~\fullstack-lab
+git add month-14
+git status
+```
+
+Commit when the day's definition of done is true. Do not commit secrets. Product tests stay in product repos.
+
+<!-- length-pad-2 -->
+# Worked questions: red-green
+
+Write answers in `Q.md` in the day's lab folder before you peek at the sentences under each question. Then compare.
+
+**Q1.** What is good red?
+
+Answer: An assertion about status or a predicate, not FixtureNotFound.
+
+**Q2.** Why revert if already green?
+
+Answer: You never saw the test catch the bug.
+
+**Q3.** Why not pytest.raises(HTTPException) around TestClient?
+
+Answer: The client turns it into a response.
+
+**Q4.** Weak snapshot?
+
+Answer: Any new field fails; the bug field might not be asserted.
+
+**Q5.** Characterization vs regression?
+
+Answer: Current vs desired. Do not pin a bug as desired.
+
+**Q6.** Exam connection?
+
+Answer: Break a feature; a kept test goes red.
+
+**Q7.** Name shape?
+
+Answer: test_whitespace_only_code_returns_422.
+
+**Q8.** Second loop?
+
+Answer: 409, 403, or mail-on-422. Same red-green.
+
+**Q9.** Commit?
+
+Answer: Test and fix together or test first then fix — red must have been seen.
+
+**Q10.** Plant on main?
+
+Answer: No. Lab or a branch.
+
+## Quick table
+
+| Idea | Honest use | Dishonest use |
+|---|---|---|
+| Red | Bug exists | Fixture typo |
+| Green | Fix works | You deleted the test |
+| Keep | Memory | Souvenir without red |
+| Name | Grep the story | test_bug |
+| HTTP | status_code | raises HTTPException |
+
+## Closing
+
+Month 14's exam is this loop aimed at a product feature. Practice until RED1.txt exists.
+
+If this page is the only thing you remember tomorrow, you still have the day's gate. Type the lab. Run the command. Do not paste Project 7.
+
+## One more planted story (if Block C was thin)
+
+Plant `PATCH` as a stranger returning 200. Write `test_stranger_patch_returns_403`. Watch red. Call `can_edit` in the route. Watch green. That is Month 13 plus Month 14 in one motion.
+
+Do not leave the plant on disk when you stop. The test stays. The bug does not.
+
+The stranger-PATCH story is the same loop as whitespace codes: name the claim, see red, fix the route, keep the test. If you already did this in Block C, write `ALREADY.md` instead of planting twice.
+
+That loop is also how you un-OWED a deny test in TEST-STRATEGY.md before the exam.
+
+```powershell
+uv run pytest -q --tb=short
+```

@@ -369,3 +369,31 @@ Write `RECITE.txt` with one honest sentence per line.
 - [ ] no exploit page  
 
 If a line is mush, re-read this file only.
+
+---
+
+# Extra lecture — flags in production vs the lab
+
+**HttpOnly** stays **True** in lab and production. There is no “we’ll add it after launch.”
+
+**Secure** is often **False** on `http://127.0.0.1` because browsers will not store a Secure cookie on clear HTTP (localhost exceptions exist; do not depend on folklore). Production HTTPS: **True**, driven by `ENV` / settings, not a comment you forget.
+
+**SameSite=Lax** is the default to beat for first-party Project 7. **None** requires **Secure** and is a **cross-site** tool. **Strict** is safer and sometimes annoying for inbound links.
+
+**Path=/** is normal for a session cookie. Do not invent a clever path that “hides” the cookie from `/docs` — `/docs` is not the threat model.
+
+**Max-Age** is the **browser** clock. The **server** row must still expire. Logout deletes the row **and** clears the cookie (`max_age=0`).
+
+**Logging:** never print `Set-Cookie` values. `curl.exe -D headers-login.txt` is a **file you keep local**; do not commit real session ids.
+
+**fetch:** same-origin cookies send by default. Cross-origin needs `credentials: 'include'` **and** CORS credentials **and** an explicit origin — Week 3. Vite **proxy** keeps the cookie first-party if you already use one. Record that in `PROJECT7-COOKIES.md`.
+
+**Wrong belief:** “If curl sent the cookie, SameSite works.”  
+**Correct:** SameSite is a **browser** policy. Today curl is a **header inspector**.
+
+Prefixes `__Host-` / `__Secure-` are optional literacy. Not required in the lab.
+
+If you set `secure=True` on HTTP and the browser ignores the cookie, the flag did its job. Split dev and production settings.
+
+Lab path remains `~\fullstack-lab\month-13\week-01\day-04\`. Bind `127.0.0.1`. `uv run uvicorn main:app --reload --host 127.0.0.1 --port 8000`.
+

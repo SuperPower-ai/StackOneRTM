@@ -362,6 +362,16 @@ Write `CATALOG.md` with one row you actually hit today, in your own words.
 
 ---
 
+**psql `\echo`.** You may add comments in SQL. Do not add `SELECT '=== Q3 ===';` as a substitute for PREDICT.md.
+
+Write `RUN-ORDER.md`: the exact `psql -f` sequence for a teammate.
+
+---
+
+Write `PREDICT-UPDATE.md`: before running C2/C3, guess the constraint names.
+
+---
+
 ## Optional review links
 
 Mutating SQL is explained in this chapter. These pages are for later checking, not for first learning.

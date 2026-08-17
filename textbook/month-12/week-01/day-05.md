@@ -345,3 +345,43 @@ New `QueryClient` every test. `retry: false`. `findBy` for async.
 TestClient is HTTP in-process for FastAPI. It proves 200 and CORS headers. RTL proves the four UI states. You need both kinds this month, not tomorrow’s Playwright yet.
 
 No Project 7 dump. No `any` on the mock JSON if you can type a DTO fixture.
+
+---
+
+# Vitest config sketch (adapt to your template)
+
+If `import.meta.env.VITE_API_BASE` is empty in tests, set it:
+
+```ts
+// vitest.config.ts
+export default defineConfig({
+  test: { environment: "jsdom" },
+  define: {
+    "import.meta.env.VITE_API_BASE": JSON.stringify("http://127.0.0.1:8000"),
+  },
+});
+```
+
+Or a `setup.ts` that assigns on `import.meta.env`. Document the choice in `TESTS.md`.
+
+**Contract vs UI — two sentences for the exam**
+
+TestClient: “GET `/hooks` is 200 and has `items` and `total`; Origin 5173 is echoed.”  
+RTL: “The user sees Loading, then Hook A; on 500 they see an alert.”
+
+jsdom does **not** enforce CORS. Do not claim CORS from a green RTL test.
+
+**Wrong belief:** “`waitFor` is optional if my mock is sync.”  
+**Correct:** Query still schedules microtasks. `findBy` is the default.
+
+```mermaid
+flowchart TB
+  M[mock fetch 200] --> C[client parse]
+  C --> Q[useQuery]
+  Q --> RTL[findBy title]
+  M2[mock fetch 500] --> C2[ApiError throw]
+  C2 --> Q2[isError]
+  Q2 --> AL[findByRole alert]
+```
+
+Re-run after you break the 500 mock. `RED.txt` is part of done.

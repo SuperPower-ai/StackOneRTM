@@ -266,3 +266,36 @@ Write `RECITE.txt` with one honest sentence per line.
 - [ ] model_dump on Out
 - [ ] curl.exe vs browser
 - [ ] not Project 7 source
+
+---
+
+# If you pointed at 6B instead of the stub
+
+Write `SOURCE.txt`:
+
+- exact GET path
+- envelope vs bare array
+- whether you wrapped the array in the client
+- CORS: did 6B already allow 5173?
+
+If 6B returns a bare array, either:
+
+1. Change 6B to `{items, total}` (better for Week 2 pagination), or  
+2. Wrap in the client: `{ items: data, total: data.length }` and say so in CONTRACT.md.
+
+Do not `as any`. Parse.
+
+**Wrong belief:** “Memory day is optional if Day 2 compiled.”  
+**Correct:** Day 2 had the files open in your muscle memory. Today the recap is the teacher.
+
+Windows quoting is not the API. If POST is not in spec, skip it. GET list is enough.
+
+```powershell
+uv run uvicorn main:app --reload --host 127.0.0.1 --port 8000
+npm run dev -- --host 127.0.0.1 --port 5173
+curl.exe -s -D - http://127.0.0.1:8000/shelves -H "Origin: http://127.0.0.1:5173" -o NUL
+```
+
+If Allow-Origin is missing, CORSMiddleware is missing. If curl works and Chrome fails, you opened the wrong host.
+
+Tomorrow Query: `useQuery({ queryKey: ["shelves"], queryFn: () => api.listShelves() })`. If `listShelves` does not exist, you will paste fetch into the page. That fails the week.

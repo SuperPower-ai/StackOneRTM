@@ -261,3 +261,72 @@ Write `ALOUD.md`: the two-minute version in your voice. If it mentions Project 7
 ## Tomorrow
 
 **Week review.** Closed-book synthesis, a mini classify-and-build, debug, then plan Week 2 (pytest fixtures and database isolation). Do not start Week 2 because the calendar moved.
+
+
+<!-- length-pad -->
+# Lecture: strategy documents that can be read aloud
+
+This section is still the lesson. Read it if a block felt thin. Say each claim aloud before you continue.
+
+## Claims you must still own
+
+1. Ten headings exist; slogans do not replace paths.
+
+2. OWED is honest; invented green is not.
+
+3. Product tests live in product repos.
+
+4. One Playwright story, not twenty.
+
+5. Fakes at boundaries; Postgres is a test database.
+
+6. Section 10 names the test that should go red in Week 4.
+
+7. Coverage walks permission files, not getters.
+
+8. Windows commands you actually type belong in the doc.
+
+## Wrong belief / Correct
+
+**Wrong belief:** “Copy a Google testing blog.”  
+**Correct:** Map YOUR risks.
+
+**Wrong belief:** “Strategy means write 200 tests today.”  
+**Correct:** Document plus maybe one extracted predicate.
+
+**Wrong belief:** “I do not have Project 7 so I skip the doc.”  
+**Correct:** Write for the farthest stack you have and mark the gate blocked.
+
+## Drills (write answers in the lab folder)
+
+1. Read TEST-STRATEGY.md aloud in two minutes.
+
+2. Tick REVIEW.md as a hostile TA.
+
+3. Write WHERE.md with the real path.
+
+## Windows
+
+- uv run pytest -q in YOUR api repo.
+
+- npm test -- --run in YOUR web repo.
+
+## Pitfalls
+
+- Pasting handlers into fullstack-lab.
+
+- Calling TestClient E2E in the strategy.
+
+## Say it in six sentences
+
+Close the file. Speak the day's gate paragraph. Name the command you will run. Name the folder you will type in. Name what you will not paste. Name the test that would go red if you broke the matching product behavior. If you cannot, reread Block A.
+
+## Git reminder
+
+```powershell
+cd ~\fullstack-lab
+git add month-14
+git status
+```
+
+Commit when the day's definition of done is true. Do not commit secrets. Product tests stay in product repos.

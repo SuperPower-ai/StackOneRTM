@@ -258,3 +258,149 @@ Review and coverage are explained in this chapter.
 ## Tomorrow
 
 **Independent:** prepare the **break-a-feature rehearsal** (a branch or a documented revert) so the exam is not a scramble.
+
+
+<!-- length-pad -->
+# Lecture: review and flashlight coverage
+
+This section is still the lesson. Read it if a block felt thin. Say each claim aloud before you continue.
+
+## Claims you must still own
+
+1. Review behavior, authz, tests — not commas.
+
+2. Block on authz holes; nit on names.
+
+3. Name the test in the comment.
+
+4. Coverage shows dark lines; it does not prove meaning.
+
+5. Walk permission, delete, mail; ignore getters.
+
+6. No 100% CI gate this month.
+
+7. 100% on can_edit unused by the router still ships 200.
+
+8. term-missing is the flashlight column.
+
+9. Do not commit huge htmlcov.
+
+10. The exam is a red test, not a badge.
+
+11. Dependency majors in lockfiles are a review topic, not today's rabbit hole.
+
+12. Day 6 rehearsal should already name a test.
+
+## Wrong belief / Correct
+
+**Wrong belief:** “100% coverage, thumbs up.”  
+**Correct:** Router might not call the predicate.
+
+**Wrong belief:** “Review is nits about commas.”  
+**Correct:** Formatters ate nits.
+
+**Wrong belief:** “Write more tests.”  
+**Correct:** Name the claim.
+
+## Drills (write answers in the lab folder)
+
+1. FLASHLIGHT.md six rows
+
+2. REVIEW-COMMENTS.md two comments
+
+3. WHY-NOT-100.md
+
+4. WALK.md
+
+## Windows
+
+- uv run pytest --cov=. --cov-report=term-missing -q
+
+## Pitfalls
+
+- Panic at 40% on __repr__.
+
+- Coverage HTML committed.
+
+## Say it in six sentences
+
+Close the file. Speak the day's gate paragraph. Name the command you will run. Name the folder you will type in. Name what you will not paste. Name the test that would go red if you broke the matching product behavior. If you cannot, reread Block A.
+
+## Git reminder
+
+```powershell
+cd ~\fullstack-lab
+git add month-14
+git status
+```
+
+Commit when the day's definition of done is true. Do not commit secrets. Product tests stay in product repos.
+
+<!-- length-pad-2 -->
+# Worked questions: review and coverage
+
+Write answers in `Q.md` in the day's lab folder before you peek at the sentences under each question. Then compare.
+
+**Q1.** Nit vs block?
+
+Answer: Commas vs authz.
+
+**Q2.** Comment shape?
+
+Answer: Observation, risk, test name.
+
+**Q3.** Flashlight?
+
+Answer: term-missing on dangerous files.
+
+**Q4.** Trophy?
+
+Answer: 100% getters.
+
+**Q5.** Unused can_edit?
+
+Answer: 403 HTTP test and call it.
+
+**Q6.** htmlcov commit?
+
+Answer: No.
+
+**Q7.** CI 90% floor?
+
+Answer: Not this month's gate.
+
+**Q8.** Walk order?
+
+Answer: Authz, delete, mail, schemas last.
+
+**Q9.** Playwright every line?
+
+Answer: No.
+
+**Q10.** Lockfile majors?
+
+Answer: Notice; do not rabbit-hole.
+
+**Q11.** Self review?
+
+Answer: Hostile and fair.
+
+**Q12.** Exam?
+
+Answer: Named test in comments should exist.
+
+## Quick table
+
+| Idea | Honest use | Dishonest use |
+|---|---|---|
+| Review | Behavior | Commas |
+| Coverage | Dark branches | Badge |
+| Authz | Deny test | Hidden button |
+| Comment | Test name | Write more tests |
+| Gate | Red on break | 100% |
+
+## Closing
+
+Formatters ate nits. You review meaning. Coverage is a flashlight you actually walk.
+
+If this page is the only thing you remember tomorrow, you still have the day's gate. Type the lab. Run the command. Do not paste Project 7.

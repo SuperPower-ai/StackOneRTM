@@ -239,3 +239,62 @@ Write `RECITE.txt` with one honest sentence per line.
 - [ ] not an attack script  
 
 If a line is mush, re-read this file only.
+
+---
+
+# Extra lecture — refuse the old link
+
+Expiry is a comparison, not a hope. Tests move the clock or the column. Password and verified flags stay put on failure. Public JSON stays generic.
+
+No guessing loops. Entropy plus expiry plus `used_at`. Lab: `~\fullstack-lab\month-13\week-02\day-05\`.
+
+If the only expiry test sleeps, rewrite it before you commit.
+
+```python
+def consume(token: str, *, now: datetime | None = None) -> int | None:
+    now = now or datetime.now(timezone.utc)
+    ...
+```
+
+Tests pass `now=` far ahead **or** insert `expires_at` already past.
+
+Used vs expired vs missing: three internal reasons, **one** public shape if you want to avoid token enumeration.
+
+Rate-limit notes in `RATE.txt` one sentence — Week 3.
+
+Do not print tokens in pytest names. `@example.com` only.
+
+`uv run pytest -q`. No brute-force client.
+
+---
+
+# Required tests (names you may copy)
+
+- `test_fresh_token_ok`  
+- `test_expired_token_refused`  
+- `test_used_token_refused`  
+- `test_expired_reset_does_not_change_password` if reset exists  
+- Optional: expired fail JSON == random-token fail JSON  
+
+`CLOCK.md` explains how tests control time. `PROJECT7-TESTPLAN.md` names tests for the product.
+
+Do not use `datetime.now()` without timezone in new code.
+
+If you compared naive and aware datetimes, you will get a crash or a lie. UTC everywhere.
+
+Mark `used_at` on **success** only unless you have a written reason.
+
+Lab: `~\fullstack-lab\month-13\week-02\day-05\`. Port **your** consume function; do not paste Project 7.
+
+An unauthorized person might **try** an old link from email search. **Prevent:** expiry + used. Tests encode that. They might **try** many random tokens. **Prevent:** entropy + rate limit later. Tests do **not** loop millions of guesses.
+
+`CLOCK.md` plus four named tests are the bar. If you waited 24 hours instead of injecting time, rewrite the test.
+
+Expired reset must leave the old password working. Expired verify must leave `email_verified_at` unchanged.
+
+Public fail JSON stays generic. Internal reasons stay in the test setup, not in the client body.
+
+
+
+
+

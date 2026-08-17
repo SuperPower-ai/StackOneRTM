@@ -282,3 +282,17 @@ Write `RECITE.txt`.
 
 If any debug answer is “just stamp head,” rewrite it from the synthesis.
 Do not start Week 3 until the kits chain upgrades and A–E are sentences.
+
+---
+
+## Office hours (review day)
+
+**Two heads.** You branched revisions. `alembic merge` exists; for the mini, delete the extra unapplied file and keep a line. 6B on one laptop should stay linear if you always pull/commit `versions/`.
+
+**`downgrade -1` after NOT NULL** leaves NULLs if you only alter nullable True without a policy. Fine. If you `drop_column` in downgrade, data in `status` is gone. STORY.md should say which downgrade you implemented.
+
+**pytest inspect cannot find `kits`.** Upgrade did not run, or inspect used the wrong engine URL. Print `engine.url` in the test **without** the password (render with username only) — or print the database **name** only.
+
+Windows: two databases `month11_w2d7` and `_test`. Do not mix. `uv run alembic current`. Mini is kits, not 6B.
+
+Redis is next week. If retro wants Redis tonight, write why a missing column would be cached as 500s, then do not open Redis until kits upgrade.

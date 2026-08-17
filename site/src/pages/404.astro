@@ -1,8 +1,13 @@
 ---
 import Base from "../layouts/Base.astro";
 import Header from "../components/Header.astro";
+import { MONTHS } from "../data/months";
+import { isPublished } from "../lib/catalog";
 
 const base = import.meta.env.BASE_URL;
+const live = MONTHS.filter((month) => isPublished(month.number));
+const latest = live.at(-1);
+const last = live.length;
 ---
 
 <Base title="Page not found" description="That chapter is not in this edition.">
@@ -12,13 +17,14 @@ const base = import.meta.env.BASE_URL;
       <p class="eyebrow">404</p>
       <h1>This page is not in the textbook.</h1>
       <p class="lede">
-        The URL may be mistyped, or that month is still being written. Months 1–14 are in print and open.
+        The URL may be mistyped. Months 1–{last || 1} are in print and open.
       </p>
       <div class="cta-row">
         <a class="btn btn-primary" href={base}>Return home</a>
         <a class="btn btn-secondary" href={`${base}month-01/week-01/day-01/`}>Open Day 1</a>
-        <a class="btn btn-ghost" href={`${base}month-10/`}>Open Month 10</a>
-        <a class="btn btn-ghost" href={`${base}month-14/`}>Open Month 14</a>
+        {latest && (
+          <a class="btn btn-ghost" href={`${base}${latest.slug}/`}>Open Month {latest.number}</a>
+        )}
       </div>
     </section>
   </main>

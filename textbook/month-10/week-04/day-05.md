@@ -190,9 +190,115 @@ Finish the reporting pack and **justify indexes** against real EXPLAIN on **your
 
 ---
 
+# Pool arithmetic you must actually write
+
+Pick numbers and put them in POOL.md. Example:
+
+- PostgreSQL `max_connections` on your laptop: paste `SHOW max_connections;`  
+- You plan 1 Uvicorn worker in dev: pool 5 is plenty  
+- You imagine 4 workers in a small deploy: 4 × 10 = 40; if max_connections is 100 and other apps share the instance, you are already negotiating  
+
+If you cannot paste SHOW, write “I did not connect; typical default 100” and still do the multiply. The gate is the **multiply**, not a production config.
+
+## Idle in transaction — story with SQL
+
+Session borrows a connection, `BEGIN`, `UPDATE …`, then the Python code calls an external HTTP API for 2 seconds, then `COMMIT`. During those 2 seconds:
+
+- The row lock from UPDATE may still be held  
+- The pool has one fewer free connection  
+- Other requests wait  
+
+Good story: `BEGIN`, `UPDATE`, `COMMIT`, return connection, **then** HTTP call (or do HTTP first with no open tx). Write both stories in CHECKOUT.md with **your** Project 6 nouns (issue status, inventory).
+
+## What you will see in Month 11 (preview only)
+
+`create_engine("postgresql+psycopg://…", pool_size=5, max_overflow=5)` is a client pool. You are not typing it today. You are refusing to cargo-cult `pool_size=100`. Overflow exists; it is not infinite.
+
+PgBouncer transaction pooling changes session features (temp tables, prepared statements). That is why it is not “just turn it on” in a lab. Mention it exists; do not install it for the gate.
+
+## INDEXES.md example row
+
+```markdown
+| Name | Table | Columns | Serves | Keep? |
+|---|---|---|---|---|
+| issues_pkey | issues | id | PK | yes, default |
+| issues_project_id_idx | issues | project_id | JOIN, FK checks, list-by-project | yes / EXPLAIN on report 01 |
+| issues_status_idx | issues | status | rejected | no, 80% open |
+```
+
+Fill with **your** names. If the table is empty, the doc is fiction.
+
+Write `REJECTED.md`: the index you did not create, in five sentences.
+
+---
+
+# Held lock story with Week 3 words
+
+FOR UPDATE plus a slow HTTP call is idle-in-transaction **and** a row lock. Pool starvation plus lost-update-adjacent blocking. The fix is the same: short transactions. POOL.md and Day 2’s FOR UPDATE notes are one topic.
+
+Write `LOCK-AND-POOL.md`: five sentences connecting them. This is how Week 3 and Week 4 meet without SQLAlchemy.
+
+## max_connections on Windows
+
+```powershell
+psql -U postgres -d month10 -c "SHOW max_connections;"
+```
+
+Paste the number. Multiply. If you cannot connect, still multiply hypothetical 100.
+
+## Index budget vs reporting pack
+
+Day 4’s EXPLAIN.md should be cited in INDEXES.md. If you promised `issues_project_id_idx` and the plan seq-scanned 30 rows, write “tiny table, index kept for growth.” That is honest. Writing “Index Scan” when you did not run EXPLAIN is not.
+
+---
+
+# Worker arithmetic example to copy and replace
+
+“If `max_connections` is 100 and I run 2 app processes with `pool_size` 8 and `max_overflow` 4, peak is 2×(8+4)=24, leaving headroom for `psql` and backups.” Replace 100 with your SHOW. Replace 2/8/4 with numbers you would actually choose in **dev** (small).
+
+Write `ARITH.md`: one equation.
+
+## INDEXES.md must include PK rows
+
+A budget that lists only extras hides the indexes you already pay for. Start with pkeys and unique constraints from `\d`.
+
+---
+
+# SHOW max_connections paste
+
+Without a paste or an honest skip, POOL.md is a vibe. Run the SHOW. If password fails, write that — still multiply 100 as hypothetical and label it hypothetical.
+
+Write `SHOW.md`: the number or “hypothetical 100.”
+
+## Rejected index paragraph
+
+Five sentences: column, selectivity guess, why B-tree would not help or would not be used, what you would measure in EXPLAIN, that you did not create it.
+
+REJECTED.md is required even if INDEXES.md already has a no row.
+
+---
+
+Write `INDEX-ROWS.md`: how many rows in INDEXES.md (including PK).
+
+---
+
+Write `POOL-EQ.md`: workers × (pool_size + overflow) = your peak.
+
+---
+
+Write `SHOW-N.md`: max_connections number.
+
+---
+
+## Closing note
+
+Paste `SHOW max_connections`. Multiply workers by pool size. Do not invent SQLAlchemy tonight.
+
+---
+
 ## Optional review links
 
-Pools and indexes are explained in this chapter.
+Pools and indexes are explained in this chapter. These pages are for later checking, not for first learning.
 
 - [PostgreSQL: Resource consumption / connections](https://www.postgresql.org/docs/current/runtime-config-connection.html)
 - [PostgreSQL: Indexes](https://www.postgresql.org/docs/current/indexes.html)

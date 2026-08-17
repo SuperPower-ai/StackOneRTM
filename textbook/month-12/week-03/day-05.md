@@ -229,3 +229,75 @@ The UI may validate more (password strength meter later). The API may refuse mor
 Filename, sort, limit, and authz are the rows people forget because the happy path form never sends them. curl remembers.
 
 Month 13 will add rows for CSRF and ownership. Leave a blank **Authz** row as “must-refuse, not implemented this week” if honest.
+
+---
+
+# VALIDATION.md column meanings
+
+| Column | Fill with |
+|---|---|
+| Rule | invariant in English |
+| UI | Zod, input attrs, disabled submit |
+| API | Pydantic, service, SQL whitelist |
+| Bypass | curl.exe or TestClient |
+| Status | 422, 413, 400, 409, 404 |
+
+CORS is **not** a body validator. Put it in a footnote: origin 5173, not `*`.
+
+Authz row: “must-refuse later (Month 13); UI hide is courtesy.” Do not fake a full 401 matrix unless you sketched Day 1 next week.
+
+**Wrong belief:** “If VALIDATION.md exists, drift is impossible.”  
+**Correct:** you still compare Zod and Pydantic numbers in DRIFT.md. The table is a tool, not a spell.
+
+Proofs (two required):
+
+```powershell
+curl.exe ... short title → 422
+curl.exe ... limit=999999 → clamp or 422
+```
+
+or upload wrong type → 400.
+
+Empty list remains 200. Do not put that in the 422 row.
+
+Filename row: UI may display the name; API must not use it as a path.
+
+Email row: no client SMTP; server port only.
+
+---
+
+# Status.md (your words, not a copy of HTTP textbooks)
+
+200 empty is success. 201 created. 204 empty delete. 400 you refused type. 404 you raised missing. 409 unique. 413 too large. 422 schema list. 401/403 later.
+
+Do not 200 `{ok:false}`.
+
+If VALIDATION.md says the API clamps `limit` and the code does not, that is a bug in the doc or the code. Pick one. PROOFS.txt shows the pick.
+
+Auth row honest: not implemented / sketched. No fake security theater.
+
+Filename, sort whitelist, SQL binds: security rows, not polish.
+
+---
+
+# Recite-back
+
+- [ ] courtesy vs must-refuse
+- [ ] two bypass proofs
+- [ ] 413 vs 422
+- [ ] filename not path
+- [ ] sort whitelist API
+- [ ] CORS not a validator row
+- [ ] drift checked
+
+---
+
+# Definition of done reminder
+
+VALIDATION.md rows complete. Two proofs. STATUS.md. DRIFT.md or none. Commit. No Project 7 dump.
+
+---
+
+# Closing card
+
+Windows: `curl.exe`. Vite extra `--`. FastAPI `--host 127.0.0.1`. CORS `http://127.0.0.1:5173` not `*`. `VITE_API_BASE` public. Query v5 object API: `useQuery({ queryKey, queryFn })`, `isPending`, `gcTime` not `cacheTime`. `invalidateQueries({ queryKey })` when you write. Pydantic v2 `model_dump()`. No `fetch` in pages. No Project 7 source dump. Bind 127.0.0.1.

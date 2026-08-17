@@ -199,3 +199,153 @@ The flow is explained in this chapter.
 ## Tomorrow
 
 **From memory:** flake sources (timing, shared DB) and waits that are **not** sleep.
+
+
+<!-- length-pad -->
+# Lecture: critical flow against YOUR app
+
+This section is still the lesson. Read it if a block felt thin. Say each claim aloud before you continue.
+
+## Claims you must still own
+
+1. Login, create primary record, see unique title in the list.
+
+2. Spec lives in the web repo.
+
+3. Seeded e2e user; password in env, not git.
+
+4. Unique title with Date.now or uuid.
+
+5. Role locators; table rows are rows.
+
+6. Do not intercept your own CRUD.
+
+7. Do not waitForTimeout after login; expect a heading.
+
+8. Fix CORS and cookies if login fails; do not sleep.
+
+9. Virtualized lists may need scrollIntoViewIfNeeded.
+
+10. STACK.md ports; FLOW.md names; no secrets.
+
+11. If create is 403, the user cannot create — seed a role that can.
+
+12. This spec is a candidate for the exam red test.
+
+## Wrong belief / Correct
+
+**Wrong belief:** “Intercept every API and call it E2E.”  
+**Correct:** Then you did not prove Postgres or cookies.
+
+**Wrong belief:** “waitForTimeout 5000 after login.”  
+**Correct:** Expect the shell heading.
+
+**Wrong belief:** “Use your personal Google account.”  
+**Correct:** Seeded local user.
+
+## Drills (write answers in the lab folder)
+
+1. STACK.md
+
+2. FLOW.md
+
+3. USER.md role only
+
+4. npx playwright test green
+
+## Windows
+
+- Start API and Vite on 127.0.0.1
+
+- npx playwright test --headed
+
+## Pitfalls
+
+- localhost vs 127.0.0.1 cookies.
+
+- Row on page 2.
+
+- 2FA without a test bypass in local env.
+
+## Say it in six sentences
+
+Close the file. Speak the day's gate paragraph. Name the command you will run. Name the folder you will type in. Name what you will not paste. Name the test that would go red if you broke the matching product behavior. If you cannot, reread Block A.
+
+## Git reminder
+
+```powershell
+cd ~\fullstack-lab
+git add month-14
+git status
+```
+
+Commit when the day's definition of done is true. Do not commit secrets. Product tests stay in product repos.
+
+<!-- length-pad-2 -->
+# Worked questions: critical flow
+
+Write answers in `Q.md` in the day's lab folder before you peek at the sentences under each question. Then compare.
+
+**Q1.** Three steps?
+
+Answer: Login, create, see unique title.
+
+**Q2.** Where spec?
+
+Answer: Your web repo.
+
+**Q3.** Unique?
+
+Answer: Timestamp or uuid in the title.
+
+**Q4.** Intercept CRUD?
+
+Answer: No.
+
+**Q5.** Sleep after login?
+
+Answer: No; expect heading.
+
+**Q6.** 403 on create?
+
+Answer: Wrong role; seed a creator.
+
+**Q7.** Table?
+
+Answer: getByRole row.
+
+**Q8.** Password in STACK.md?
+
+Answer: No.
+
+**Q9.** Virtualized?
+
+Answer: scrollIntoViewIfNeeded or disable in test.
+
+**Q10.** storageState?
+
+Answer: Not for the critical spec; login stays.
+
+**Q11.** CORS?
+
+Answer: 127.0.0.1 match Month 9.
+
+**Q12.** Exam?
+
+Answer: This spec may be the named red test.
+
+## Quick table
+
+| Idea | Honest use | Dishonest use |
+|---|---|---|
+| Login | Real cookies | Stubbed APIs |
+| Create | Unique title | North dock forever |
+| List | Role name | CSS card |
+| Wait | Heading | sleep 5s |
+| User | Seeded e2e | Personal Gmail |
+
+## Closing
+
+One precious journey. Green on your machine. Then Day 3 removes sleeps.
+
+If this page is the only thing you remember tomorrow, you still have the day's gate. Type the lab. Run the command. Do not paste Project 7.

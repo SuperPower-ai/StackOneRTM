@@ -190,3 +190,153 @@ The gate is in [Month 14 README](../../README.md).
 ## Tomorrow
 
 **Month 14 exam + gate.** Break the feature on purpose; show which automated test fails; repair. Self-mark. **Month 15** (Linux, Docker, observability) is **forthcoming** — open it only if every gate row is true.
+
+
+<!-- length-pad -->
+# Lecture: rehearsal for the break
+
+This section is still the lesson. Read it if a block felt thin. Say each claim aloud before you continue.
+
+## Claims you must still own
+
+1. Break a feature, not an assert.
+
+2. Name the test today; prove it green.
+
+3. Dry-run red; restore; do not leave main broken.
+
+4. Branch m14-break-rehearsal or documented revert commands.
+
+5. Forbidden: drop prod DB, secrets, attacking others.
+
+6. If no test exists, write it today (Week 2 Day 5 loop).
+
+7. Menu: skip authz, drop 201, list always empty, login cookie, mail not sent.
+
+8. ONE-LINE.md the product change.
+
+9. Update TEST-STRATEGY section 10.
+
+10. Password never in REHEARSAL.md.
+
+11. Do not force-push.
+
+12. Tomorrow is the exam performance of this rehearsal.
+
+## Wrong belief / Correct
+
+**Wrong belief:** “Change assert 404 to 200.”  
+**Correct:** That breaks the test, not the feature.
+
+**Wrong belief:** “Break CSS padding.”  
+**Correct:** Pick behavior.
+
+**Wrong belief:** “I'll discover a test on exam morning.”  
+**Correct:** That is why today exists.
+
+## Drills (write answers in the lab folder)
+
+1. REHEARSAL.md
+
+2. GREEN.txt
+
+3. RED-DRY.txt
+
+4. ONE-LINE.md
+
+## Windows
+
+- git checkout -b m14-break-rehearsal
+
+- uv run pytest -k name
+
+- npx playwright test
+
+## Pitfalls
+
+- Leaving the break on main overnight.
+
+- Dry-run on production.
+
+## Say it in six sentences
+
+Close the file. Speak the day's gate paragraph. Name the command you will run. Name the folder you will type in. Name what you will not paste. Name the test that would go red if you broke the matching product behavior. If you cannot, reread Block A.
+
+## Git reminder
+
+```powershell
+cd ~\fullstack-lab
+git add month-14
+git status
+```
+
+Commit when the day's definition of done is true. Do not commit secrets. Product tests stay in product repos.
+
+<!-- length-pad-2 -->
+# Worked questions: rehearsal
+
+Write answers in `Q.md` in the day's lab folder before you peek at the sentences under each question. Then compare.
+
+**Q1.** Feature vs assert?
+
+Answer: Change production code.
+
+**Q2.** Dry-run?
+
+Answer: Red then restore today.
+
+**Q3.** Branch?
+
+Answer: m14-break-rehearsal.
+
+**Q4.** No test?
+
+Answer: Write it today.
+
+**Q5.** Menu?
+
+Answer: Authz, 201, empty list, login, mail.
+
+**Q6.** Forbidden?
+
+Answer: Prod drop, secrets, attacking others.
+
+**Q7.** ONE-LINE?
+
+Answer: The product change.
+
+**Q8.** main overnight?
+
+Answer: Must stay green.
+
+**Q9.** Playwright only net?
+
+Answer: Allowed if it is the named test; cheaper is better too.
+
+**Q10.** Cannot git branch?
+
+Answer: Documented copy restore.
+
+**Q11.** Section 10?
+
+Answer: Update strategy.
+
+**Q12.** Tomorrow?
+
+Answer: Exam performance of this script.
+
+## Quick table
+
+| Idea | Honest use | Dishonest use |
+|---|---|---|
+| Break | Product | Assert |
+| Proof | Named test | Coverage % |
+| Restore | Written commands | Memory |
+| Place | Branch | Broken main |
+| Ethics | Test DB | Production |
+
+## Closing
+
+If you cannot name the test tonight, the gate is already in trouble. Write the test.
+
+If this page is the only thing you remember tomorrow, you still have the day's gate. Type the lab. Run the command. Do not paste Project 7.

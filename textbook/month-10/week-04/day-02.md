@@ -250,9 +250,132 @@ git commit -m "Month 10 Week 4 Day 2: EXPLAIN Seq Scan vs Index Scan."
 
 ---
 
+# Reading a plan without becoming a DBA
+
+## Nested Loop vs Hash Join in sentences
+
+**Nested Loop:** “For each row from the outer table, PostgreSQL looks up matches in the inner table. If the inner lookup uses an index on the join key, this can be cheap when the outer side is small.”
+
+**Hash Join:** “PostgreSQL builds a hash table from one side (often the smaller) and probes it with rows from the other side. This is common for joining all tickets to all projects.”
+
+If you cannot tell which you got, look for the words `Nested Loop` or `Hash Join` in the EXPLAIN text. Write that word in JOIN-PLAN.md. Guessing “it joined” is not a sentence.
+
+## Rows removed by filter
+
+If you see `Rows Removed by Filter: N`, the scan read rows and discarded them. An index condition would have avoided fetching some of those. That is how you distinguish Index Cond from Filter in a full sentence: “The index could not test `lower(title)`; the filter ran after the fetch.”
+
+## Timing noise
+
+First ANALYZE of a query can be slower (cache). Second run may be faster. Do not chase 0.05 ms. Chase node **type** and **row count** stories. If actual rows is 4000 and you expected 5, your WHERE did not filter — that is a query bug, not an index bug.
+
+## ANALYZE the table
+
+```sql
+ANALYZE w4_tickets;
+```
+
+This updates statistics. After `generate_series` inserts, run it. If you skip it, the planner may think the table is empty-ish. Mention in PLANS.md whether you ANALYZEd.
+
+## Parallel seq scan
+
+You might see `Gather` and `Parallel Seq Scan`. Sentence: “PostgreSQL split the sequential read across workers.” That is still a seq scan family, not an index win. Do not confuse parallelism with indexing.
+
+## What to paste
+
+Paste the **top nodes**, not 200 lines of YAML. A text EXPLAIN of 15–40 lines is enough. Annotate with `-->` comments in PLANS.md, not in the SQL that you rerun.
+
+Write `SENTENCE-BANK.md` with six templates you filled in using **your** plan’s numbers.
+
+---
+
+# Cost numbers — what they are not
+
+`cost=0.00..85.50` does not mean 85 milliseconds. It does not mean 85 cents. It is a planner unit. Comparing **two plans for the same SQL** is the use. Comparing your laptop’s 85 to a classmate’s 92 is noise.
+
+`actual time=0.123..1.456` **is** milliseconds for that run. Cache effects matter. Write “about 1–2 ms” not “exactly 1.456 forever.”
+
+## Bitmap scan sentence bank
+
+If you see Bitmap Index Scan:
+
+“PostgreSQL collected row locations from the index into a bitmap, then read the heap in an order closer to sequential. This often appears when many rows match, more than a single index scan of scattered heap pages would like, but not so many that a seq scan wins.”
+
+If you do not see it, do not pretend. Seq and Index Scan are enough for the gate.
+
+## Join plan: nested loop example story
+
+“Outer: Index Scan on w4_tickets for project_id = 3, 80 rows. Inner: Index Scan on w4_projects by id. Nested Loop because 80 is small.”
+
+Your numbers will differ. The **structure** of the sentence is the skill.
+
+## When EXPLAIN lies to beginners
+
+- You EXPLAINed without ANALYZE and believed `rows=1` when actual is 4000 — stats.  
+- You EXPLAIN ANALYZE a query with `LIMIT 10` and thought the whole table is cheap — LIMIT can short-circuit.  
+- You read the **inner** node time as the whole query — look at the top node’s actual time.
+
+Write `LIMIT-PLAN.md`: EXPLAIN ANALYZE the LIMIT 10 query from 05-order.sql and say whether the plan **stopped early**.
+
+## Recreate indexes if you dropped them
+
+Day 1 names:
+
+```sql
+CREATE INDEX IF NOT EXISTS w4_tickets_project_id_idx ON w4_tickets (project_id);
+CREATE INDEX IF NOT EXISTS w4_tickets_project_created_idx
+  ON w4_tickets (project_id, created_at DESC);
+```
+
+Do not leave the lab without these if you used the drop test.
+
+---
+
+# Hash join vs nested loop recap for this file
+
+You may see Hash Join on the COUNT report that scans all tickets and all projects. Sentence: “A hash join built a hash of projects (50 rows) and scanned tickets (4000).” That is normal. It is not a missing index emergency.
+
+Write `HASH.md`: one sentence from **your** 04-join.sql plan.
+
+## Drop-test restore confirmation
+
+`\d w4_tickets` must show `w4_tickets_project_id_idx` before you leave. If the drop test is still down, recreate. Day 3 pagination assumes the composite index may exist.
+
+---
+
+Write `COMPOSITE-USED.md`: did 05-order.sql mention `w4_tickets_project_created_idx` in EXPLAIN? yes/no/uncertain.
+
+---
+
+Write `EQ-NODE.md`: Seq Scan or Index Scan for project_id = 1.
+
+---
+
+Write `PLAN-STATUS.md`: Seq Scan or Index Scan for WHERE status = 'open'.
+
+---
+
+# ILIKE plan one-liner
+
+Leading wildcard → Filter on seq scan (typical). Write that in PLANS.md if 03-ilike.sql did that. If you somehow got an index, say which — unusual for `%Ticket%`.
+
+Write `BUFFERS.md`: used EXPLAIN (ANALYZE, BUFFERS) yes/no (optional).
+
+Write `TOP-NODE.md`: the first node word in 01-explain-eq.sql plan.
+
+---
+
+## Closing note
+
+Write four sentences per plan before you add another index. Seq Scan can be the honest answer.
+
+Cost is not milliseconds.
+
+---
+
 ## Optional review links
 
 Plans are explained in this chapter. These pages are for later checking, not for first learning.
 
 - [PostgreSQL: Using EXPLAIN](https://www.postgresql.org/docs/current/using-explain.html)
 - [PostgreSQL: EXPLAIN](https://www.postgresql.org/docs/current/sql-explain.html)
+- [PostgreSQL: Statistics](https://www.postgresql.org/docs/current/planner-stats.html)

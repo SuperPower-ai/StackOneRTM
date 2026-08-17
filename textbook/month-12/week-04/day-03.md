@@ -195,3 +195,108 @@ Write `RECITE.txt`.
 - [ ] curl.exe
 - [ ] no fetch in pages
 - [ ] not Project 7
+
+---
+
+# Happy-path script (fill CURL.txt)
+
+```powershell
+curl.exe -s http://127.0.0.1:8000/tabs
+# 200 empty items
+
+curl.exe -s -D - -X POST http://127.0.0.1:8000/tabs -H "Content-Type: application/json" --data-binary @tab.json
+# 201
+
+curl.exe -s http://127.0.0.1:8000/tabs
+# items length 1, same title
+```
+
+Browser: empty or loading → submit valid title → row appears **without** a full reload. That is invalidation. If you need F5, `STALE.txt` and fix `invalidateQueries({ queryKey: ["tabs"] })`.
+
+Zod 3–40. Pydantic 3–40. curl `"ab"` 422. UI `"ab"` no 201.
+
+**Wrong belief:** “Memory day can skip CORS because curl works.”  
+**Correct:** open 127.0.0.1:5173. If blocked, middleware.
+
+Client-only fetch. `VITE_API_BASE`. `ApiError`. `useQuery({ queryKey: ["tabs"], queryFn })`. `useMutation({ mutationFn })`. `isPending` list vs mutation. `gcTime` not `cacheTime`. `model_dump()`. Vite extra `--`. `react-router` only if you route.
+
+No Project 7 dump. Index tabs. 25-minute lookup. `lookups.txt`.
+
+Auth not required. Uploads not required. Pagination optional.
+
+The second GET is the month.
+
+---
+
+# Network order (browser)
+
+1. GET `/tabs` 200  
+2. POST `/tabs` 201 (OPTIONS maybe before)  
+3. GET `/tabs` 200 with new row  
+
+If 3 missing, invalidate missing. If 2 is 200, status_code=201 missing. If 1 is HTML, VITE_API_BASE unused (relative fetch).
+
+Speak Block A. Paper sequence in DRILLS.txt. Build. Defect hunt including STALE.txt.
+
+Title 3–40 both sides. CORS 5173. No Day 2 copy. Recite-back in RECITE.txt.
+
+Happy path is the month in miniature: store, API, UI, then tomorrow a recorded proof.
+
+---
+
+# Recite-back
+
+- [ ] GET empty 200
+- [ ] POST 201
+- [ ] invalidate then GET has row
+- [ ] four UI states
+- [ ] dual 3–40
+- [ ] CORS 5173
+- [ ] no fetch in pages
+- [ ] curl.exe three calls
+
+If STALE.txt happened, you learned more than if it did not. Leave the fix in the code.
+
+Optional pagination: not required. Optional `/me`: not required.
+
+Days 1–2 of the week closed. Recap in this file. 25-minute lookup.
+
+Index tabs, not Project 7, not ops-web.
+
+---
+
+# Worked session extra
+
+uv + Vite extra `--`. Client. Provider. Object hooks. Pydantic Field 3–40. CORS 5173. Three curls. Zod preferred. `model_dump()`. Invalidate prefix. No cacheTime. No star. No Project 7. STALE.txt if you saw it.
+
+```powershell
+curl.exe -s http://127.0.0.1:8000/tabs
+curl.exe -s -D - -X POST http://127.0.0.1:8000/tabs -H "Content-Type: application/json" --data-binary @tab.json
+curl.exe -s http://127.0.0.1:8000/tabs
+```
+
+201 in the middle. List grows. Browser matches without F5.
+
+---
+
+# Closing card
+
+Windows: `curl.exe`. Vite extra `--`. FastAPI `--host 127.0.0.1`. CORS `http://127.0.0.1:5173` not `*`. `VITE_API_BASE` public. Query v5 object API: `useQuery({ queryKey, queryFn })`, `isPending`, `gcTime` not `cacheTime`. `invalidateQueries({ queryKey })` when you write. Pydantic v2 `model_dump()`. No `fetch` in pages. No Project 7 source dump. Bind 127.0.0.1.
+
+---
+
+# Git
+
+```powershell
+cd ~\fullstack-lab
+git add month-12
+git commit -m "Month 12 Day 3: tabs list-create-list from memory."
+```
+
+Lookups.txt: none or honest. The second GET is the point of the month. Empty then create then appear. 201 in the middle.
+
+Four states. Dual 3–40. CORS 5173. Client-only fetch. That is the happy path.
+
+Commit after CURL.txt.
+Do not copy Day 2.
+Do not paste ops-web.

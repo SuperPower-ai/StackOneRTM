@@ -218,3 +218,135 @@ States are explained in this chapter.
 ## Tomorrow
 
 **a11y:** jest-axe (or equivalent) light check; names and roles still rule.
+
+
+<!-- length-pad -->
+# Lecture: loading empty error
+
+This section is still the lesson. Read it if a block felt thin. Say each claim aloud before you continue.
+
+## Claims you must still own
+
+1. Loading is status with a name, not a CSS spinner contract.
+
+2. Delay one handler to observe loading.
+
+3. Empty is a heading, not an alert.
+
+4. Error is alert.
+
+5. queryBy for absence of listitems.
+
+6. Detail 404 is not empty list.
+
+7. Retry button by role name.
+
+8. retry false if Query.
+
+9. COPY.md exact names.
+
+10. Product missing copy is a product bug.
+
+## Wrong belief / Correct
+
+**Wrong belief:** “Empty and error can be the same red text.”  
+**Correct:** Users must tell them apart.
+
+**Wrong belief:** “Spinner class is the loading test.”  
+**Correct:** Use role status.
+
+**Wrong belief:** “No delay needed.”  
+**Correct:** Then you never asserted loading.
+
+## Drills (write answers in the lab folder)
+
+1. Four list tests.
+
+2. Detail 404 and 500.
+
+3. PRODUCT-STATES.md
+
+## Windows
+
+- npx vitest run
+
+## Pitfalls
+
+- delay(10000) slowing the suite.
+
+- Found multiple status without names.
+
+## Say it in six sentences
+
+Close the file. Speak the day's gate paragraph. Name the command you will run. Name the folder you will type in. Name what you will not paste. Name the test that would go red if you broke the matching product behavior. If you cannot, reread Block A.
+
+## Git reminder
+
+```powershell
+cd ~\fullstack-lab
+git add month-14
+git status
+```
+
+Commit when the day's definition of done is true. Do not commit secrets. Product tests stay in product repos.
+
+<!-- length-pad-2 -->
+# Worked questions: three states
+
+Write answers in `Q.md` in the day's lab folder before you peek at the sentences under each question. Then compare.
+
+**Q1.** Loading role?
+
+Answer: status with a name.
+
+**Q2.** Why delay?
+
+Answer: Otherwise loading never appears.
+
+**Q3.** Empty vs alert?
+
+Answer: Empty is success zero; alert is failure.
+
+**Q4.** Absence?
+
+Answer: queryBy listitem not in document.
+
+**Q5.** Detail 404?
+
+Answer: Not the empty list heading.
+
+**Q6.** Retry?
+
+Answer: Button named Retry; second fetch succeeds.
+
+**Q7.** Spinner class?
+
+Answer: Not the contract.
+
+**Q8.** How much delay?
+
+Answer: 200ms, not 10s.
+
+**Q9.** Product no copy?
+
+Answer: Add copy; that is the bug.
+
+**Q10.** Query retry?
+
+Answer: false.
+
+## Quick table
+
+| Idea | Honest use | Dishonest use |
+|---|---|---|
+| Loading | status | CSS animate-spin |
+| Empty | heading | alert |
+| Error | alert | empty heading |
+| Happy | listitem | snapshot |
+| Wait | findBy | sleep |
+
+## Closing
+
+Month 12 required these states. Month 14 requires tests that would fail if they rot.
+
+If this page is the only thing you remember tomorrow, you still have the day's gate. Type the lab. Run the command. Do not paste Project 7.

@@ -257,3 +257,37 @@ Write A–E in sentences. Retro names logging, not a third database.
 - [ ] mini not in ops-api
 
 Do not start Week 4 until the mini invalidates and A–E are sentences.
+
+---
+
+## Office hours (review day)
+
+**Mini GET 200 [] after POST 201.** Invalidation or Session not committing or two databases. `psql` count. Header MISS after POST.
+
+**Tests green, curl stale.** TestClient is not the Uvicorn process. curl hits fakeredis empty after reload. Write RELOAD.txt. pytest is the proof.
+
+**Debug D made me uncomfortable.** Good. The course will not help you attack. Rewrite D as “I would not” plus the SoR/defense sentence.
+
+Windows: `uv run pytest -q`, `curl.exe -D -`, `month11_w3d7`. Quotes are the noun. 6B ARCHITECTURE in Block 4 only.
+
+Week 4 logging will print request ids. A stale cache will look like a heisenbug. Invalidation literacy is the prerequisite.
+
+---
+
+## Predicted mini traces
+
+| Action | Expect |
+|---|---|
+| GET `/quotes` first | 200, X-Cache MISS |
+| GET again | HIT |
+| POST | 201 |
+| GET | MISS, body includes new quote |
+| GET `/quotes/abc` | 422 if id is int |
+
+Debug A is this table’s failure mode. Debug B is FLUSHALL. Debug E is SoR.
+
+`design.md` fail-open vs closed. `retro.md` Week 4 request ids.
+
+Windows: `uv run pytest -q`, `curl.exe`, `month11_w3d7`. Quotes not hangars (those are the month exam). Not ops-api.
+
+If you skip INCR in the mini, still answer debug D in sentences. Defense, not attack.

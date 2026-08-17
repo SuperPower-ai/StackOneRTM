@@ -209,3 +209,93 @@ Days 1–5 of this week.
 ## Tomorrow
 
 **Week 3 review.** Mini-build. Debug. Then Week 4 auth concepts, tests, Project 7 start, month exam.
+
+---
+
+# Choose A or B in the first 10 minutes
+
+Do not start both. Depth.
+
+**A Upload** in **your** API: multipart, cap, allowlist, uuid name, `file_path` column or field, FormData client, `invalidateQueries`, `curl.exe -F`, gitignore binaries, TestClient `files=`.
+
+**B Email** in **your** API: Protocol, console, Depends, Memory + override clear, pytest asserts one message, UI only POSTs JSON, no `VITE_` mail, watch Uvicorn print.
+
+Alembic for `file_path` if Postgres and you choose A — that is a real vertical slice. If you cannot migrate, BLOCKED.md + lab is honest; the month gate for files waits.
+
+**Wrong belief:** “I’ll npm install an email SaaS SDK in Vite.”  
+**Correct:** keys would be public. Server port.
+
+CONTRACT.md in fullstack-lab; code in product repos. No textbook coats/photos nouns as the product domain.
+
+```mermaid
+flowchart TB
+  A[multipart] --> P[path in DB]
+  B[JSON create] --> E[send_email console]
+```
+
+CORS still 5173. Dual validation if the form has a title. `model_dump()` on Out.
+
+---
+
+# Evidence templates
+
+**A**
+
+```
+POST multipart 201
+file_path: lab-uploads/<uuid>.jpg
+disk name ≠ original filename
+413 on oversized
+400 on text/plain
+invalidate list
+```
+
+**B**
+
+```
+POST JSON 201
+Uvicorn printed === DEV EMAIL ===
+pytest MemoryEmailSender len==1
+overrides cleared
+no VITE mail
+```
+
+Pick one template. Fill it. Product commit separate from fullstack-lab envelope commit.
+
+Do not store bytea as the taught design. Do not trust filename. Do not configure SMTP.
+
+---
+
+# Recite-back
+
+- [ ] chose A or B
+- [ ] CONTRACT first
+- [ ] test green
+- [ ] no SMTP / no trusted filename
+- [ ] path not bytes if A
+- [ ] console port if B
+- [ ] CORS 5173
+
+One feature complete beats two stubs. Product repo commit is yours.
+
+---
+
+# Definition of done reminder
+
+CONTRACT A or B. Feature in your API. One test. Evidence. No SMTP secrets. No trusted filename. CORS 5173.
+
+---
+
+# Closing card
+
+Windows: `curl.exe`. Vite extra `--`. FastAPI `--host 127.0.0.1`. CORS `http://127.0.0.1:5173` not `*`. `VITE_API_BASE` public. Query v5 object API: `useQuery({ queryKey, queryFn })`, `isPending`, `gcTime` not `cacheTime`. `invalidateQueries({ queryKey })` when you write. Pydantic v2 `model_dump()`. No `fetch` in pages. No Project 7 source dump. Bind 127.0.0.1.
+
+---
+
+# Independent git
+
+```powershell
+cd ~\fullstack-lab
+git add month-12\week-03\day-06
+git commit -m "Month 12 Day 6: upload or email-port evidence."
+```

@@ -18,7 +18,7 @@ Repair forgotten facts from **this synthesis**, not from Weeks 1–4 day files a
 
 Work in `~\fullstack-lab\month-14-exam\` for exam evidence. Do **not** implement exam minis inside Project 7. Do **not** start Month 15 because the calendar moved.
 
-**Month 15** (Linux, Docker, networking, observability) is **forthcoming**. It opens when this gate is true.
+**Month 15** (Linux, Docker, networking, observability) is in print. Open it when this gate is true — not because the calendar moved.
 
 ---
 

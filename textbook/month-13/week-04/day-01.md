@@ -271,3 +271,109 @@ Write `RECITE.txt` with one honest sentence per line.
 - [ ] tests refuse member admin  
 
 If a line is mush, re-read this file only.
+
+---
+
+# Extra lecture — courtesy is not a lock, with HTTP traces
+
+AuthN is who. AuthZ is whether. 401 vs 403 vs 404 as policy. Hidden buttons are UX. `curl.exe` still speaks HTTP.
+
+Lab header `X-User-Id` is a **shortcut** so you can see 401/403 in an hour. Project 7 uses AUTH.md **sessions**. Anyone can send a header. Do not ship `X-User-Id` as production AuthN.
+
+```powershell
+uv run uvicorn main:app --reload --host 127.0.0.1 --port 8000
+curl.exe -s -D - http://127.0.0.1:8000/admin/stats -o NUL
+curl.exe -s -D - http://127.0.0.1:8000/admin/stats -H "X-User-Id: 1" -o NUL
+```
+
+Predict **401** then **403** for a member. Write `PREDICT.txt` before you run.
+
+**Wrong belief:** “They won’t know the UUID.”  
+**Correct:** ids leak in lists, emails, logs. Check owner/role anyway.
+
+**Wrong belief:** “CORS will stop them calling admin.”  
+**Correct:** curl ignores CORS. Role check on the route.
+
+PROJECT7-ACTIONS.md must mark **API enforced** per action. If the column is “no,” that is Week 4 backlog.
+
+Lab: `~\fullstack-lab\month-13\week-04\day-01\`. `uv run pytest -q`.
+
+If admin stats are 200 for a member, AuthZ is a comment. Fix it.
+
+`disabled` on a button is not a control. DevTools exists. The API refuses.
+
+---
+
+# Worked session — 401 then 403
+
+In-memory users: id 1 member, id 2 admin. Lab header only.
+
+- `GET /who` 401 missing; 200 `{id, role}`  
+- `GET /admin/stats` 401 missing; 403 member; 200 admin  
+
+Tests in pytest. `NOT-PRODUCT.txt` says Project 7 uses sessions.
+
+PROJECT7-ACTIONS.md: 8–15 actions with AuthN required? AuthZ rule? UI hidden? **API enforced?**
+
+**404 vs 403 for other people’s rows:** 403 tells them the id exists. 404 does not. Many products use 404. Pick one. Day 4 tests it.
+
+Layers that fail alone: hidden button, client route guard, CORS, “they won’t know the UUID.”
+
+`Depends(get_current_user)` → 401. Then `require_admin` or `require_owner` → 403/404.
+
+Lab: `~\fullstack-lab\month-13\week-04\day-01\`. `uv init --name lab-authn-authz`.
+
+The month’s two questions are not one. “We added auth” often means login only. Product 7 requires **roles and ownership**.
+
+---
+
+# Status policy (repeat until boring)
+
+| Status | Meaning |
+|---|---|
+| **401** | No valid proof of identity |
+| **403** | Identity known; action forbidden |
+| **404** | Missing **or** you hide that the row exists |
+
+Do not send 200 `{error: "please login"}`.
+
+`get_current_user` missing → 401. Do not 403 “not owner” when you do not know who they are.
+
+Lab: `uv add fastapi uvicorn` and pytest httpx. `uv run pytest -q`.
+
+Write `PREDICT.txt` before curl. Member on `/admin/stats` is 403, not 200.
+
+Tomorrow: RBAC vs ownership. You need **both**.
+
+`~\fullstack-lab\month-13\week-04\day-01\`. `uv run pytest -q`. Bind `127.0.0.1`.
+
+If `/admin/stats` is 200 for a member, stop and fix before Day 2. Role check is three lines and a test — the same shape as tomorrow’s owner check.
+
+**Depends order:** identity first (401), permission second (403/404). Mixing them produces “not owner” for anonymous callers — a confused status.
+
+PROJECT7-ACTIONS.md is not optional. If you cannot list eight actions, you do not know your product yet. Use Project 7 requirements (users, workspaces, primary and secondary entities) as prompts, not as a paste.
+
+`X-User-Id` in production is an open door. AUTH.md sessions or tokens only.
+
+```powershell
+uv run uvicorn main:app --reload --host 127.0.0.1 --port 8000
+curl.exe -s -D - http://127.0.0.1:8000/admin/stats -o NUL
+curl.exe -s -D - http://127.0.0.1:8000/admin/stats -H "X-User-Id: 1" -o NUL
+curl.exe -s -D - http://127.0.0.1:8000/admin/stats -H "X-User-Id: 2" -o NUL
+```
+
+Predict 401, then 403, then 200 for admin id 2. If the middle curl is 200, the member is an admin in your dict — fix the fixture.
+
+Write `STATUSES.txt` with those three lines. That file is the day’s oral exam.
+
+Hidden buttons, client routers, and CORS do not appear in STATUSES.txt. Only HTTP statuses from **your** API. That is AuthZ.
+
+401 is missing identity. 403 is known identity, no. 404 may hide a row. Write which you use for cross-user GET-one.
+
+
+
+
+
+
+
+

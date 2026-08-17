@@ -242,3 +242,64 @@ Bind 127.0.0.1. No secrets in Vite. Error UI short. CORS not auth.
 ## Tomorrow
 
 **Week 1 review** — contracts and CORS myths. Synthesis in the Day 7 file. Mini-build. Days 1–6 closed during the mini-build.
+
+---
+
+# Product join checklist (tick in EVIDENCE.md)
+
+1. Repo paths written (api + web).  
+2. GET path and envelope keys match CONTRACT.md.  
+3. `src/api/` exists; `Select-String fetch src` shows **only** `src/api`.  
+4. `QueryClient` in `main.tsx`; `useQuery({ queryKey, queryFn: () => api.listX() })`.  
+5. First load uses **`isPending`**. Empty copy is not the spinner.  
+6. `.env.example` has `VITE_API_BASE=http://127.0.0.1:8000`.  
+7. API `CORSMiddleware` lists `http://127.0.0.1:5173` only (plus localhost only if documented).  
+8. `curl.exe -s` the list; then `curl.exe -D -` with Origin 5173.  
+9. Browser `http://127.0.0.1:5173` — not a random port.  
+10. One test: TestClient envelope **or** RTL loading→name.
+
+**Wrong belief:** “I’ll wire Redux because the dashboard had it in Month 7.”  
+**Correct:** GET lists stay in Query. Redux is still optional and not for this list.
+
+If 6B has no list, adding GET list + Out model + `model_dump()` **is** today’s backend work. That is not cheating. That is the join.
+
+Postgres stays. Do not rip 6B back to a dict to make CORS easier.
+
+```powershell
+curl.exe -s http://127.0.0.1:8000/YOUR
+curl.exe -s -D - http://127.0.0.1:8000/YOUR -H "Origin: http://127.0.0.1:5173" -o NUL
+```
+
+Write the two status lines in EVIDENCE.md. If the second has no Allow-Origin, fix CORS before you call the UI done.
+
+---
+
+# What “wired” means in one paragraph
+
+Your list page mounts. `useQuery({ queryKey: ["YOUR"], queryFn: () => api.listYOUR() })` runs. `queryFn` is the client. The client prefixes `VITE_API_BASE`, checks `ok`, parses `unknown`. FastAPI returns an envelope your CONTRACT named. CORS allows `http://127.0.0.1:5173`. `isPending` shows loading. Empty is a success sentence. Error is an alert and Retry. `curl.exe` showed the same JSON. A test exists. That is Day 6. Extra chrome is not a substitute.
+
+If two components subscribe to the same key, Network shows **one** GET. If you see two, the keys differ. Fix the key, not the API.
+
+Do not add create unless the list is honest. Week 2 is mutations.
+
+---
+
+# BLOCKED.md shape (only if true)
+
+- What endpoint 6B/Project 7 is missing
+- What you ran instead (lab noun — **new**, not Day 4 benches)
+- What you will do next session to unstick
+
+The month gate still needs **your** API list. A lab fallback is honesty, not a pass.
+
+---
+
+# Git
+
+Product repos: commit there. fullstack-lab: envelope only.
+
+```powershell
+cd ~\fullstack-lab
+git add month-12\week-01\day-06
+git commit -m "Month 12 Day 6: list join evidence."
+```

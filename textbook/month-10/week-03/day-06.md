@@ -166,7 +166,135 @@ Week review: transactions + constraints. Mini exam on a new pair of updates. Rep
 
 ---
 
+# Invariant catalog (fill with your nouns — examples are shapes)
+
+**Shape C — constraint already in CREATE TABLE.** “Every issue has a real project.” Mechanism: FK. Proof: insert `project_id = 99999` fails.
+
+**Shape T — transaction.** “Creating an issue always writes an audit row, or neither.” Mechanism: BEGIN two INSERTs. Proof: second INSERT fails CHECK → no issue row.
+
+**Shape I — isolation note.** “Two agents must not both close the last inventory unit from a stale read.” Mechanism: `qty = qty - 1 WHERE qty >= 1`, UPDATE 0 means conflict. FOR UPDATE only if you must read extra columns before deciding.
+
+**Shape R — RESTRICT.** “Cannot delete a customer with open orders.” Mechanism: ON DELETE RESTRICT. Proof: DELETE fails; name the constraint.
+
+**Shape U — uniqueness of a pair.** “A user cannot join a project twice.” Mechanism: PRIMARY KEY (project_id, user_id). Proof: second INSERT fails 23505.
+
+**Shape K — CHECK.** “Duration minutes > 0.” Proof: 0 fails.
+
+You need six rows. If four are Shape C, add T and I. Variety is the week.
+
+## Mapping to Month 11 without writing Month 11
+
+When you `session.add(order); session.add(item); session.commit()`, that **is** today’s BEGIN/COMMIT if the session is used correctly. If you `commit()` after the order and then insert the item in a new request, you recreated autocommit split. Write that risk in MONTH11.md.
+
+`expire_on_commit` and session scope are Month 11. Today: “one request, one transaction, rollback on 4xx/5xx that happens after SQL started.”
+
+## Proof file headers
+
+Each `proofs/*.sql` starts with:
+
+```sql
+-- Invariant I4: create clinic and first clinician together
+-- Expected: after failed clinician CHECK, no clinic named 'TxClinic'
+```
+
+Then the SQL. RESULTS.md pastes the error and the after SELECT.
+
+## Forbidden proofs
+
+Running proofs on `w3l_parents` and claiming they are Project 6. Using a blog `posts` table. CASCADE on users to make DELETE easy.
+
+Write `NOT-LAB.md`: one sentence that your table names are from CONTRACT.md.
+
+---
+
+# Example invariant table (replace nouns)
+
+| ID | Sentence | Tag |
+|---|---|---|
+| I1 | Every issue references a real project | constraint FK |
+| I2 | Email unique among users | constraint UNIQUE |
+| I3 | Title not blank | constraint CHECK |
+| I4 | Issue and first comment created together | transaction |
+| I5 | Cannot delete project with issues | constraint RESTRICT |
+| I6 | Two workers cannot both take the last stock from a stale read | isolation-note |
+
+If your domain has no stock, I6 is status: “two agents cannot both mark the same appointment booked from a stale remaining=1.” Still `col = col - 1 WHERE col >= 1` or a UNIQUE on a booking slot.
+
+## Proof I4 sketch
+
+BEGIN; INSERT parent RETURNING id; INSERT child with bad CHECK; catch abort; SELECT parent by unique name — empty.
+
+That is the same as Week 3 Day 4 Bundle, with **your** names. If RESULTS.md still says `w3l_parents`, you failed today’s transfer.
+
+## MONTH11.md prompts
+
+- Which route creates two rows?  
+- Will you commit after the first insert? (No.)  
+- Where does rollback happen on 409?  
+
+No code. Names of handlers from CONTRACT.md.
+
+---
+
+# Dual write warning
+
+If 6A created an issue and a notification dict in one request, Stage B must do both INSERTs in one BEGIN or you split them. Name that pair in I4. If 6A had no pair, invent an honest one (issue+event) in CONTRACT-DELTA.md — still no API today.
+
+Write `PAIR.md`: the two tables in the bundle.
+
+## RESTRICT delete proof
+
+`DELETE FROM parent WHERE id = …` while children exist must fail. Paste the constraint name into RESULTS.md. If it succeeds, you used CASCADE or had no children. Fix before claiming I5.
+
+---
+
+# Six rows minimum
+
+If INVARIANTS.md has four rows, add I5 RESTRICT and I6 isolation-note before you git commit. Variety was the instruction. Four FKs is one idea repeated.
+
+Write `COUNT-INV.md`: how many rows in the table (must be >= 6).
+
+## Proofs live next to SCHEMA.md
+
+Reviewers should not hunt Week 3 lab folders for Product 6 proofs. `ops-api/sql/proofs/` or `sql/invariants/`. Link from SCHEMA.md.
+
+---
+
+# Isolation-note must name a column
+
+“Be careful with concurrency” is not I6. Name `qty`, `status`, or `remaining_slots` and the SQL shape `col = col - 1 WHERE col >= 1`. If your domain is only labels, I6 can be “do not upsert membership on POST.” Still specific.
+
+Write `I6.md`: the sentence copied from the table.
+
+## Proof 2 uniqueness
+
+If both proofs are FK orphans, replace one with UNIQUE or CHECK abort in a bundle. Variety.
+
+---
+
+Write `SCHEMA-LINK.md`: SCHEMA.md links to INVARIANTS.md yes/no.
+
+---
+
+# Why I6 is not optional
+
+A schema that never names a race will grow an ORM that reads-modify-writes. I6 exists so Month 11 has a written warning. If you skip it, add it now even if the proof is a paragraph not SQL.
+
+Write `PAIR-TABLES.md`: the two table names in I4.
+
+Write `I6-COL.md`: the column named in I6.
+
+---
+
+## Closing note
+
+Six tagged invariants, two proofs on **your** tables. Lab `w3l_` names fail this day.
+
+---
+
 ## Optional review links
+
+These pages are for later checking, not for first learning.
 
 - [PostgreSQL: Constraints](https://www.postgresql.org/docs/current/ddl-constraints.html)
 - [PostgreSQL: Transactions](https://www.postgresql.org/docs/current/tutorial-transactions.html)

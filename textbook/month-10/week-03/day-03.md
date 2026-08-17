@@ -169,9 +169,135 @@ Lab: **prove ROLLBACK undoes** and **constraint failure aborts** with a checklis
 
 ---
 
+# Transfer mechanics you must invent from the recap
+
+## UPDATE 0 is a business result
+
+```sql
+UPDATE w3_bins
+SET qty = qty - 4
+WHERE code = 'A' AND qty >= 4
+RETURNING code, qty;
+```
+
+If this returns no row, there was not enough stock **or** the code was wrong. You cannot tell those apart from UPDATE 0 alone. SELECT first inside the same BEGIN if you need a precise error, then UPDATE, or use two different WHERE failures (missing code vs qty). Either way: **ROLLBACK** if the transfer cannot complete. Do not COMMIT a decrement that had no increment.
+
+## Two-bin transfer with RETURNING both
+
+You will write something with this **shape** (you still type it; this is a shape, not a paste-ready product):
+
+```sql
+BEGIN;
+
+UPDATE w3_bins SET qty = qty - 4 WHERE code = 'A' AND qty >= 4
+RETURNING code, qty;
+
+UPDATE w3_bins SET qty = qty + 4 WHERE code = 'B'
+RETURNING code, qty;
+
+COMMIT;
+```
+
+If the second RETURNING is empty, the dest bin does not exist. The first UPDATE is still uncommitted. ROLLBACK. That is the whole point of Day 3.
+
+## Why not Python arithmetic
+
+```text
+a = SELECT qty FROM w3_bins WHERE code = 'A'   -- 10
+# another session subtracts 3 → qty 7
+UPDATE w3_bins SET qty = 6 WHERE code = 'A'    -- you believed 10-4
+```
+
+Lost update. `qty = qty - 4` would have become 3. Write STALE.md even if you refuse to run the broken version. Running it once in lab on `w3_bins` is allowed if you reset after.
+
+## Isolation reminder (from Day 2, in this file)
+
+A second `psql` session during your open BEGIN should still see A=10, B=0 until COMMIT. If it sees 6 and 4 early, you autocommitted. Visibility is how you debug “I thought I BEGAN.”
+
+## CHECK as backstop
+
+`CHECK (qty >= 0)` turns a bug that subtracts 999 into an error and abort. `WHERE qty >= n` turns it into UPDATE 0. Prefer both: WHERE for control flow, CHECK for the invariant. Document in STOCK.md which one you saw first.
+
+## Identity gaps
+
+If you INSERT a third bin inside a transaction and ROLLBACK, the id may skip. That is not missing inventory. Do not number bins by arithmetic on ids.
+
+Write `TRANSFER-SHAPE.md`: eight to twelve sentences restating the four-step pattern (BEGIN, decrement with guard, increment, COMMIT) using **bin** words, not account words.
+
+---
+
+# Bin codes vs ids
+
+Look up bins by `code` (`'A'`, `'B'`), not by assuming id 1 and 2 after other labs. `WHERE code = 'A'` is stable in this folder’s seed. Ids are not.
+
+## Insufficient stock two ways
+
+```sql
+-- Way 1: UPDATE 0
+UPDATE w3_bins SET qty = qty - 999 WHERE code = 'A' AND qty >= 999;
+
+-- Way 2: CHECK
+UPDATE w3_bins SET qty = qty - 999 WHERE code = 'A';
+```
+
+Way 2 errors and aborts if CHECK exists and 10-999 < 0. Way 1 is silent 0. Both must end in ROLLBACK of the bundle if you already decremented nothing and must not increment B. If Way 1 returns 0, do not run the increment.
+
+Write both in STOCK.md with the message or `UPDATE 0`.
+
+## Reset helper
+
+```sql
+UPDATE w3_bins SET qty = 10 WHERE code = 'A';
+UPDATE w3_bins SET qty = 0 WHERE code = 'B';
+```
+
+Use this between experiments. It is two autocommit facts on purpose — you are repairing the lab, not transferring.
+
+Write `RESET.md`: when reset is allowed (between proofs) vs when it would hide a failed ROLLBACK (do not reset before the after SELECT).
+
+## Two windows visibility script
+
+Window 1: BEGIN; decrement A; SELECT. Window 2: SELECT A. Window 2 must see 10. Window 1 COMMIT. Window 2 sees 6. If window 2 saw 6 early, window 1 autocommitted.
+
+---
+
+# Isolation SHOW reminder for Day 2 carry-over
+
+This day stays at default isolation. Do not SET SERIALIZABLE to make two windows “easier.” Read Committed is the point of yesterday’s COUNT story; today’s transfer still uses it.
+
+Write `LEVEL.md`: `SHOW transaction_isolation;` paste.
+
+## RETURNING both bins
+
+If only A is RETURNING and B is not, you cannot see the increment in the same result set. Add RETURNING on both UPDATEs. Paste both into PROOF.md.
+
+---
+
+Write `BINS-CODES.md`: A and B qtys after successful transfer (expect 6 and 4).
+
+---
+
+Write `STOCK-WHICH.md`: UPDATE 0, CHECK, or both for 999.
+
+---
+
+Write `RETURNING-IDS.md`: two ids printed from the transfer UPDATEs.
+
+---
+
+Write `RESET-USED.md`: reset between proofs yes/no.
+
+---
+
+## Closing note
+
+Do not COMMIT a decrement when the increment did not run. ROLLBACK is the product.
+
+---
+
 ## Optional review links
 
-The recap in this file is the teacher.
+The recap in this file is the teacher. These pages are for later checking, not for first learning.
 
 - [PostgreSQL: Transactions](https://www.postgresql.org/docs/current/tutorial-transactions.html)
 - [PostgreSQL: UPDATE](https://www.postgresql.org/docs/current/sql-update.html)

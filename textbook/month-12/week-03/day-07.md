@@ -231,3 +231,73 @@ Write `RECITE.txt`.
 - [ ] 422 loc
 - [ ] courtesy vs law
 - [ ] mini not ops-web
+
+---
+
+# Badges mini plus one extra
+
+Required: JSON POST `/badges` title 3–40 both sides, GET list, CORS 5173, Query mutation + invalidate `["badges"]`, pytest 422 loc.
+
+Optional extra (one): multipart photo **or** console email — not both required.
+
+Debug after you write A–F:
+
+**A** FormData + JSON Content-Type → boundary gone  
+**B** `file.filename` as path → traversal/overwrite  
+**C** Zod 40 Pydantic unlimited → curl long title 201  
+**D** `VITE_SMTP_PASSWORD` → public secret  
+**E** assert exact 422 `msg` → brittle  
+**F** empty list as error → empty is success  
+
+**Wrong belief:** “Week 4 is copy-paste JWT.”  
+**Correct:** Week 4 is a **choice** (cookie vs token) and a sketch. Finish badges first.
+
+`RULES.md` 3–40. Strip order aligned. `model_dump()`. `curl.exe` short title. Vite extra `--`. Object `useMutation`. `isPending` on the button. `gcTime` unused but named in retro.
+
+design.md: three courtesy vs must-refuse rows (title, filename or limit, email-not-from-browser).
+
+---
+
+# exam-01.md must include
+
+Multipart vs JSON; untrusted filename; path not bytes; send_email port; RULES+Zod+Pydantic; 422 loc; courtesy vs law; Query object invalidate; CORS 5173; VITE public.
+
+Mini badges. Debug A–F written **before** you peek keys. Retro: Week 4 is a sketch not an IdP.
+
+If Zod and Pydantic still disagree on 40, repair today. Dual validation is the week.
+
+---
+
+# Recite-back
+
+- [ ] FormData no JSON header
+- [ ] filename discarded
+- [ ] path not bytes
+- [ ] send_email port
+- [ ] Zod + Pydantic aligned
+- [ ] 422 loc
+- [ ] mini not ops-web
+
+Week 4 Day 1: cookie or token, justify, HttpOnly sketch, Month 13 link. No JWT paste.
+
+---
+
+# Next week
+
+[Week 4 Day 1](../week-04/day-01.md) — auth concepts, cookie or token, HttpOnly sketch, [Month 13](../../month-13/README.md). Defense only.
+
+---
+
+# Closing card
+
+Windows: `curl.exe`. Vite extra `--`. FastAPI `--host 127.0.0.1`. CORS `http://127.0.0.1:5173` not `*`. `VITE_API_BASE` public. Query v5 object API: `useQuery({ queryKey, queryFn })`, `isPending`, `gcTime` not `cacheTime`. `invalidateQueries({ queryKey })` when you write. Pydantic v2 `model_dump()`. No `fetch` in pages. No Project 7 source dump. Bind 127.0.0.1.
+
+---
+
+# Review git
+
+```powershell
+cd ~\fullstack-lab
+git add month-12
+git commit -m "Month 12 Week 3 review: badges mini."
+```

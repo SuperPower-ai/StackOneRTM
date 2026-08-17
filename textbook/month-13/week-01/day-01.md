@@ -253,3 +253,129 @@ Password hashing is explained in this chapter. These pages are for later checkin
 
 - [OWASP: Password Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html)
 - [argon2-cffi documentation](https://argon2-cffi.readthedocs.io/)
+- [passlib](https://passlib.readthedocs.io/en/stable/) (same algorithms; `.hash` / `.verify` names)
+
+---
+
+# Lecture: timing-safe compare is a library property
+
+**Naive `==` on secrets** can, in some languages, stop at the first differing character. In principle, an unauthorized person who can measure **many** responses very precisely might **try** to learn about a secret from tiny time differences. That is a **class of bug**, not a lab you will run and not a timing experiment you will build.
+
+**What prevents it:** you do **not** write a character-by-character loop. You call **`verify`** on **argon2-cffi** or **passlib**. Those implementations are the compare. Python’s `hmac.compare_digest` is the helper if you must compare two **high-entropy** byte strings (for example two hashes of a **random reset token** next week). You still do not invent a loop “for security.”
+
+**Wrong belief:** “I’ll write my own constant-time compare to be thorough.”  
+**Correct:** you will get it wrong. Call the library.
+
+**Wrong belief:** “`if candidate == stored_hash` is fine because hashes are long.”  
+**Correct:** `verify` is the API. The stored string encodes algorithm parameters. Equality of two strings is not “this password is right.”
+
+Write `COMPARE.txt` in the lab: one paragraph — verify is the compare; timing-safe is a property you **buy**, not a demo you plot.
+
+---
+
+# Lecture: passlib and argon2-cffi are both allowed
+
+This course allows:
+
+- **`argon2-cffi`:** `PasswordHasher().hash` / `.verify` (today’s type-along).  
+- **`passlib[argon2]`:** `from passlib.hash import argon2` then `.hash` / `.verify`.  
+- **bcrypt** via passlib or `bcrypt` if argon2 cannot install **today**. Write `ALGO.txt`.
+
+Prefer **argon2**. Defaults beat a blog’s “rounds = 4.” You may lower cost **only** in tests, with a **separate** hasher object that never becomes production settings.
+
+**Pepper** (optional literacy): a server-side secret mixed in, kept in config not in the table. Not required today. Not a substitute for argon2.
+
+**Length policy:** minimum you can defend (this course: **at least 10** for new apps unless you write a reason). **Maximum** so a huge body cannot become a denial-of-service on the hasher (cap at 128 or 256 **before** hash). Do not `.lower()` passwords. Emails might be case-folded; passwords are **not**. Empty password: reject at validation; do not hash empty.
+
+**bcrypt 72-byte limit:** know it exists if you chose bcrypt. Another reason argon2 is nicer.
+
+---
+
+# What an unauthorized person might try — and what stops it
+
+If a dump ever leaves your control, they might **try** to recover passwords from a `password` column. **What prevents it:** there is **no** password column — only `password_hash`. They might then **try** many guesses against those hashes. **What slows that:** argon2/bcrypt (slow on purpose) plus a **unique salt per hash** so one guessed word does not unlock every row that used the same word.
+
+They might **try** to read passwords from logs, `/docs` examples, or a JSON body that echoed register. **What prevents it:** never log them; never put them on Out models; never commit secrets.
+
+They might **try** to compare with homemade `==`. **What prevents it:** library `verify`.
+
+This chapter does **not** walk through stealing a dump or guessing. Defense is the job.
+
+---
+
+# Worked session — hashes, not the product
+
+`uv init` in `~\fullstack-lab\month-13\week-01\day-01`. `uv add argon2-cffi` (or passlib). `hash_password` / `verify_password`. Two hashes of the same lab password **differ**; both verify. Print the store; confirm the plaintext is **not** a substring of the stored value.
+
+FastAPI optional: `POST /register` 201 `{email}` only; `POST /login` 401 generic. Bind `127.0.0.1`. **`curl.exe`** with `--data-binary @body.json`. Gitignore `body.json` if it contains even a lab password you might reuse by accident — today’s lab password must be **fictional**.
+
+```powershell
+uv run uvicorn main:app --reload --host 127.0.0.1 --port 8000
+```
+
+Do not add JWT. Do not add Google login. Do not store the hash in a cookie (Day 2: a **session id** is a different object).
+
+**UserOut:** `id`, `email`. Storage may have `password_hash`. `response_model` is the seatbelt (Month 9). Leak = omitted Out.
+
+**Exceptions:** `verify` on a corrupted stored string may raise. Catch and treat as **login failure**, not 500 with a traceback in the body.
+
+---
+
+# Closing lecture — storage is the first lock
+
+Plaintext in a column is a disaster waiting for a dump.
+Encoding is not hashing. Encryption for “email them their password”
+is a product that should not exist. Reset is Week 2.
+
+argon2 or bcrypt through a library. Salt is already in the string.
+You do not invent a salt loop today. You do not invent a compare loop.
+`verify` is the API. Timing-safe is a library property.
+
+Never log passwords, reset tokens, or session ids.
+Never put hashes on UserOut. Never put hashes in Vite.
+SHA-256 is a checksum tool, not a password tool.
+
+This lab is `~\fullstack-lab\month-13\week-01\day-01\`.
+Project 7 remains yours. Notes, not a paste.
+
+Bind 127.0.0.1 if you add HTTP. `curl.exe` if you add HTTP.
+Windows: PowerShell quoting is hostile; a JSON file is kinder.
+
+If two hashes of the same password are equal, you are not using
+the password library. If verify is `==`, rewrite it.
+
+---
+
+## Recite-back checklist (close the editor, then tick)
+
+Write `RECITE.txt` with one honest sentence per line.
+If a line is mush, re-read the matching section in **this** file only.
+
+- [ ] Hash is one-way; encryption is not the password tool  
+- [ ] Salt is inside argon2/bcrypt stored strings  
+- [ ] argon2-cffi or passlib hash + verify  
+- [ ] No homemade timing compare  
+- [ ] No plaintext column  
+- [ ] No secrets in logs  
+- [ ] UserOut omits hash  
+- [ ] Lab is not the product dump  
+
+If `login` returns 200 with `ok: false`, that is a **status** bug. Use **401**.
+If register JSON includes `password` or `password_hash`, that is a leak.
+If you logged the request body on `/login`, delete the log line before you commit.
+
+**Windows:** `curl.exe`, not the `curl` alias. Bind `127.0.0.1`. JSON via `--data-binary @body.json`.
+
+The hash is not a session. Day 2’s session id is a **random handle**. Do not put the hash in a cookie.
+
+
+**Dummy verify (preview of Day 5):** when the email is missing, you may still call `verify` against a **startup dummy hash** so the missing-user path is not obviously faster than the known-user path. Then return the same 401. You will test **equal bodies** on Day 5. Do not `time.sleep` only on one branch.
+
+**Git:** do not commit `.env`. Do not commit a production dump of `USERS`. The lab dict is RAM.
+
+**Project 7 note (not a dump):** `PROJECT7-HASH.md` — which column holds the hash, which Out model omits it, which library you will call.
+
+If argon2-cffi cannot install, bcrypt is acceptable **today** with `ALGO.txt`. Prefer argon2 when both work. Do not MD5 it twice. Do not Base64 the password. Do not AES the password with a key in `.env` so you can “email it back.”
+
+
+

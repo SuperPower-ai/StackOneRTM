@@ -214,3 +214,87 @@ Write `RECITE.txt` with one honest sentence per line.
 - [ ] committed in Project 7  
 
 If a line is mush, re-read this file only.
+
+---
+
+# Extra lecture — name the door and the lock
+
+Every major endpoint is a door. Write who may open it and what you do if they should not. Assets are why you care.
+
+Gaps are honest. Silent gaps are how Week 4 is skipped. IDOR is the preview. `owner_id` is next week.
+
+Your routes, not a template product. Defense sentences. No recipes.
+
+If the table lists only `/health`, you did not inventory.
+
+Too thin: “SQL injection — use best practices.”  
+Enough: “`GET /items?q=` uses a bound pattern; sort whitelist.”
+
+Rate limiting: cap `/login` and `/reset/request` first. Dependency pinning: commit lockfiles — named on Day 7.
+
+SSRF: if you fetch a user URL, allowlist or delete the feature.
+
+Copy THREATS.md into `~\fullstack-lab\month-13\week-03\day-06\` without secrets. Canonical file in Project 7.
+
+One improvement today if easy: generic 401 test, remove unsafe HTML, bind a leftover query, gitignore `.env`.
+
+---
+
+# Table template reminder
+
+| Method | Path | Who may call | Might try (one sentence) | Prevents it |
+|---|---|---|---|---|
+| POST | `/login` | anyone | Guess / enumerate | Generic 401, hash, rate limit? |
+| GET | `/me` | session | No cookie | 401 |
+| PATCH | `/items/{id}` | member | Another user’s id | owner check or GAP |
+
+Fill with **your** paths until boringly complete for major routes.
+
+ASSETS.md: hashes, session ids, email tokens, PII, primary entity, secondary entity, env secrets, mail-sending ability.
+
+Canonical THREATS.md in Project 7. Lab copy has no secrets.
+
+Gate language only: might **try** / **what prevents it**. No “how I would hack.”
+
+---
+
+# Block reminder
+
+A: assets. B: inventory real OpenAPI routes. C: fill prevent; one easy fix. D: AUTH.md cross-read.
+
+IDOR class: they might **try** `PATCH /items/{someone_elses_id}`. **Prevent:** load and check owner/org. If no check, write **GAP**.
+
+Lockfile sentence: we install from `uv.lock` / `package-lock.json`.
+
+If you have uploads or webhooks, add a row. If you fetch URLs, SSRF allowlist row.
+
+Too thin: “hackers might hack login.”  
+Enough: “they might try many passwords; we hash, generic 401, and will rate-limit.”
+
+`~\fullstack-lab\month-13\week-03\day-06\`. Commit Project 7 too.
+
+If AUTH.md and the threat table disagree on cookie flags, fix one of them today. Lying prevent-columns fail the exam.
+
+Week 4 Day 6 is the full one-pager. Today is the **endpoint table**. Keep both. Do not throw this table away.
+
+`ASSETS.md` plus the table plus one gap closed or deferred — that is done.
+
+Do not implement a WAF. Do not attack a URL you do not own. Your OpenAPI, your rows.
+
+Lockfile sentence. Rate limit named. IDOR gap or owner check named. That is enough for Day 6.
+
+Canonical file in Project 7. Lab copy has no secrets. Week 4 Day 6 expands this into a one-pager — do not delete today’s table.
+
+Cross-read AUTH.md. Cookie flags and generic 401 must match the table.
+
+If the prevent column says “owner check” and no test exists, write GAP or add the test.
+
+
+
+
+
+
+
+
+
+

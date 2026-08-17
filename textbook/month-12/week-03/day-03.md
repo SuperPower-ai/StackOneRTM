@@ -216,3 +216,85 @@ Write `RECITE.txt`.
 - [ ] model_dump
 - [ ] CORS 5173
 - [ ] not Project 7
+
+---
+
+# BYPASS.txt is the exam
+
+1. UI: type 2-character title. Submit blocked or field error. Network has **no** POST (or you document why a POST still 422).  
+2. `curl.exe` POST `{"title":"ab"}` → **422**.  
+3. Temporarily comment out the UI check. POST from the form. API still **422**. Restore the UI check.  
+
+That third step is dual validation as a feeling, not a slogan.
+
+Pydantic: `Field(min_length=3, max_length=40)` plus strip validator so `"  ab"` does not sneak through. Zod tomorrow will `.trim()` in the same order. Write the order in STORY.md today.
+
+**Wrong belief:** “Disabled button is security.”  
+**Correct:** curl, TestClient, a second client, a stale SPA. The API is the law.
+
+Uploads: `accept="image/*"` is the same story as Zod. The API still allowlists and caps.
+
+Email: the UI cannot be the mailer. The port is the law.
+
+```powershell
+curl.exe -s -D - -X POST http://127.0.0.1:8000/signs -H "Content-Type: application/json" --data-binary @short.json
+```
+
+CORS 5173. `model_dump()` on Out. Query invalidate on 201 if you list. No Day 2 copy. `lookups.txt`.
+
+---
+
+# STORY.md outline (ten lines)
+
+1. UI check saves a round trip.  
+2. API check saves the database.  
+3. They must use the same numbers.  
+4. curl is the bypass client for **your** lab.  
+5. 422 loc names `title`.  
+6. Empty list is not 422.  
+7. `accept=` is not a file type law.  
+8. Email is not a Vite feature.  
+9. `model_dump()` Out.  
+10. Query invalidates after a legal 201.
+
+Oral Block A without Day 1–2 files. Paper drills: English, Zod sketch, Field, two predictions.
+
+No complete app in the prompt. You write signs.
+
+---
+
+# Recite-back
+
+- [ ] UI courtesy
+- [ ] API law
+- [ ] same length numbers
+- [ ] curl 422
+- [ ] bypass still 422
+- [ ] strip order written
+- [ ] not Project 7
+
+Day 4 types both Zod and Pydantic. Today STORY.md + BYPASS.txt are required even if Zod is a hand `if`.
+
+---
+
+# Definition of done reminder
+
+Spoke A. Pydantic 3–40. UI refuses short. curl 422. BYPASS.txt. Commit. Signs not ops-web.
+
+---
+
+# Closing card
+
+Windows: `curl.exe`. Vite extra `--`. FastAPI `--host 127.0.0.1`. CORS `http://127.0.0.1:5173` not `*`. `VITE_API_BASE` public. Query v5 object API: `useQuery({ queryKey, queryFn })`, `isPending`, `gcTime` not `cacheTime`. `invalidateQueries({ queryKey })` when you write. Pydantic v2 `model_dump()`. No `fetch` in pages. No Project 7 source dump. Bind 127.0.0.1.
+
+---
+
+# Independent git
+
+```powershell
+cd ~\fullstack-lab
+git add month-12
+git commit -m "Month 12 Day 3: dual validation story."
+```
+
+Lookups.txt: none or honest. Days 1–2 closed. Recap was the teacher.

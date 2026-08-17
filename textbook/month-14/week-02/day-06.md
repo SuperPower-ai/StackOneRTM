@@ -193,3 +193,137 @@ Isolation is explained in Day 2 of this week.
 ## Tomorrow
 
 **Week review.** Synthesis, mini-build (not your product), debug, plan Week 3 (RTL, MSW, a11y).
+
+
+<!-- length-pad -->
+# Lecture: isolating YOUR api tests
+
+This section is still the lesson. Read it if a block felt thin. Say each claim aloud before you continue.
+
+## Claims you must still own
+
+1. Postgres test database, not the SQLite gym as proof.
+
+2. Safety assert on the URL.
+
+3. Isolation fixture every test.
+
+4. Empty-start or equivalent unique-code absence.
+
+5. Fake mail/redis/clock or dated OWED.
+
+6. Alembic on the test DB.
+
+7. Evidence is paths and names, not source.
+
+8. Do not DROP a URL you use for clicking unless it is clearly *_test.
+
+9. If the suite is huge, still isolate the folder you run.
+
+10. Strategy section 5 must match reality.
+
+## Wrong belief / Correct
+
+**Wrong belief:** “Copy Day 2 SQLite into production tests.”  
+**Correct:** Product is Postgres.
+
+**Wrong belief:** “Isolation means deleting the DB by hand.”  
+**Correct:** Fixtures do it.
+
+**Wrong belief:** “I still mock Session.commit for everything.”  
+**Correct:** Keep at least one resource honest.
+
+## Drills (write answers in the lab folder)
+
+1. Fill INVENTORY.md.
+
+2. Run empty-start until order-independent.
+
+3. Update TEST-STRATEGY.md.
+
+## Windows
+
+- $env:TEST_DATABASE_URL = '...'
+
+- uv run pytest -q
+
+## Pitfalls
+
+- Secrets in lab git.
+
+- Deleting empty-start because it flakes.
+
+## Say it in six sentences
+
+Close the file. Speak the day's gate paragraph. Name the command you will run. Name the folder you will type in. Name what you will not paste. Name the test that would go red if you broke the matching product behavior. If you cannot, reread Block A.
+
+## Git reminder
+
+```powershell
+cd ~\fullstack-lab
+git add month-14
+git status
+```
+
+Commit when the day's definition of done is true. Do not commit secrets. Product tests stay in product repos.
+
+<!-- length-pad-2 -->
+# Worked questions: product isolation
+
+Write answers in `Q.md` in the day's lab folder before you peek at the sentences under each question. Then compare.
+
+**Q1.** Why not SQLite as product proof?
+
+Answer: Postgres types and constraints differ.
+
+**Q2.** Safety assert limitation?
+
+Answer: A prod name could contain the letters test.
+
+**Q3.** Empty-start flakes?
+
+Answer: Fix fixtures; do not delete the detector.
+
+**Q4.** Rollback vs commit war?
+
+Answer: Savepoint or truncate; do not mock commit as the fix.
+
+**Q5.** Evidence format?
+
+Answer: repo, cmd, passed, isolation, test names.
+
+**Q6.** Alembic?
+
+Answer: upgrade head on the test DB.
+
+**Q7.** Secrets?
+
+Answer: Env in the session; never lab git.
+
+**Q8.** No tests at all?
+
+Answer: Add TestClient on one resource today.
+
+**Q9.** Huge suite?
+
+Answer: Marks and a folder; still isolate.
+
+**Q10.** Strategy mismatch?
+
+Answer: Rewrite section 5 to match reality.
+
+## Quick table
+
+| Idea | Honest use | Dishonest use |
+|---|---|---|
+| Test DB | Dedicated name | Shared with TablePlus humans |
+| Rollback | Fast | Broken by commit |
+| Truncate | Survives commit | Forgotten table |
+| Mock Session | Fast | Misses constraints |
+| Evidence | Names | Pasted routers |
+
+## Closing
+
+Day 6 is the week that matters: YOUR repo. Labs do not replace it.
+
+If this page is the only thing you remember tomorrow, you still have the day's gate. Type the lab. Run the command. Do not paste Project 7.

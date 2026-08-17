@@ -284,3 +284,27 @@ Environment variables are how machines differ. Git is how code is shared. Health
 503 means not ready. 200 means the promise of that path. Liveness is cheap. Readiness is a ping you actually run.
 
 Cloakroom tickets are the noun. 6B Settings will be **yours** on Day 6.
+
+---
+
+## Recite-back checklist
+
+Write `RECITE.txt`.
+
+- [ ] Settings from environment  
+- [ ] `.env` gitignored; `.env.example` committed  
+- [ ] missing DATABASE_URL fails loud at startup  
+- [ ] `/health` is liveness, no URLs  
+- [ ] `/ready` pings or READY.md  
+- [ ] 503 not 200-with-false  
+- [ ] `model_dump` if dumping; redact  
+- [ ] no `/debug-config`  
+- [ ] request id still present  
+
+**lru_cache trap.** Tests that change env after first `get_settings()` see old values. `get_settings.cache_clear()` in a fixture. Write that in TESTS.md even if you skip pytest today.
+
+**Redis and /ready.** If Redis is optional in ARCHITECTURE.md, `/health` must not require it. `/ready` may. Document. fakeredis should not be the reason liveness fails.
+
+Windows: `git status` must not show `.env`. `curl.exe` `/health` and `/ready`. `$env:DATABASE_URL` or `.env` file. Bind 127.0.0.1.
+
+If `/ready` 500 instead of 503, you let the exception bubble. Map it. Loud and **correct status**.

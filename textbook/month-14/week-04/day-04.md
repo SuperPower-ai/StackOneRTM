@@ -237,3 +237,84 @@ Hygiene is explained in this chapter.
 ## Tomorrow
 
 **Code review checklist** and **useful coverage** vs chasing 100%.
+
+
+<!-- length-pad -->
+# Lecture: lint format hooks concept
+
+This section is still the lesson. Read it if a block felt thin. Say each claim aloud before you continue.
+
+## Claims you must still own
+
+1. Ruff check lints; ruff format formats.
+
+2. ESLint lints TS; Prettier formats.
+
+3. A git hook is a script git runs; pre-commit aborts on non-zero.
+
+4. .git/hooks is not committed; frameworks install from committed config.
+
+5. Hooks must be seconds; no Playwright in the hook.
+
+6. --no-verify exists; CI is the backstop.
+
+7. Lint green is not tests green.
+
+8. Windows CRLF vs LF — note it, do not fight all day.
+
+9. If pre-commit install fights Windows, document commands and run them.
+
+10. lint-staged idea: only staged files.
+
+11. Month 16 CI still needed.
+
+12. Do not add 20 scanners today.
+
+## Wrong belief / Correct
+
+**Wrong belief:** “Pre-commit means I do not need CI.”  
+**Correct:** Hooks can be skipped.
+
+**Wrong belief:** “Put ruff in a Playwright test.”  
+**Correct:** Different layer.
+
+**Wrong belief:** “Format deletes unused imports.”  
+**Correct:** That is check --fix.
+
+## Drills (write answers in the lab folder)
+
+1. HOOKS.md
+
+2. COMMANDS.md
+
+3. PRODUCT-HOOKS.md
+
+4. FAST.md estimated seconds
+
+## Windows
+
+- uv run ruff check .
+
+- uv run ruff format .
+
+- npx prettier --write src
+
+## Pitfalls
+
+- Hook hung on npx network.
+
+- Playwright in the hook list.
+
+## Say it in six sentences
+
+Close the file. Speak the day's gate paragraph. Name the command you will run. Name the folder you will type in. Name what you will not paste. Name the test that would go red if you broke the matching product behavior. If you cannot, reread Block A.
+
+## Git reminder
+
+```powershell
+cd ~\fullstack-lab
+git add month-14
+git status
+```
+
+Commit when the day's definition of done is true. Do not commit secrets. Product tests stay in product repos.

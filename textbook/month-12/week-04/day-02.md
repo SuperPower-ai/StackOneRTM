@@ -212,3 +212,176 @@ If Python says `title` and TypeScript says `name`, the product is already split.
 curl.exe remains the manual sibling. Automated tests are the regression net.
 
 Month 14 will drive a real browser. Today you still own HTTP and Query.
+
+---
+
+# Shared fixture pattern
+
+`fixtures/clipboard.json`:
+
+```json
+{ "id": 1, "title": "Board A" }
+```
+
+Python TestClient expects those keys after POST 201.  
+TypeScript mock fetch returns the same shape.  
+Zod parse in the client should accept it.
+
+If Python uses `name` and TS uses `title`, the join is already broken. Fix CONTRACT.md.
+
+```python
+def test_cors_list() -> None:
+    r = client.get("/clipboards", headers={"Origin": "http://127.0.0.1:5173"})
+    assert r.status_code == 200
+    assert r.headers.get("access-control-allow-origin") == "http://127.0.0.1:5173"
+```
+
+RTL wrapper:
+
+```ts
+new QueryClient({
+  defaultOptions: {
+    queries: { retry: false, gcTime: 0 },
+    mutations: { retry: false },
+  },
+});
+```
+
+`MemoryRouter` from `"react-router"` if you have routes. Do not nest `BrowserRouter`.
+
+**Wrong belief:** “One TestClient test of 201 means the create form works.”  
+**Correct:** the form can still `fetch` relative URLs. RTL with mock fetch under the **client** proves the page.
+
+**Wrong belief:** “MSW in jsdom proves CORS.”  
+**Correct:** CORS is a browser rule. TestClient headers or Playwright/Day 4.
+
+LAYERS.md three bullets: HTTP, UI+Query, future E2E.
+
+Isolation: reset dict + `_next_id`; unstub fetch; new QueryClient every test.
+
+`model_dump()` on Out so the fixture matches reality.
+
+This is not Playwright. Day 4 is thin E2E. Month 14 is deep.
+
+```mermaid
+flowchart TB
+  FIX[shared JSON] --> PY[pytest status]
+  FIX --> TS[RTL titles]
+  CONTRACT[CONTRACT.md] --> FIX
+```
+
+Write `INTEGRATION.md`: one paragraph on what is not yet in-process (real Vite, real CORS in a browser).
+
+Minimum suite:
+
+1. pytest POST 201 + GET list total  
+2. pytest 422 loc on short title if dual validation exists  
+3. RTL loading then title  
+4. RTL create error alert on mocked 422  
+
+If time: 401 `/me` TestClient from Day 1 sketch — optional, not a product auth dump.
+
+---
+
+# Why “integration” is a shared CONTRACT
+
+A UI test that returns `{ name: "A" }` and an API that returns `{ title: "A" }` will both be green and the product will still be wrong. The fixture is the join.
+
+Copy the fixture into pytest as `json.loads(Path("fixtures/clipboard.json").read_text())` or duplicate the dict once and comment “keep in sync.” Prefer one file if the test runners can see it.
+
+jsdom `fetch` stub must return `Content-Type: application/json` so the client’s `response.json()` works.
+
+Do not start Uvicorn inside Vitest. Do not start Vite inside pytest. That is Day 4 / Month 14.
+
+401 tests: optional. Do not dump login product.
+
+Write LAYERS.md. Run both suites. RED.txt on one broken assert.
+
+`invalidateQueries` in the real app; in RTL you may mock GET after POST with two items instead of proving refetch — say so in TESTS.md. Prefer proving refetch if the mock is sequential.
+
+This chapter is the learn day for tests-across-layers. Spend Block C on 422 loc **and** an alert, not on a toast library.
+
+---
+
+# Block B file tree
+
+```
+day-02/
+  CONTRACT.md
+  fixtures/clipboard.json
+  lab-api/main.py
+  lab-api/test_clipboards.py
+  lab-web/src/api/client.ts
+  lab-web/src/api/clipboards.ts
+  lab-web/src/test/renderWithQuery.tsx
+  lab-web/src/ClipboardList.test.tsx
+  LAYERS.md
+  INTEGRATION.md
+```
+
+pytest: fixture reset store. Vitest: unstub fetch. Neither suite imports the production `queryClient`.
+
+When POST 201 body must match Out `model_dump()`. If you add a field tomorrow, both tests fail together — that is success.
+
+**Wrong belief:** “I’ll skip RTL because TestClient is faster.”  
+**Correct:** then `isPending` UI disappears and nobody notices until Playwright month.
+
+**Wrong belief:** “I’ll skip TestClient because the UI looks right.”  
+**Correct:** then POST stays 200 and CONTRACT.md is decoration.
+
+Spend time on 422 loc **and** the alert. Dual validation Week 3 still applies.
+
+`curl.exe` is the third runner for humans. Not required in CI today.
+
+Auth optional: one 401. Do not expand into OAuth.
+
+`gcTime: 0` in tests. `retry: false` queries and mutations.
+
+Import `MemoryRouter` from `"react-router"` when the list is a route.
+
+This learn day is long on purpose: two stacks, one sentence.
+
+---
+
+# Recite-back
+
+- [ ] shared fixture
+- [ ] pytest HTTP
+- [ ] RTL loading then title
+- [ ] mock fetch not useQuery
+- [ ] CORS header test
+- [ ] retry false both hooks
+- [ ] LAYERS.md
+
+Run both:
+
+```powershell
+uv run pytest -q
+npx vitest run
+```
+
+If only one is green, the day is not done. CONTRACT.md is the shared language. `model_dump()` on Out. No Playwright required. No Project 7 dump. `gcTime: 0` in the test client.
+
+---
+
+# Closing card
+
+Windows: `curl.exe`. Vite: `npm create vite@latest name -- --template react-ts`. Router: `npm install react-router` and import from `"react-router"`. FastAPI `--host 127.0.0.1 --port 8000`. CORS `allow_origins=["http://127.0.0.1:5173"]` not `*`. `VITE_API_BASE` in `.env` — no secrets. Query v5: `useQuery({ queryKey, queryFn })`, `useMutation({ mutationFn })`, `isPending` first load, `gcTime` not `cacheTime`, `placeholderData: keepPreviousData` when paging, `invalidateQueries({ queryKey })` after writes. Pydantic v2 `model_dump()`. JSON `unknown` then DTO. No `any`. No `fetch` in components. No Project 7 dump.
+
+```mermaid
+flowchart LR
+  UI[UI states] --> Q[Query]
+  Q --> C[client]
+  C --> API[FastAPI]
+  API --> ST[(store)]
+```
+
+---
+
+# Git
+
+```powershell
+cd ~\fullstack-lab
+git add month-12
+git commit -m "Month 12 Day 2: TestClient and RTL share a fixture."
+```

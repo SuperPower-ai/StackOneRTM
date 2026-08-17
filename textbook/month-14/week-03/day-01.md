@@ -270,3 +270,149 @@ Query priority is explained in this chapter.
 ## Tomorrow
 
 **MSW** — HTTP in component tests without starting Uvicorn.
+
+
+<!-- length-pad -->
+# Lecture: role and name until it hurts
+
+This section is still the lesson. Read it if a block felt thin. Say each claim aloud before you continue.
+
+## Claims you must still own
+
+1. Users and screen readers use the accessibility tree.
+
+2. getByRole with name beats class selectors.
+
+3. A div.btn is a product bug when getByRole button fails.
+
+4. get throws, query returns null, find waits.
+
+5. Await userEvent.
+
+6. within(row) for per-row actions.
+
+7. Labels via htmlFor, not placeholder-as-name.
+
+8. Icon-only buttons need aria-label.
+
+9. testid is last.
+
+10. Do not spy on useState.
+
+11. Prove RED-DIV.txt.
+
+12. Grep tests for querySelector — zero.
+
+## Wrong belief / Correct
+
+**Wrong belief:** “Stable BEM classes are fine.”  
+**Correct:** Classes change with restyle; roles change with meaning.
+
+**Wrong belief:** “data-testid everything.”  
+**Correct:** The UI is mute to assistive tech.
+
+**Wrong belief:** “getByText Save is as good as role.”  
+**Correct:** It matches headings too.
+
+## Drills (write answers in the lab folder)
+
+1. Map your create form to roles.
+
+2. Add aria-label to an icon delete.
+
+3. Use within on a listitem.
+
+## Windows
+
+- npm create vite extra --
+
+- npx vitest run
+
+## Pitfalls
+
+- Forgetting await user.click.
+
+- Multiple /edit/i buttons.
+
+## Say it in six sentences
+
+Close the file. Speak the day's gate paragraph. Name the command you will run. Name the folder you will type in. Name what you will not paste. Name the test that would go red if you broke the matching product behavior. If you cannot, reread Block A.
+
+## Git reminder
+
+```powershell
+cd ~\fullstack-lab
+git add month-14
+git status
+```
+
+Commit when the day's definition of done is true. Do not commit secrets. Product tests stay in product repos.
+
+<!-- length-pad-2 -->
+# Worked questions: RTL philosophy
+
+Write answers in `Q.md` in the day's lab folder before you peek at the sentences under each question. Then compare.
+
+**Q1.** Why role and name?
+
+Answer: That is how users and AT see the UI.
+
+**Q2.** div.btn?
+
+Answer: No button role; getByRole fails; fix markup.
+
+**Q3.** get vs find?
+
+Answer: find waits for async.
+
+**Q4.** query vs get for absence?
+
+Answer: query returns null; get throws.
+
+**Q5.** userEvent await?
+
+Answer: Forgetting await flakes.
+
+**Q6.** within?
+
+Answer: Scope a row's delete button.
+
+**Q7.** placeholder?
+
+Answer: Not a label.
+
+**Q8.** testid?
+
+Answer: Last resort.
+
+**Q9.** useState spy?
+
+Answer: Do not test implementation.
+
+**Q10.** RED-DIV?
+
+Answer: Prove the contract.
+
+**Q11.** searchbox?
+
+Answer: type=search may be searchbox role.
+
+**Q12.** Vitest command?
+
+Answer: npx vitest run.
+
+## Quick table
+
+| Idea | Honest use | Dishonest use |
+|---|---|---|
+| Role | Meaning | Class |
+| Name | Label/text | testid soup |
+| findBy | Async fetch | getBy too soon |
+| userEvent | Real events | fireEvent only |
+| within | Row scope | nth-child |
+
+## Closing
+
+If the test cannot find the control, neither can a screen reader. That is the philosophy.
+
+If this page is the only thing you remember tomorrow, you still have the day's gate. Type the lab. Run the command. Do not paste Project 7.

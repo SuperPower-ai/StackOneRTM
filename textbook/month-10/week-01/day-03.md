@@ -271,6 +271,32 @@ Write `COMPOSITE.md` (six to ten sentences) answering: what would break if team 
 
 ---
 
+# Drop order as a sentence
+
+`d3_memberships` references teams and people. `d3_teams` references orgs. `d3_org_settings` references orgs. Drop memberships and settings before teams and people, then orgs. If you `DROP TABLE d3_orgs` first, PostgreSQL refuses (RESTRICT) or cascades if you asked it to. Type the DROP list in `00-reset.sql` in dependency order. That order is a model of the graph.
+
+## Role CHECK vs role table
+
+`lead` / `member` is a closed set. CHECK is honest. If Day 6’s product will add roles weekly, a `roles` table is better — not required today. Do not CHECK twenty strings.
+
+Write `ROLE.md` only if you added a third role; otherwise skip.
+
+## Proof table (fill in PROOF.md)
+
+| # | Intent | Constraint name |
+|---|---|---|
+| 2 | orphan team | |
+| 3 | duplicate email | |
+| 4a | duplicate team name same org | |
+| 4b | same name second org succeeds | (no error) |
+| 5 | delete org with teams | |
+| 6 | orphan membership | |
+| 7 | bad role | |
+
+Empty names mean you did not run it. Fill them.
+
+---
+
 ## Optional review links
 
 The recap in this chapter is the lesson. These pages are for later checking, not for first learning.

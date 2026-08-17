@@ -273,3 +273,151 @@ MSW in this chapter is the teacher.
 ## Tomorrow
 
 **From memory:** render a list with an MSW handler. Days 1–2 closed during the drill.
+
+
+<!-- length-pad -->
+# Lecture: MSW as HTTP
+
+This section is still the lesson. Read it if a block felt thin. Say each claim aloud before you continue.
+
+## Claims you must still own
+
+1. setupServer from msw/node for Vitest.
+
+2. http.get and HttpResponse.json (v2).
+
+3. listen onUnhandledRequest error.
+
+4. resetHandlers after each test.
+
+5. server.use for empty and 500.
+
+6. Match the exact fetch URL including VITE_API_BASE.
+
+7. findBy after fetch.
+
+8. QueryClient retry false.
+
+9. MSW is not E2E.
+
+10. Prefer MSW over vi.mock of the api module.
+
+11. Unhandled proof UNHANDLED.txt.
+
+12. Not a test database.
+
+## Wrong belief / Correct
+
+**Wrong belief:** “I'll vi.mock api.ts.”  
+**Correct:** You freeze wrapper internals.
+
+**Wrong belief:** “MSW is E2E.”  
+**Correct:** No real browser, no real Postgres.
+
+**Wrong belief:** “Hitting :8000 from Vitest is more honest.”  
+**Correct:** Different layer.
+
+## Drills (write answers in the lab folder)
+
+1. Write HANDLERS.md with both strings matching.
+
+2. Override empty array heading.
+
+3. 500 alert.
+
+## Windows
+
+- npx vitest run
+
+- npm install msw --save-dev
+
+## Pitfalls
+
+- MSW v1 rest.get by accident.
+
+- Hanging unhandled fetch.
+
+- CORS absolute URL mismatch.
+
+## Say it in six sentences
+
+Close the file. Speak the day's gate paragraph. Name the command you will run. Name the folder you will type in. Name what you will not paste. Name the test that would go red if you broke the matching product behavior. If you cannot, reread Block A.
+
+## Git reminder
+
+```powershell
+cd ~\fullstack-lab
+git add month-14
+git status
+```
+
+Commit when the day's definition of done is true. Do not commit secrets. Product tests stay in product repos.
+
+<!-- length-pad-2 -->
+# Worked questions: MSW
+
+Write answers in `Q.md` in the day's lab folder before you peek at the sentences under each question. Then compare.
+
+**Q1.** Why MSW not vi.mock api?
+
+Answer: Same HTTP path as the browser.
+
+**Q2.** Lifecycle?
+
+Answer: listen, resetHandlers, close.
+
+**Q3.** Unhandled?
+
+Answer: error flag fails the test.
+
+**Q4.** URL mismatch?
+
+Answer: Hang or error; HANDLERS.md both strings.
+
+**Q5.** server.use?
+
+Answer: Per-test empty or 500.
+
+**Q6.** retry false?
+
+Answer: 500 tests would spin.
+
+**Q7.** Not E2E?
+
+Answer: No browser, no Postgres.
+
+**Q8.** POST body?
+
+Answer: request.json if JSON; FormData otherwise.
+
+**Q9.** Cookies?
+
+Answer: Leave to Playwright.
+
+**Q10.** v1 rest.get?
+
+Answer: Upgrade to http.get.
+
+**Q11.** Absolute base?
+
+Answer: Handler must include it.
+
+**Q12.** Query wrapper?
+
+Answer: New client per test.
+
+## Quick table
+
+| Idea | Honest use | Dishonest use |
+|---|---|---|
+| Default handler | Happy list | Forgotten reset |
+| use | Empty/500 | Poison next test |
+| findBy | After fetch | getBy immediate |
+| error unhandled | Catch typos | Silent network |
+| retry false | Fast 500 | Triple retry flake |
+
+## Closing
+
+MSW is the fake HTTP server for the component layer. Name it that in TEST-STRATEGY.md.
+
+If this page is the only thing you remember tomorrow, you still have the day's gate. Type the lab. Run the command. Do not paste Project 7.

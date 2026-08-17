@@ -319,6 +319,66 @@ Isolation: **Read Committed** default, **lost update** and **phantom** as storie
 
 ---
 
+# WAL and durability in one honest paragraph
+
+When you COMMIT, PostgreSQL writes enough to its **write-ahead log** that a crash can replay the commit. You do not tune `fsync` today. You do not disable durability to make a benchmark. The sentence you need: **COMMIT is a disk promise**, not a Python return value. If the OS has not flushed, that is the DBA’s `synchronous_commit` world — out of scope. If your laptop dies mid-BEGIN, those uncommitted UPDATEs are gone. That is atomicity, not a bug.
+
+## Session versus transaction
+
+A **session** is the connection (`psql` window). A session can run many transactions in a row. Ending `psql` rolls back an open transaction. Do not rely on killing the client as your ROLLBACK strategy; type ROLLBACK.
+
+`COMMIT AND CHAIN` exists. You do not need it. `BEGIN` again after COMMIT for the next bundle.
+
+## Read your own writes
+
+Inside a transaction, `SELECT` sees your uncommitted UPDATE. That is why B3’s inner SELECT showed Ada 70. Another session does not. If you confuse “I selected 70” with “the world sees 70,” you will think ROLLBACK failed when it succeeded.
+
+Write `OWN-WRITES.md`: two sentences on that distinction.
+
+## Negative balance CHECK
+
+```sql
+UPDATE w3_accounts SET balance = balance - 1000 WHERE name = 'Ada';
+```
+
+If Ada has 100, CHECK `>= 0` fails, the statement errors, the transaction aborts if you BEGAN. That is Day 4’s cousin. Today, if you trip it, ROLLBACK and reset. Mention it in NOTES if it happens.
+
+## File vs interactive
+
+`psql -f 01-transfer-commit.sql` runs as one script. If the file includes BEGIN and COMMIT, that is one transaction. If you split UPDATE 1 and UPDATE 2 into two `-c` invocations, they are two transactions. **How you invoke psql is part of the meaning.** Write HOW-I-RAN for Block B.
+
+---
+
+# Restore 100/100
+
+```sql
+UPDATE w3_accounts SET balance = 100 WHERE name IN ('Ada', 'Lin');
+DELETE FROM w3_accounts WHERE name IN ('Tmp', 'Sam');
+```
+
+Run this between blocks if numbers drift. It is lab hygiene, not a transfer.
+
+## ACID.md rubric
+
+- A: uses **your** two UPDATEs, not a slogan only  
+- C: names CHECK or FK, not “data is consistent”  
+- I: names another session  
+- D: names crash after COMMIT  
+
+If C says “the app validates,” rewrite. Consistency here is **constraints**.
+
+Write ACID.md until that rubric is true.
+
+---
+
+# Interactive abort for B4
+
+If `-f` exits at `1/0`, open `psql -U postgres -d month10`, paste BEGIN, UPDATE, `SELECT 1/0`, UPDATE Lin, see aborted, ROLLBACK. File-based labs are not always the best for abort **messages**. HOW-I-RAN.md should say interactive if that is what you did.
+
+Write `INTERACTIVE.md`: yes/no.
+
+---
+
 ## Optional review links
 
 Transactions are explained in this chapter. These pages are for later checking, not for first learning.

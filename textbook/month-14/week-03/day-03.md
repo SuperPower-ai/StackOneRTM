@@ -196,3 +196,128 @@ Repair from this recap first.
 ## Tomorrow
 
 **Lab:** loading, empty, and error states — still RTL + MSW, still role and name.
+
+
+<!-- length-pad -->
+# Lecture: from memory list plus MSW
+
+This section is still the lesson. Read it if a block felt thin. Say each claim aloud before you continue.
+
+## Claims you must still own
+
+1. New folder, new noun trays.
+
+2. findByRole listitem.
+
+3. Empty heading No trays yet.
+
+4. onUnhandledRequest error.
+
+5. No querySelector.
+
+6. Vite extra -- on Windows.
+
+7. jsdom environment.
+
+8. Delete demo counter tests.
+
+## Wrong belief / Correct
+
+**Wrong belief:** “Memory day means paste Day 2.”  
+**Correct:** Rebuild.
+
+**Wrong belief:** “getByRole immediately after render.”  
+**Correct:** Use findBy.
+
+## Drills (write answers in the lab folder)
+
+1. UNHANDLED.txt
+
+2. Reload trays real button
+
+3. design.md product list URL
+
+## Windows
+
+- npx vitest run
+
+## Pitfalls
+
+- Handler /trays vs fetch /api/trays.
+
+- Forgot resetHandlers.
+
+## Say it in six sentences
+
+Close the file. Speak the day's gate paragraph. Name the command you will run. Name the folder you will type in. Name what you will not paste. Name the test that would go red if you broke the matching product behavior. If you cannot, reread Block A.
+
+## Git reminder
+
+```powershell
+cd ~\fullstack-lab
+git add month-14
+git status
+```
+
+Commit when the day's definition of done is true. Do not commit secrets. Product tests stay in product repos.
+
+<!-- length-pad-2 -->
+# Worked questions: memory list
+
+Write answers in `Q.md` in the day's lab folder before you peek at the sentences under each question. Then compare.
+
+**Q1.** Noun?
+
+Answer: Trays, not Project 7.
+
+**Q2.** findBy?
+
+Answer: Fetch is async.
+
+**Q3.** Empty copy?
+
+Answer: Heading No trays yet.
+
+**Q4.** Vite --?
+
+Answer: Windows extra --.
+
+**Q5.** jsdom?
+
+Answer: vitest environment.
+
+**Q6.** Demo counter?
+
+Answer: Delete it.
+
+**Q7.** Unhandled proof?
+
+Answer: Wrong path once.
+
+**Q8.** div reload?
+
+Answer: Use a button.
+
+**Q9.** Product URL?
+
+Answer: design.md names only.
+
+**Q10.** Copy Day 2?
+
+Answer: Not allowed.
+
+## Quick table
+
+| Idea | Honest use | Dishonest use |
+|---|---|---|
+| Layer | Component | E2E |
+| HTTP | MSW | Uvicorn |
+| Query | Role name | CSS |
+| Wait | findBy | getBy |
+| Reset | afterEach | Shared 500 |
+
+## Closing
+
+Rebuild. New folder. Same ideas. That is from-memory day.
+
+If this page is the only thing you remember tomorrow, you still have the day's gate. Type the lab. Run the command. Do not paste Project 7.

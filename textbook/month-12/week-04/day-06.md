@@ -197,3 +197,105 @@ Product repos: your commits, your messages.
 ## Tomorrow
 
 **Month 12 exam + gate.** From a requirement, change **DB → API → UI → test**. Link [Month 13](../../../month-13/README.md) only if the gate is true.
+
+---
+
+# Slice that counts as a start
+
+One resource. GET list envelope. POST 201. Postgres (prefer) or BLOCKED.md. Typed client. `useQuery` + `useMutation` + `invalidateQueries({ queryKey })`. Dual validation on one field. CORS 5173. `.env.example`. One test. `curl.exe` evidence in fullstack-lab `EVIDENCE.md` — **commands and statuses**, not product source.
+
+DOMAIN.md: why not a todo. Primary entity name. Secondary later. Users/orgs Month 13.
+
+REPO.md: two run commands.
+
+SLICE.md written **before** the happy path.
+
+**Wrong belief:** “I’ll scaffold a marketplace with 12 models today.”  
+**Correct:** one vertical slice. Width is how Project 7 dies.
+
+**Wrong belief:** “The textbook will paste a starter kit tomorrow.”  
+**Correct:** the exam mini is pots, not your product. Your product stays yours.
+
+Read Project 7 requirements headings: users later, roles later, this month’s join now.
+
+```powershell
+curl.exe -s http://127.0.0.1:8000/YOUR_LIST
+```
+
+Vite: `npm create vite@latest ... -- --template react-ts` if the web repo is new. `npm install react-router @tanstack/react-query`. Import from `"react-router"`. `isPending`. `gcTime`. `model_dump()`. No `*`. No `any` on new files.
+
+Tomorrow the exam asks you to add a field through the stack. Practice that motion on the slice if you have time: one extra column is the whole month.
+
+---
+
+# DOMAIN.md questions
+
+- What job does a real user hire this app to do?  
+- What is the primary noun?  
+- What is one secondary noun you will **not** build today?  
+- Why is a todo list the wrong size?
+
+SLICE.md: field table, endpoint table, queryKey, CORS, env, test name.
+
+If 6B becomes Project 7, say that in REPO.md. Do not start a third repo by accident.
+
+Exam tomorrow will add `material` on pots. Your slice should be ready for a similar field next week. That motion is the gate.
+
+No textbook source for the product. Envelope only here.
+
+---
+
+# Recite-back
+
+- [ ] serious domain
+- [ ] REPO.md run commands
+- [ ] SLICE.md before code
+- [ ] one test if coded
+- [ ] EVIDENCE.md no source dump
+- [ ] CORS 5173
+- [ ] no todo
+- [ ] Month 13 not started as a substitute
+
+Vertical slice: one noun through Postgres (prefer), FastAPI, client, Query, test.
+
+If BLOCKED.md, the exam mini still proves the **motion**. The product gate wants the motion on **your** domain before you claim Month 12 complete.
+
+Tomorrow: pots + `material`. Same motion. Then self-mark. Then Month 13 only if true.
+
+---
+
+# Definition of done reminder
+
+DOMAIN.md serious. REPO.md. SLICE.md first. Slice or BLOCKED. One test if coded. EVIDENCE.md. No todo. No textbook dump. Gate tomorrow: material through pots, then eight claims.
+
+```powershell
+curl.exe -s http://127.0.0.1:8000/YOUR_LIST
+```
+
+Vite 127.0.0.1:5173. `isPending`. `invalidateQueries({ queryKey })`. Dual validation one field. `model_dump()`. No `any` on new client files. No `*`.
+
+---
+
+# Closing card
+
+Windows: `curl.exe`. Vite extra `--`. FastAPI `--host 127.0.0.1`. CORS `http://127.0.0.1:5173` not `*`. `VITE_API_BASE` public. Query v5 object API: `useQuery({ queryKey, queryFn })`, `isPending`, `gcTime` not `cacheTime`. `invalidateQueries({ queryKey })` when you write. Pydantic v2 `model_dump()`. No `fetch` in pages. No Project 7 source dump. Bind 127.0.0.1.
+
+---
+
+# Git
+
+```powershell
+cd ~\fullstack-lab
+git add month-12\week-04\day-06
+git commit -m "Month 12 Day 6: Project 7 domain and slice envelope."
+```
+
+Product repos: your message, your history. Textbook stays envelope-only.
+
+Serious domain. First slice. Envelope in fullstack-lab. Code in your repos. Exam tomorrow adds `material` through pots. Do not start Month 13 tonight.
+
+Users and roles wait for Month 13. Today: domain, repo, one slice through the stack.
+
+No todo.
+No marketplace of twelve models.
+One noun. One test. Envelope first.

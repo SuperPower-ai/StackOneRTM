@@ -268,3 +268,41 @@ No `any` on fixtures if you have DTOs. No Project 7 dump. No mock of the hook.
 Fresh QueryClient. `gcTime: 0`. `findBy`. Prefix invalidation is Week 2 Day 1; today you prove the unhappy path.
 
 Named risk from Day 4 is why 409 should not have been optimistic on `code`.
+
+---
+
+# Failure matrix (implement at least two tests)
+
+| Server | UI claim |
+|---|---|
+| PATCH 409 | `findByRole("alert")` — title/code taken |
+| PATCH 500 | alert — could not save |
+| PATCH 200 | title updates (optional) |
+| Optimistic + 409 | old label visible again |
+
+```ts
+mutations: { retry: false }
+queries: { retry: false, gcTime: 0 }
+```
+
+If retry stays at 3, the error test waits and you will call Vitest haunted.
+
+Mock **`fetch`** (or `patchLocker`). Do not mock `useMutation`.
+
+**Wrong belief:** “Draft text still showing New after a failed pessimistic save means rollback failed.”  
+**Correct:** pessimistic never wrote the cache. The input is a draft. Document it. Assert the alert **and** that query data is still Old if you read the cache — or just the alert.
+
+TestClient 409 on unique `code` is the API twin. Both belong in `TESTS.md`.
+
+```mermaid
+sequenceDiagram
+  participant U as userEvent
+  participant M as useMutation
+  participant F as fetch mock
+  U->>M: Save
+  M->>F: PATCH 409
+  F-->>M: ApiError
+  M-->>U: role alert
+```
+
+`findBy` not `getBy` immediately after click.

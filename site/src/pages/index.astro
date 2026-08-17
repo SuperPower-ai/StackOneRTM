@@ -16,10 +16,14 @@ const docs = loadAllDocs();
 const dayCount = docs.filter((d) => d.kind === "day").length;
 const liveMonths = MONTHS.filter((month) => isPublished(month.number));
 const laterMonths = MONTHS.filter((month) => !isPublished(month.number));
-const newest = liveMonths.filter((month) => month.number >= 10);
+const newest = liveMonths.slice(-5);
 const latest = liveMonths.at(-1);
 const latestHref = latest ? `${base}${latest.slug}/` : start;
 const phases = [...new Set(liveMonths.map((month) => month.phase))];
+const printedRange =
+  liveMonths.length === 18
+    ? "Months 1–18 are in print"
+    : `Months 1–${String(liveMonths.length).padStart(2, "0")} are in print`;
 
 const hrefFor = (monthNumber: number, slug: string) => {
   const first = firstDayOfMonth(monthNumber);
@@ -29,7 +33,7 @@ const hrefFor = (monthNumber: number, slug: string) => {
 
 <Base
   title="Full-Stack Mastery Textbook"
-  description="An 18-month university-style textbook in the browser. Months 1–14 are in print and open to read: from the machine on your desk through tests that catch a real break."
+  description={`An 18-month university-style textbook in the browser. ${printedRange} and open to read.`}
 >
   <Header current="home" />
   <main class="home" id="content">
@@ -38,8 +42,8 @@ const hrefFor = (monthNumber: number, slug: string) => {
         <p class="eyebrow">A calm daily textbook · 18 months</p>
         <h1>Study like a course. Read it like a well-made book.</h1>
         <p class="lede">
-          One URL is one study day. Months 1–14 are on the shelf — SQL, the ORM,
-          the full stack, security, and tests. Every control below is live.
+          One URL is one study day. {printedRange} — from the machine on your desk
+          through Linux, Docker, AWS, performance, and the capstone. Every blue control is live.
         </p>
         <div class="cta-row">
           <a class="btn btn-primary" href={start}>Start with Day 1</a>
@@ -62,7 +66,9 @@ const hrefFor = (monthNumber: number, slug: string) => {
           ))}
         </nav>
         <p class="jump-hint">
-          Blue pills open today. Pale numbers are Months 15–18 — still being written, not broken buttons.
+          {laterMonths.length
+            ? "Blue pills open today. Pale numbers are still being written — they are not broken buttons."
+            : "Eighteen blue pills. The core program is on the shelf."}
         </p>
       </div>
       <aside class="desk-card" aria-label="Your place in the book">
@@ -99,10 +105,12 @@ const hrefFor = (monthNumber: number, slug: string) => {
       <div class="shelf-head">
         <div>
           <p class="eyebrow">Just added</p>
-          <h2 class="section-title" id="newest">Months 10–14 are ready</h2>
+          <h2 class="section-title" id="newest">
+            Months {newest[0] ? String(newest[0].number).padStart(2, "0") : "01"}–{latest ? String(latest.number).padStart(2, "0") : "18"} are ready
+          </h2>
         </div>
         <p class="section-lead shelf-lead">
-          PostgreSQL, SQLAlchemy, full-stack wiring, security, and tests. Each card is a real chapter — tap and read.
+          The newest volumes on the shelf. Each card is a real chapter — tap and read.
         </p>
       </div>
       <div class="shelf-grid">
@@ -175,27 +183,33 @@ const hrefFor = (monthNumber: number, slug: string) => {
       ))
     }
 
-    <section class="later" aria-labelledby="later">
-      <h2 class="section-title" id="later">Still being written</h2>
-      <p class="section-lead">
-        Months 15–18 are the path ahead. They are listed so you can see the program — they are not grey copies of the cards above.
-      </p>
-      <ol class="later-list">
-        {laterMonths.map((month) => (
-          <li>
-            <span class="later-num">{String(month.number).padStart(2, "0")}</span>
-            <div>
-              <strong>{month.title}</strong>
-              <p>{month.blurb}</p>
-            </div>
-            <span class="later-tag">Later · {month.phase}</span>
-          </li>
-        ))}
-      </ol>
-    </section>
+    {laterMonths.length > 0 && (
+      <section class="later" aria-labelledby="later">
+        <h2 class="section-title" id="later">Still being written</h2>
+        <p class="section-lead">
+          These months are the path ahead. They are listed so you can see the program — they are not grey copies of the cards above.
+        </p>
+        <ol class="later-list">
+          {laterMonths.map((month) => (
+            <li>
+              <span class="later-num">{String(month.number).padStart(2, "0")}</span>
+              <div>
+                <strong>{month.title}</strong>
+                <p>{month.blurb}</p>
+              </div>
+              <span class="later-tag">Later · {month.phase}</span>
+            </li>
+          ))}
+        </ol>
+      </section>
+    )}
   </main>
   <footer class="site-footer">
     <span>Full-Stack Mastery Textbook · 2026</span>
-    <span>Fourteen months in print. Four still ahead.</span>
+    <span>
+      {liveMonths.length === 18
+        ? "Eighteen months in print. The core program is on the shelf."
+        : `${liveMonths.length} months in print. ${18 - liveMonths.length} still ahead.`}
+    </span>
   </footer>
 </Base>

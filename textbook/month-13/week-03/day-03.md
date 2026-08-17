@@ -246,3 +246,70 @@ Write `RECITE.txt` with one honest sentence per line.
 - [ ] not the product dump  
 
 If a line is mush, re-read this file only.
+
+---
+
+# Extra lecture — data is not the command
+
+Never concatenate user text into SQL. ORM expressions and `:binds` keep values separate. f-string SQL is the bug shape. Do not complete it with a payload.
+
+Whitelist sort identifiers. Do not bind table names from users. SSRF: do not fetch arbitrary URLs.
+
+Harbor buoys. pytest. `curl.exe` punctuation as **text**. Grep Project 7 for `text(f`, `execute(f`, `"SELECT" +`. Fix, do not demo.
+
+If GREP.txt is empty, say so. If not, bind the values.
+
+Pydantic validates **types**. It does not bind SQL. A valid string can still be concatenated. Binds are the SQL habit.
+
+`LIKE`: add `%` in Python to the **value**, still bind. `limit()` typed, not string-glued.
+
+NoSQL concat into a query document is the same **class**. Project 7 is PostgreSQL.
+
+Lab: `~\fullstack-lab\month-13\week-03\day-03\`. SQLite in-memory is enough.
+
+```powershell
+uv run pytest -q
+```
+
+If you “escape quotes yourself” instead of binding, rewrite. Escaping SQL by hand is how you lose.
+
+---
+
+# Paper drills you should still have
+
+1. `select(Buoy).where(Buoy.code == code)`  
+2. `text("SELECT id FROM buoys WHERE code = :code")` with `{"code": code}`  
+3. A **forbidden** f-string **without** a payload — `{email}` in the SQL — crossed out NEVER  
+4. Three allowed sort keys  
+
+Identifiers (table names) cannot always be bound. **Whitelist**. Never put a user string in a table name.
+
+LIMIT/OFFSET: integers from `Query(ge=0)` or SQLAlchemy `limit()`.
+
+Defense in depth: least privilege DB user (Week 4 Day 5) is **not** a substitute for binds.
+
+Lab noun: harbor buoys. Not Project 7. `~\fullstack-lab\month-13\week-03\day-03\`.
+
+---
+
+# Independent grep (required)
+
+In this lab and Project 7 if time:
+
+Search `text(f`, `execute(f`, `"SELECT" +`, `'SELECT' +`. Record in `GREP.txt`. Convert hits to binds.
+
+Do not add a concatenation “for demo.”
+
+`GET /buoys?q=` with punctuation still **200**, treated as **text**.
+
+```powershell
+uv run uvicorn main:app --reload --host 127.0.0.1 --port 8000
+curl.exe -s "http://127.0.0.1:8000/buoys?q=hello"
+```
+
+Sort whitelist: unknown sort → 422, not a raw column name in SQL.
+
+SSRF one sentence in `SSRF.txt`: do not fetch arbitrary user URLs; allowlist hosts/schemes. No lab hitting metadata endpoints.
+
+
+

@@ -251,3 +251,46 @@ FakeRedis is a double. Postgres test DB is still SQL. Skip marks the real server
 Do not mock INCR. Do not flush a shared production Redis from pytest. Prefix keys. Depends for injection.
 
 Windows labs stay green with fakeredis. That is the point of Day 1’s no-Redis path, completed as tests.
+
+---
+
+## Recite-back checklist
+
+Write `RECITE.txt`.
+
+- [ ] FakeRedis fixture flushed between tests  
+- [ ] Depends override uses the **same** instance  
+- [ ] cache HIT/MISS or invalidate asserted  
+- [ ] 429 tested or omission documented  
+- [ ] integration skipif REDIS_URL  
+- [ ] pytest.ini marker registered  
+- [ ] EXPLAIN-REDIS.md exists  
+- [ ] Postgres still in the SoR tests  
+
+**pytest.ini** lives next to the uv project. If markers warn `Unknown pytest.mark.integration`, you did not register it. Warnings are noise until CI `-W error`.
+
+**TestClient and fakeredis:** do not start Uvicorn. In-process ASGI. Reload is not running. HIT can happen.
+
+**Clear overrides** after the client fixture. Month 9 still applies.
+
+Windows: `uv run pytest -q` without 6379 must be green. `uv run pytest -q -m integration` should skip, not fail, when REDIS_URL is unset. Paste skip in SKIP.txt.
+
+Do not `flushall` a shared Memurai from a test that forgot the fake. Guard: if `REDIS_URL` is set in the shell, cache tests still use FakeRedis unless marked integration.
+
+---
+
+## Minimum test names
+
+- `test_health`  
+- `test_get_list_miss_then_hit`  
+- `test_post_invalidates_list`  
+- `test_sixth_post_429` (or skip with reason in TESTS.md)  
+- `test_real_redis_ping` skipif  
+
+`uv run pytest -q` **without** REDIS_URL is green. That is the Windows contract.
+
+EXPLAIN-REDIS.md: string, TTL, SoR, invalidation, INCR defense — even if 6379 never ran.
+
+Do not mock `incr` to return 1 always. FakeRedis is the double.
+
+`select()` for SQL. `model_dump` if comparing JSON. No `Query()`. No ops-api. Announcements are the noun.

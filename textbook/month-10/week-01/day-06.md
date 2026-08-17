@@ -267,6 +267,30 @@ If `DEFENSE.md` could apply to any tutorial dump, it is too vague. Name **your**
 
 ---
 
+# CONTRACT.md → columns (worked method)
+
+Take one 6A resource. For each JSON field in CONTRACT.md, write: column name, type, NULL?, CHECK?, UNIQUE?, FK?. Nested objects either become a 1–1 table or flatten **with a sentence**. Arrays of ids become a junction, not `INTEGER[]` without FKs.
+
+That mapping **is** GAPS.md. If a field has no column, either you dropped it on purpose or you are still in RAM. Say which.
+
+## Database choice recap
+
+`CREATE DATABASE ops_api;` keeps labs in `month10`. `CREATE SCHEMA ops` keeps one database. Mixing `d4_tasks` with `ops_issues` in public schema is how you DROP the wrong table. Write the choice again at the top of SCHEMA.md if it is not there.
+
+---
+
+# Stage B is not a blog — one more time
+
+If DEFENSE.md could describe WordPress, rewrite it with **your** resource names from CONTRACT.md. The independent day fails a paste even if the SQL is pretty.
+
+Write `NOUNS.md`: three resource names, no commentary.
+
+## Seed two parents three children
+
+That count is a minimum. Without it, Week 2 reports cannot HAVING >= 2. Do it today.
+
+---
+
 ## Optional review links
 
 Relational modeling is explained in this week’s chapters. These pages are for later checking, not for first learning.

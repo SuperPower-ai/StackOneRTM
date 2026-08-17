@@ -232,3 +232,68 @@ Write `RECITE.txt` with one honest sentence per line.
 - [ ] tests deny wrong user  
 
 If a line is mush, re-read this file only.
+
+---
+
+# Extra lecture — two axes
+
+Role is **who you are in the club**. Ownership is **whose backpack it is**. Admins of club A still do not open club B’s backpack unless you are a **platform** operator — which Project 7 probably is not.
+
+RBAC: `membership.role`. Ownership: `notes.owner_id`. Lists **filter**. Get-one **checks**. Writes **check**. UUIDs help guessing, not leaked ids.
+
+Nested: task → project → workspace. Check the **chain**. They might **try** to move a task into a workspace they are not in. **Prevent:** validate parent membership on write.
+
+SQL belt: `WHERE id = :id AND workspace_id = :ws`. Python belt: compare after load. Neither is optional if the other is missing — both is fine.
+
+Lab sticky notes: `~\fullstack-lab\month-13\week-04\day-02\`. `X-User-Id` still not Project 7. `NOT-PRODUCT.txt`.
+
+`uv run pytest -q`. User 1 cannot PATCH user 2’s note.
+
+PROJECT7-MATRIX.md: rows are actions; columns are logged out / member / admin; cells are allow / deny / own-only. One paragraph on **workspace** boundary.
+
+If list is filtered but GET-one is not, you are not done.
+
+---
+
+# IDOR in one breath
+
+The URL contains an id. AuthN succeeded. AuthZ forgot the row. **Prevent:** always load and check. Do not `update where id=:id` without owner/org.
+
+Integer ids might be **tried** in sequence. UUIDs help **guessing**, not **leaked** ids. Still check.
+
+Global `is_admin` on user 1 in production is not workspace-scoped. Use membership per workspace.
+
+Lab: POST `/notes` owner = current user. GET list own only. PATCH/DELETE owner only. Optional admin user 9 if documented.
+
+`MATRIX.md` for the lab. `PROJECT7-MATRIX.md` for the product.
+
+`~\fullstack-lab\month-13\week-04\day-02\`. `uv run pytest -q`.
+
+Do not sprinkle `if user.email == "me@..."`. Roles are persisted strings.
+
+`NOT-PRODUCT.txt` again: Project 7 uses AUTH.md sessions. The lab header is a teaching crutch.
+
+Workspace boundary paragraph in PROJECT7-MATRIX.md is required even if you only have one org today — write the future rule.
+
+Lists that return every row to any logged-in user are an AuthZ bug. Pagination does not hide other people’s rows if you never filtered.
+
+`~\fullstack-lab\month-13\week-04\day-02\`. Two users. Deny tests green.
+
+If user 1 patches user 2, the test must be red until the check exists. Matrix first, then code.
+
+UUIDs are not permission. Filter lists. Check get-one. Check writes. Check the parent chain.
+
+`MATRIX.md` for the lab. `PROJECT7-MATRIX.md` for the product. Both exist before you call the day done.
+
+`uv run pytest -q`. User 1 cannot PATCH user 2. List is filtered. GET-one denies or 404s.
+
+Do not skip GET-one. A filtered list with an open get-one is still IDOR-shaped.
+
+
+
+
+
+
+
+
+

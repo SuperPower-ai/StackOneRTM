@@ -333,3 +333,55 @@ Query caches metadata. Bytes stay on disk. Invalidate the metadata list after cr
 Browser FormData sets the boundary. Your fetch wrapper must not smash that with `application/json`.
 
 413 is oversize. 400 is type. 422 is validation of form fields (title length) — Week 3 Day 4 will dual-validate title. Today the file is the lesson.
+
+---
+
+# Client helper split (do not skip)
+
+JSON helper sets `Content-Type: application/json`.  
+Upload helper passes `FormData` and **does not** set Content-Type so the browser can set **boundary**.
+
+If you have one `request()` that always sets JSON headers, uploads will fail in a confusing 422.
+
+```ts
+export async function uploadPhoto(title: string, file: File) {
+  const body = new FormData();
+  body.append("title", title);
+  body.append("file", file);
+  return request("/photos", { method: "POST", body }, parsePhoto);
+}
+```
+
+`useMutation({ mutationFn: ({ title, file }) => uploadPhoto(title, file), onSuccess: () => queryClient.invalidateQueries({ queryKey: ["photos"] }) })`.
+
+Disk: `lab-uploads/` gitignored. Names: `uuid.hex + ext` from **your** content-type map. Store `file_path` string. Postgres column is `String`, not `LargeBinary`, if you add SQLAlchemy.
+
+```powershell
+curl.exe -s -D - -X POST http://127.0.0.1:8000/photos -F "title=bench" -F "file=@.\tiny.jpg" -H "Origin: http://127.0.0.1:5173"
+```
+
+**Wrong belief:** “`file.filename` is fine if I `Path(name).name`.”  
+**Correct:** still attacker-controlled. uuid is simpler and enough for the lab.
+
+413 oversize. 400 bad type. Title length 422 is Week 3 Day 4. Do not conflate them.
+
+## Recite-back
+
+- [ ] multipart ≠ JSON
+- [ ] FormData no JSON header
+- [ ] filename not a path
+- [ ] path not bytes
+- [ ] 413 / 400
+- [ ] invalidate metadata list
+
+---
+
+# Serving files (optional, careful)
+
+If you add GET `/photos/{id}/file`, resolve the path **inside** `UPLOAD_DIR`. Reject `..`. Return `FileResponse`. Do not take a free path string from the query.
+
+StaticFiles mount of the upload dir is easier for the lab. Still gitignore contents.
+
+Query must not cache bytes. Metadata list only.
+
+Title field on the same multipart POST: `Form(...)`. Pydantic does not parse JSON body here. Dual validation of title still belongs on the **string** after you read the form — or a second JSON PATCH. Say which in MULTIPART.md.

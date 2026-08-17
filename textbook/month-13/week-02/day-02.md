@@ -289,3 +289,24 @@ Write `RECITE.txt` with one honest sentence per line.
 - [ ] policy in Project 7 notes  
 
 If a line is mush, re-read this file only.
+
+---
+
+# Extra lecture — match is not merge
+
+Email string match is not identity. Provider `sub` is the provider’s account key. Auto-link is how takeovers happen as a **class of bug**. Verification proves inbox control. Reset uses that proof.
+
+Social login is optional this month. Password accounts already authenticate. Do not paste a linking snippet from a blog.
+
+Write policies. Do not write takeover steps. Generic messages. Rate limits later.
+
+Lab: `~\fullstack-lab\month-13\week-02\day-02\`.
+
+If SCENARIOS.md reads like a crime novel with step numbers, delete the steps and keep the rule.
+
+Unverified users: pick a policy (login allowed but no invite, or cannot login until verified). Silent full access without verify is the weak default.
+
+Store `provider` + `sub` unique. Emails change. `sub` is the stable handle.
+
+`email_verified` claim from a provider is useful and **still** not a reason to auto-merge with a local password user.
+

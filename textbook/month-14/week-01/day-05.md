@@ -338,3 +338,76 @@ pytest **injects** fixtures by parameter name. `def test_x(clock: FakeClock)` as
 ## Tomorrow
 
 **Independent:** write `TEST-STRATEGY.md` for **your** Project 7. This textbook will not write it for you. Product tests stay in your repos; the strategy document may live there too.
+
+
+<!-- length-pad -->
+# Lecture: clocks, RNG, UTC
+
+This section is still the lesson. Read it if a block felt thin. Say each claim aloud before you continue.
+
+## Claims you must still own
+
+1. Sleep is not a clock.
+
+2. Pass now or inject ClockPort.
+
+3. Naive datetimes are rejected in this lab.
+
+4. Store UTC; display local.
+
+5. Do not assert unseeded uuid4 equality.
+
+6. FakeRng scripts characters when the exact code is the claim.
+
+7. Function-scoped FakeClock; never session-scoped mutable clocks.
+
+8. freezegun is a process patch; prefer ports in your services.
+
+9. CI is often UTC; laptops often are not.
+
+10. Run pytest twice; summaries must match.
+
+## Wrong belief / Correct
+
+**Wrong belief:** “time.sleep(1) makes expiry tests honest.”  
+**Correct:** Advance FakeClock.
+
+**Wrong belief:** “Store local time because the shop is in one city.”  
+**Correct:** Servers and CI disagree.
+
+**Wrong belief:** “random.seed fixes secrets.token_hex.”  
+**Correct:** Different generators; inject a port.
+
+## Drills (write answers in the lab folder)
+
+1. Write the seven-day boundary test without now().
+
+2. Compare two ISO strings with different offsets for equality in UTC.
+
+3. Document ASCII slug policy if you refuse Unicode case-fold.
+
+## Windows
+
+- PowerShell Get-Date is not the app clock.
+
+- uv run pytest -q twice.
+
+## Pitfalls
+
+- Mixing naive and aware.
+
+- Module-level FakeClock advanced by test A.
+
+## Say it in six sentences
+
+Close the file. Speak the day's gate paragraph. Name the command you will run. Name the folder you will type in. Name what you will not paste. Name the test that would go red if you broke the matching product behavior. If you cannot, reread Block A.
+
+## Git reminder
+
+```powershell
+cd ~\fullstack-lab
+git add month-14
+git status
+```
+
+Commit when the day's definition of done is true. Do not commit secrets. Product tests stay in product repos.

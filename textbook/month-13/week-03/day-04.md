@@ -255,3 +255,125 @@ Write `RECITE.txt` with one honest sentence per line.
 - [ ] Project 7 audited  
 
 If a line is mush, re-read this file only.
+
+---
+
+# Extra lecture — browsers only, again, because the myth is sticky
+
+CORS is a **browser reading gate**. `curl.exe` is not a browser. Authentication is a **session check**. Tight origins. No star. Credentials need a **specific** origin.
+
+Project 7: `http://127.0.0.1:5173` and later the HTTPS origin. `localhost` is a **different** origin. Pick one Vite URL and document it.
+
+Proxy makes **one** origin and calms cookies. If you proxy, CORS on 8000 may matter less for the SPA — still do not use `*`.
+
+OPTIONS success is not “logged in.”
+
+Reflecting **any** Origin header you receive is almost `*`. Compare to an allowlist.
+
+`GET /secret` 401 without a cookie — CORS headers do not change that.
+
+```powershell
+curl.exe -s -D - http://127.0.0.1:8000/health -o NUL
+curl.exe -s -D - http://127.0.0.1:8000/health -H "Origin: http://127.0.0.1:5173" -o NUL
+```
+
+Body is 200 either way for `/health`. That is the lesson.
+
+Lab: `~\fullstack-lab\month-13\week-03\day-04\`. Bind `127.0.0.1`.
+
+If HEADERS.txt shows a star, you failed the lab. Fix `allow_origins`.
+
+SSRF is **your server fetching URLs**. CORS is not SSRF. Do not mix the words.
+
+Month 9 already forbade `*`. Today you can **teach why**.
+
+---
+
+# Worked session — three curls, one lesson
+
+```powershell
+uv run uvicorn main:app --reload --host 127.0.0.1 --port 8000
+```
+
+1. No Origin: 200 body, likely **no** ACAO.  
+2. Origin 5173: 200 body **plus** `Access-Control-Allow-Origin: http://127.0.0.1:5173`.  
+3. Origin a not-listed host: 200 body, ACAO **not** that host.
+
+Write `HEADERS.txt`. Write `MYTHS.md`: three myths in your words.
+
+TestClient: send `Origin` or you will not see CORS headers. `/secret` 401 without cookie — CORS did not log anyone in.
+
+`allow_headers`: tighten later to `Content-Type`, `X-CSRF-Token`, `Authorization`. `"*"` for headers is sloppy; origins must not be `"*"`.
+
+`allow_credentials=True` **requires** a specific origin. Browsers reject `*` plus credentials.
+
+Grep Project 7 `allow_origins`. If star, fix today.
+
+Lab: `~\fullstack-lab\month-13\week-03\day-04\`. `uv add fastapi uvicorn` and `pytest httpx`.
+
+Preflight OPTIONS is not AuthN. Simple vs preflight: know the words; middleware handles OPTIONS if configured.
+
+---
+
+# Origin arithmetic
+
+**Origin** = scheme + host + port. `http://127.0.0.1:5173` ≠ `http://localhost:5173` ≠ `http://127.0.0.1:8000`.
+
+Vite on 5173 + API on 8000 is **cross-origin** unless you **proxy**.
+
+They might **try** to call your API from **their** website’s JS. **Prevent:** origin not on the list; the **browser** hides the response. They might **try** `curl.exe` instead. **Prevent:** **401** without a session.
+
+`PROJECT7-CORS.md`: exact origin strings, credentials yes/no, proxy or not.
+
+Office hours: TestClient without Origin shows no ACAO. Allowed localhost but Vite is 127.0.0.1 — mismatch. Production leftover `*` “just for now” is how `*` ships.
+
+Lab `CORSMiddleware` `allow_origins=["http://127.0.0.1:5173"]`, `allow_credentials=True`, methods including OPTIONS.
+
+`~\fullstack-lab\month-13\week-03\day-04\`.
+
+If you still believe “only my SPA can call the API because of CORS,” re-read Block A of this file. curl.exe is the counterexample.
+
+Add `GET /secret` 401 without a cookie so students cannot claim CORS “protected” it. TestClient still 401. curl.exe still 401. Origin headers did not log anyone in.
+
+`HEADERS.txt` plus `MYTHS.md` plus `PROJECT7-CORS.md` are the three artifacts. Commit without secrets.
+
+`allow_origins` is a **list of strings you typed**, not `os.environ.get("ORIGIN", "*")` with a star default.
+
+Vite proxy: the browser may see one origin. Still do not use `*` on the API “just in case.” Tight list. Later production origin is HTTPS, not 5173.
+
+`curl.exe -H "Origin: ..."` is how you inspect ACAO on Windows. PowerShell `curl` is the wrong program.
+
+`GET /health` remaining 200 without Origin is **success** for the lesson, not a security hole. `/me` remaining 401 without a session is the actual lock.
+
+If `allow_credentials=True` and you still want a second SPA origin, list **both** explicitly. Do not widen to `*`.
+
+Lab: `~\fullstack-lab\month-13\week-03\day-04\`. `uv run pytest -q`.
+
+CORS is not a firewall. AuthN/AuthZ is. Tight origins are politeness to browsers. curl.exe remains your honesty check.
+
+`allow_headers=["*"]` in the type-along is a known sloppiness — tighten to Content-Type and CSRF/Authorization names in Project 7 notes.
+
+`http://127.0.0.1:5173` is the course origin unless you proxy. Document whichever you actually run. Mismatch is a day of CORS tickets.
+
+OPTIONS is not login. ACAO is not a session. `/me` is 401 without a cookie even when Origin is perfect.
+
+`~\fullstack-lab\month-13\week-03\day-04\`. Three curls. HEADERS.txt. No star. Commit.
+
+curl.exe without Origin still 200 on `/health`. That is the myth-killer. Write it in MYTHS.md.
+
+Protected routes still check sessions. CORS never logged anyone in. That sentence is the day.
+
+Tight list. No star. Credentials need a specific origin. curl.exe is not a browser.
+
+
+
+
+
+
+
+
+
+
+
+
+

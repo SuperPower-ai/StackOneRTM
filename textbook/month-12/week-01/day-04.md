@@ -375,3 +375,51 @@ No `cacheTime`. No tuple `useQuery`. No Project 7 dump. No `isLoading` as the ta
 `invalidateQueries({ queryKey })` is Week 2. `placeholderData: keepPreviousData` is Week 2. Today the list is one key and four honest states.
 
 Windows: Vite extra `--`. FastAPI 127.0.0.1. curl.exe for the stub. Browser for the provider.
+
+---
+
+# Query v5 pocket card (keep this)
+
+| Name | Meaning |
+|---|---|
+| `useQuery({ queryKey, queryFn })` | object API only |
+| `isPending` | no success data yet — first-load UI |
+| `isFetching` | request in flight — may already have rows |
+| `isError` | `queryFn` threw (`ApiError`) |
+| `staleTime` | freshness |
+| `gcTime` | unused memory after last unmount (**not** `cacheTime`) |
+| `retry` | labs 1; tests `false` |
+
+```tsx
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { staleTime: 30_000, gcTime: 5 * 60 * 1000, retry: 1 },
+  },
+});
+```
+
+Create that client **once** in `main.tsx`. Wrap `QueryClientProvider`. Optional Devtools.
+
+**Wrong belief:** “Two providers, one in tests and one in App, should share cache.”  
+**Correct:** they must **not**. Tests use a fresh client. The app uses one singleton.
+
+Week 2 preview you may write in `KEYS.md` without implementing:
+
+```ts
+queryKey: ["benches", { q, page }]
+placeholderData: keepPreviousData
+void queryClient.invalidateQueries({ queryKey: ["benches"] })
+```
+
+`keepPreviousData` is imported from `@tanstack/react-query` and passed to **`placeholderData`**.
+
+Router if you add routes: `npm install react-router`; `import { BrowserRouter, Routes, Route } from "react-router"`.
+
+## Recite-back
+
+- [ ] object useQuery
+- [ ] isPending first load
+- [ ] rows stay on isFetching
+- [ ] gcTime not cacheTime
+- [ ] queryFn calls the client
+- [ ] same key dedupes

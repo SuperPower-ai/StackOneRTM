@@ -154,7 +154,150 @@ git commit -m "Month 10 Week 4 Day 6: reporting pack complete, indexes justified
 
 ---
 
+# What “finished” means in sentences
+
+A finished pack is not “I have files.” It is:
+
+1. A stranger can `psql -f` the README order on a machine that has your seed.  
+2. Each expected note names grain and at least one invariant that can fail.  
+3. INDEXES.md lists PK/UNIQUE plus extras; extras have JUSTIFY.md rows.  
+4. At least one EXPLAIN is written in **sentences**, not only a paste.  
+5. You can name the CTE and the window without opening the SQL.
+
+If (5) fails, the pack is still a copy you have not learned. Rewrite the comments in English until you can speak them.
+
+## Index keep/drop rubric
+
+Keep if **any** of these is true and you can show it:
+
+- EXPLAIN uses it on a report you ship  
+- It is PK or UNIQUE (already required)  
+- It is a child FK column you expect to grow, even if today’s 40 rows seq-scan — write “for production size / ON DELETE checks”  
+
+Drop if:
+
+- Duplicate of another index’s leftmost prefix **and** no extra ORDER BY it uniquely serves  
+- Single-column boolean/status with ~50% selectivity and no partial-index story  
+- Created “because the exam might ask for indexes” with no query  
+
+Write the drop as SQL in `99-drop-unused.sql` **or** never create it. Leaving unused indexes “for later” is how write amplification starts.
+
+## Reporting pack README shape
+
+```markdown
+# Reports
+
+Reset: psql -U postgres -d ops_api -f sql/00-reset.sql && ...
+Then: psql -U postgres -d ops_api -f sql/reports/01_....sql
+
+| File | Question | Grain |
+|---|---|---|
+| 01_... | ... | one row per ... |
+```
+
+If the README lies, the pack is not finished.
+
+## Month 11 boundary (write this in PACK-STATUS.md)
+
+You will map these SQL files to SQLAlchemy queries later. If a report cannot be expressed without a window, do not pretend `group_by` in Python is enough. Paste the SQL into a comment in Month 11 if you must — do not lose it. Today, the `.sql` file **is** the artifact.
+
+You will not: add Redis, Dockerize Postgres, or open Alembic tonight.
+
+## Oral rehearsal for tomorrow
+
+Without files: draw three boxes for a **new** domain (not clinics yet — that is the exam’s surprise, so practice on **libraries** or **warehouses**). Speak PK, FK RESTRICT, one UNIQUE, one CHECK, one LEFT JOIN count, one BEGIN pair. If you freeze, reread Week 1 Day 7 and Week 3 Day 7 syntheses **today**, not during the exam.
+
+Write `ORAL.md`: five sentences you will say in Block 0 tomorrow. Then do not open it during the exam; the exam file repeats the synthesis.
+
+---
+
+# Cold run procedure
+
+1. Connect to the database named in WHERE.md / SCHEMA.md.  
+2. Run reset+schema+seed from Week 1 Day 6 files (or your current 00/01/02).  
+3. Run report 01 … N in README order.  
+4. Compare to expected notes.  
+5. Run EXPLAIN on two reports. Update JUSTIFY.md.  
+
+If step 4 needs a screenshot of ids, you wrote brittle notes. Fix the notes, not the ids.
+
+## Out of scope list (paste into PACK-STATUS.md)
+
+- FastAPI routes talking to Postgres  
+- SQLAlchemy models  
+- Alembic migrations  
+- Redis  
+- Docker Compose for Postgres  
+- Connection pool implementation  
+- Partial unique indexes you cannot explain  
+
+If any of those landed in git this week, move them off the gate path or delete.
+
+## Oral five sentences (ORAL.md)
+
+1. My three tables are …  
+2. Orphans are impossible because …  
+3. One report uses LEFT JOIN so that …  
+4. One transaction wraps …  
+5. I did not start Month 11 because …
+
+If you cannot fill (2) or (3), the gate is false before tomorrow’s table.
+
+---
+
+# Two EXPLAIN files
+
+`EXPLAIN-01.md` and `EXPLAIN-02.md` (or sections in EXPLAIN.md): count query and latest-per-parent (or your two hardest). Four sentences each. If both say only “Seq Scan because small,” that can be honest — then JUSTIFY.md should not claim Index Scan.
+
+Write `HONEST.md`: “I did not invent an Index Scan.”
+
+## Git paths
+
+Reports in `sql/reports/`. Expected in `sql/expected/` or `expected/`. INDEXES.md at repo root or `sql/`. PACK-STATUS.md where a reviewer finds it in 10 seconds. If files are scattered without README links, the pack is not finished.
+
+---
+
+# README must include database name
+
+`ops_api` vs `month10` vs schema `ops`. If a classmate runs reports against the wrong database, empty results look like SQL bugs. PACK-STATUS.md line 0: database name.
+
+Write `DBNAME.md`: one line.
+
+## Index drop is a commit
+
+If you DROP INDEX, the SQL lives in git (`99-drop-unused.sql`) so the environment is reproducible. Dropping only in a session is a ghost.
+
+---
+
+# PACK-STATUS ticks recopied
+
+If any required tick is empty, the day is not done. Fill them this session after the cold run, not from memory of Day 4.
+
+Write `TICKS.md`: copy of the checklist with x marks.
+
+## Justified index count
+
+Count extra (non-PK) indexes you keep. If more than four on a three-table schema, reread “when not to index.” Write the count.
+
+---
+
+Write `KEEP-DROP.md`: how many extra indexes kept vs dropped.
+
+---
+
+Write `COLD-RUN.md`: cold run completed this session yes/no.
+
+---
+
+## Closing note
+
+Cold-run the pack. Tick PACK-STATUS.md from evidence, not hope. Exam is tomorrow.
+
+---
+
 ## Optional review links
+
+These pages are for later checking, not for first learning.
 
 - [PostgreSQL: Using EXPLAIN](https://www.postgresql.org/docs/current/using-explain.html)
 - [PostgreSQL: Indexes](https://www.postgresql.org/docs/current/indexes.html)

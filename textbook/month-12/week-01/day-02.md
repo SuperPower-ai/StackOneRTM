@@ -351,3 +351,40 @@ Four states. If you only have “spinner vs table,” you will call a 500 “no 
 Cookies later. Today `allow_credentials=False`. Month 13 will make you justify session cookie vs token. Do not enable credentials to feel ready.
 
 `isPending` on Day 4 is loading. `isFetching` is not a reason to blank the table. Learn the names today so Query does not surprise you.
+
+---
+
+# FAQ you will actually hit tonight
+
+**Why does `/docs` work but the Vite page does not?**  
+`/docs` is same-origin with FastAPI (port 8000). The React app is 5173. CORS applies to the second, not the first.
+
+**Why did I add CORS and still fail?**  
+You opened `http://localhost:5173` while allowing `http://127.0.0.1:5173`. Those origins are not equal. Pick one pair and use it in the address bar, `allow_origins`, and `VITE_API_BASE`.
+
+**Can I allow both localhost and 127.0.0.1?**  
+Yes if you list **both** strings. Do not use `*`. Do not add `allow_credentials=True` today.
+
+**Is a proxy in `vite.config` a substitute for CORS?**  
+A proxy makes the browser think one origin. This course wants you to **see** two origins and configure CORS, because production UI and API are often different hosts. You may use a proxy later; you must still **explain** CORS.
+
+```mermaid
+flowchart TB
+  subgraph Browser
+    JS[fetch with Origin 5173]
+  end
+  subgraph API
+    MW[CORSMiddleware]
+    RT[route]
+  end
+  JS --> MW
+  MW -->|origin listed| RT
+  MW -->|origin not listed| BLOCK[JS cannot read body]
+```
+
+**Wrong belief:** “Loading UI can reuse the empty-state component.”  
+**Correct:** empty is success. Loading is not. Error is not. Three copies of “nothing to show” is how duplicate creates happen.
+
+Write `FOUR-STATES.txt`: the accessible name you used for loading (`role="status"`), empty (plain paragraph), error (`role="alert"`), and a row (`listitem` or table cell).
+
+Restart Vite after every `.env` change. `curl.exe` does not read `.env`. The browser bundle does.

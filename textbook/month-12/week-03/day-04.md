@@ -291,3 +291,94 @@ The form is allowed to be nicer (instant errors). The API is not allowed to be w
 `model_dump()`. `ApiError` 422 in the client can `setError` on the field (Month 7). Optional today if RTL already sees Zod errors.
 
 Day 5 you will write the **doc** that survives a new teammate who wants to “just disable the button.”
+
+---
+
+# Three places the number 40 lives
+
+1. `RULES.md`  
+2. Zod `.max(40)` after `.trim()`  
+3. Pydantic `Field(max_length=40)` after strip validator  
+
+Change one, fail the product. `ALIGN.md` lists all three.
+
+```ts
+export const plaqueTitleSchema = z.object({
+  title: z.string().trim().min(3).max(40),
+});
+```
+
+```python
+class PlaqueCreate(BaseModel):
+    title: str = Field(min_length=3, max_length=40)
+
+    @field_validator("title")
+    @classmethod
+    def strip_title(cls, v: str) -> str:
+        return v.strip()
+```
+
+pytest: `assert "title" in r.json()["detail"][0]["loc"]`. Do not freeze `msg`.
+
+RHF `zodResolver`. `noValidate`. Associated errors. Mutation `isPending` disables submit. Do not `reset()` on 422. `invalidateQueries({ queryKey: ["plaques"] })` on 201.
+
+**Wrong belief:** “HTML maxLength is dual validation.”  
+**Correct:** curl ignores it. Pydantic is the twin.
+
+curl 3-char 201. curl 41-char 422. UI `"ab"` field error.
+
+`useMutation({ mutationFn })` object API. CORS 5173. `VITE_API_BASE`. No `any` on form values — `z.infer`.
+
+---
+
+# Accessible field (do not skip)
+
+```tsx
+<label htmlFor="title">Title</label>
+<input id="title" aria-invalid={!!errors.title} aria-describedby="title-err" {...register("title")} />
+<p id="title-err">{errors.title?.message}</p>
+```
+
+RTL can `getByLabelText(/title/i)` and `findByText(/at least 3/i)`.
+
+`handleSubmit` → `mutate`. 201 → invalidate `["plaques"]`. 422 from server → optional `setError` if the UI check was bypassed.
+
+RULES.md first commit if you can. Then red tests. Then green.
+
+Strip `"  hi"` → `"hi"` length 2 → fail both sides. Write that case in ALIGN.md.
+
+---
+
+# Recite-back
+
+- [ ] RULES.md first
+- [ ] Zod trim min max
+- [ ] Pydantic strip then Field
+- [ ] 422 loc not msg
+- [ ] RHF zodResolver
+- [ ] invalidate on 201
+- [ ] ALIGN.md three forties
+
+`z.infer` for form types. No `any`. CORS 5173. `model_dump()` Out. Mutation object API.
+
+---
+
+# Tomorrow reminder
+
+Docs: VALIDATION.md courtesy vs must-refuse. Two proofs. Drift hunt. Then independent upload XOR email-port.
+
+`uv run pytest -q` 422 loc + 201. UI test or Zod unit for `"ab"`. RULES.md numbers match. Strip `"  ab"` fails. CORS 5173. `VITE_API_BASE`. No generation script required.
+
+---
+
+# Closing card
+
+Windows: `curl.exe`. Vite: `npm create vite@latest name -- --template react-ts`. Router: `npm install react-router` and import from `"react-router"`. FastAPI `--host 127.0.0.1 --port 8000`. CORS `allow_origins=["http://127.0.0.1:5173"]` not `*`. `VITE_API_BASE` in `.env` — no secrets. Query v5: `useQuery({ queryKey, queryFn })`, `useMutation({ mutationFn })`, `isPending` first load, `gcTime` not `cacheTime`, `placeholderData: keepPreviousData` when paging, `invalidateQueries({ queryKey })` after writes. Pydantic v2 `model_dump()`. JSON `unknown` then DTO. No `any`. No `fetch` in components. No Project 7 dump.
+
+```mermaid
+flowchart LR
+  UI[UI states] --> Q[Query]
+  Q --> C[client]
+  C --> API[FastAPI]
+  API --> ST[(store)]
+```

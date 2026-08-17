@@ -308,3 +308,83 @@ Never log secrets. Never accept unbounded inbound ids. Never confuse Uvicorn acc
 Tags are the noun. 6B gets this middleware **written by you** later this week — not pasted from a vendor quickstart.
 
 `curl.exe -D -` is the camera. Stdout is the film.
+
+---
+
+## Recite-back checklist
+
+Write `RECITE.txt`.
+
+- [ ] One JSON object per log line (or structured key=value I can parse)  
+- [ ] `X-Request-ID` on the response  
+- [ ] Inbound ids are validated / bounded  
+- [ ] `http_done` has method, path, status, ms, request id  
+- [ ] `/boom` logs without secrets  
+- [ ] Authorization values never appear  
+- [ ] Uvicorn access log ≠ my formatter  
+- [ ] not ops-api  
+
+---
+
+## Middleware try/except sketch (type if Block C needs it)
+
+```python
+@app.middleware("http")
+async def request_id_middleware(request: Request, call_next):
+    rid = request.headers.get("x-request-id") or ""
+    if not rid.isascii() or " " in rid or len(rid) < 8 or len(rid) > 64:
+        rid = str(uuid.uuid4())
+    request.state.request_id = rid
+    start = time.perf_counter()
+    try:
+        response = await call_next(request)
+    except Exception:
+        ms = int((time.perf_counter() - start) * 1000)
+        logger.error(
+            "http_fail",
+            extra={
+                "extra_json": {
+                    "event": "http_fail",
+                    "request_id": rid,
+                    "method": request.method,
+                    "path": request.url.path,
+                    "ms": ms,
+                }
+            },
+        )
+        raise
+    ms = int((time.perf_counter() - start) * 1000)
+    response.headers["X-Request-ID"] = rid
+    logger.info(
+        "http_done",
+        extra={
+            "extra_json": {
+                "event": "http_done",
+                "request_id": rid,
+                "method": request.method,
+                "path": request.url.path,
+                "status": response.status_code,
+                "ms": ms,
+            }
+        },
+    )
+    return response
+```
+
+If FastAPI already turned the exception into a 500 response **inside** `call_next`, you may only see `http_done` with status 500 — still log the id. The `except` path is for unhandled explosions before a response exists. Write which path `/boom` took in `BOOM.txt`.
+
+**Do not** log `str(exc)` if it might include a connection URL. Log `type(exc).__name__`.
+
+---
+
+## Lecture: correlation is a join key
+
+SQL joins on `id`. Logs join on `request_id`. If the frontend (Month 12) sends `X-Request-ID`, you **keep** it when it is safe so a browser console and a server file tell the same story. If you **always** generate a new UUID, the browser’s id is useless. Honor the header **when valid**.
+
+`ms` is a poor man’s APM. A 200 that takes 8000 ms is a timeout candidate (Day 3). Log it.
+
+Do not log query strings that contain tokens (`?access_token=`). Log `path` without the query, or redact. Write `QUERY.txt`: will you log `request.url.query`? Default **no**.
+
+SQLAlchemy `echo=True` next to JSON logs is noisy. In 6B, echo off; request logs on. Exam mini may keep echo to count N+1.
+
+Windows: `curl.exe -D - -H "X-Request-ID: lab-trace-001"`. If PowerShell eats the header, quote it. Bind `127.0.0.1`.

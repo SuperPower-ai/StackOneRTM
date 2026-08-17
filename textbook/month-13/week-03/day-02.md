@@ -283,3 +283,27 @@ Write `RECITE.txt` with one honest sentence per line.
 - [ ] no attack page  
 
 If a line is mush, re-read this file only.
+
+---
+
+# Extra lecture — two bugs, two families
+
+XSS: untrusted **content** runs in your origin.  
+CSRF: untrusted **origin** uses the victim’s **browser** as a confused deputy with **cookies**.
+
+Mitigations differ. Mixing them up produces “I set HttpOnly” as a CSRF answer — an exam fail.
+
+No walkthrough of building the deputy page.
+
+Bearer tokens in a header are **not** auto-attached by the browser — classic CSRF is weaker; XSS theft of the bearer becomes the bigger story. Cookie sessions need SameSite + CSRF token thought.
+
+GET must not mutate. `GET /delete?id=` is a CSRF and cache nightmare.
+
+CSRF token in a **query string** lands in logs. Use a header.
+
+Lab: `~\fullstack-lab\month-13\week-03\day-02\`. POST without token → 403. That is enough.
+
+`uv run pytest -q`. Bind `127.0.0.1` if you run the server.
+
+SameSite=Lax is the first cookie control. Tokens are defense in depth, especially if you ever need SameSite=None.
+

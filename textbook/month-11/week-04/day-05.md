@@ -248,3 +248,42 @@ Documents, collections, embed, ref, index, tiny `$group`. Then a page that may s
 If the page says Yes, you still **do not** have to migrate this month — you need a **reason** and a **plan**. The gate allows No.
 
 Field notes are the noun. ops-api is not a collection.
+
+---
+
+## Recite-back checklist
+
+Write `RECITE.txt`.
+
+- [ ] document vs row  
+- [ ] collection vs table  
+- [ ] embed vs ref written  
+- [ ] one index  
+- [ ] one `$group` (run or written)  
+- [ ] WOULD-MONGO-HELP-6B.md has yes or no  
+- [ ] pymongo not added to ops-api  
+- [ ] mongomock/skip-run documented if no server  
+
+**JSONB vs Mongo.** If your only argument for Mongo is “nested comments,” PostgreSQL JSONB plus a `comments` table may already win. The page should compare **that** option, not only Excel vs Mongo.
+
+**`$lookup`.** Know the name as Mongo’s join-ish. You need not use it if you ref-fetch in Python for two authors. Write one sentence: `$lookup` vs SQL JOIN.
+
+Windows: `uv run py -3 lab.py`. No Docker course. Atlas password not in git. Field observations are the noun.
+
+If the page says Yes, you still keep Mongo **out** of tonight’s ops-api unless you are ready to own two SoRs — and this course’s default remains No.
+
+---
+
+## Tiny aggregation you should be able to say
+
+Match observations that have `site`, group by `site`, sum 1. Cousin of `SELECT site, COUNT(*) FROM observations GROUP BY site`. Write both in `AGG.txt` even if mongomock is the runner.
+
+**Index:** `site` ascending. `INDEX.txt` from `index_information()` or a sentence that you called `create_index`.
+
+**Embed:** notes travel with the observation. **Ref:** authors stay small and reused. If notes were 10,000 pages, embed would be the wrong size — say that.
+
+`NOT-IN-OPS-API.txt` one sentence. `WOULD-MONGO-HELP-6B.md` 20–40 lines. No is complete.
+
+Windows: `uv add pymongo mongomock`. `uv run py -3 lab.py`. No Docker course. No Atlas password in git.
+
+Field observations are the noun. 6B remains tables.

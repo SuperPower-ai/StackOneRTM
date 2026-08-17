@@ -244,3 +244,39 @@ Courier pings are the noun. Do not retry POST. Do not swallow. Do not log tokens
 - [ ] no POST retry  
 - [ ] not ops-api  
 - [ ] not public-internet required
+
+If a line is mush, re-read the recap in **this** file only.
+
+---
+
+## Office hours (memory day)
+
+**httpx timeout never fires.** Timeout too high, or the mock returns immediately. MockTransport `sleep` or raise `httpx.TimeoutException`. Tests should not wait 60s.
+
+**Self-call deadlock.** One Uvicorn worker, `/courier` waits on `/slow` on the same app. Use MockTransport or a second process **only if** you understand it. DEADLOCK.txt is a pass if you avoided the hang.
+
+**`except Exception` in middleware.** Narrow `httpx.TimeoutException` and `httpx.ConnectError`. Log `type(exc).__name__` and request id.
+
+**Retries in the helper.** GET `/health` once retry maybe. POST never. RETRY.txt.
+
+Windows: `uv run pytest -q`. `curl.exe -D -` health. Settings `upstream_timeout_s`. No Mongo. No ops-api. Courier pings are the noun.
+
+Pool timeout: `create_engine(url, pool_timeout=30)` — if you have no engine today, still write POOL.txt as a sentence for 6B.
+
+---
+
+## Predicted statuses
+
+| Case | Status |
+|---|---|
+| GET `/health` | 200 + X-Request-ID |
+| Upstream timeout | 504 or 503 as CONTRACT |
+| Connect error | 503 |
+| Unhandled boom | 500, logged, no secret |
+| Swallow-all helper | **must not exist** |
+
+`TIMEOUTS.md`: httpx, pool, “I will not wait forever.” `RETRY.txt`: GET maybe, POST no.
+
+Windows: `uv run pytest -q`. MockTransport, not httpbin. Bind 127.0.0.1. Courier pings are the noun. No Mongo. No ops-api.
+
+If pytest waits 30 seconds, your mock did not raise. Fix the test, do not raise the timeout to hide it.

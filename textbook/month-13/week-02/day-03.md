@@ -236,3 +236,65 @@ Write `RECITE.txt` with one honest sentence per line.
 - [ ] new password hashed  
 
 If a line is mush, re-read this file only.
+
+---
+
+# Extra lecture — the mailbox list is a test spy
+
+Never ship `MAILBOX` in production. The port becomes SMTP or a vendor. Tests inject a fake.
+
+**Do not** put the raw token in query logs. If the confirm link is a URL with a query token, it still must be hashed at rest and short-lived. Prefer POST body for confirm in APIs; if you use a link, keep expiry short and accept history risk.
+
+No guessing scripts. Entropy of `token_urlsafe(32)` is the defense against guessing.
+
+**Two requests:** document whether only the **latest** token is valid. Course preference: invalidate previous unused tokens of the same purpose.
+
+**New password too short:** 422, prefer **not** consuming the token so they can retry.
+
+**Sessions after reset:** optionally revoke all sessions. Write the choice.
+
+Library cards, not the product. Bind `127.0.0.1`. `curl.exe` if you inspect HTTP. pytest is the proof.
+
+If confirm tells the client "expired" vs "unknown" and you care about token enumeration, make public bodies identical. Day 5 still proves expiry by arranging the clock.
+
+`uv run uvicorn main:app --reload --host 127.0.0.1 --port 8000` is optional. Tests do not need port 8000.
+
+Windows: JSON files + `--data-binary @file` so PowerShell quoting does not eat the day.
+
+---
+
+# Status table you must still own
+
+| Event | Status |
+|---|---|
+| Reset request (email exists or not) | **200** same generic body |
+| Confirm success | **204** or **200** |
+| Confirm fail (bad or expired) | **400** or **401** generic |
+| New password too short | **422**; prefer token **not** consumed |
+| Register seed user | **201** |
+
+**Token hash:** SHA-256 of a high-entropy random token is acceptable. **Passwords** still argon2/bcrypt. Compare token hashes with `hmac.compare_digest`.
+
+**One-time:** reuse fails. **Clock:** UTC on the server, not the email text.
+
+Unknown email: mailbox **unchanged**. Known email: mailbox has one item; DB value ≠ raw token.
+
+Login with the **new** password after confirm. Login with the **old** must fail.
+
+Lab noun: library cards. `~\fullstack-lab\month-13\week-02\day-03\`. `uv add fastapi uvicorn passlib argon2-cffi`. `uv add --dev pytest httpx`.
+
+Do not send real mail to strangers. Do not paste Project 7. Do not put the user id in the token as `42-reset`.
+
+`lookups.txt` if you opened Week 1 hashing after 25 minutes. `RAM.txt` if in-memory tokens die on reload — that is the lab, not a reason to skip hashing the token.
+
+`uv run pytest -q` is the proof. Generic request 200. Token hashed. Confirm one-time. New password argon2.
+
+Do not print tokens in pytest names. `@example.com` only. MAILBOX is a test spy, not production.
+
+Forgot-password is not retrieval. There is no old password. Hash, expire, one-time, new argon2 hash.
+
+
+
+
+
+

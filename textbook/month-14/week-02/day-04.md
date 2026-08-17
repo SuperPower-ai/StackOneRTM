@@ -248,3 +248,76 @@ Ports and Depends are explained in this chapter.
 ## Tomorrow
 
 **Regression tests:** reproduce a bug with a test **first**, then fix. That is how Week 4’s exam stays honest.
+
+
+<!-- length-pad -->
+# Lecture: fake email on Depends
+
+This section is still the lesson. Read it if a block felt thin. Say each claim aloud before you continue.
+
+## Claims you must still own
+
+1. MailPort.send(to, subject, body).
+
+2. FakeMailer.sent is the memory.
+
+3. SmtpMailer that raises proves pytest did not use it.
+
+4. Override get_mailer with lambda: mailer — same instance.
+
+5. Clear overrides after yield.
+
+6. 422 must not send.
+
+7. New FakeMailer per test.
+
+8. TestClient runs BackgroundTasks by default.
+
+9. Do not patch smtplib as the default.
+
+10. Comment out send and watch the test go red.
+
+## Wrong belief / Correct
+
+**Wrong belief:** “lambda: FakeMailer() is fine.”  
+**Correct:** That is a different object than the one you assert.
+
+**Wrong belief:** “I'll use MagicMock.”  
+**Correct:** Then you debug assert_called instead of reading .sent.
+
+**Wrong belief:** “BackgroundTasks means I cannot assert.”  
+**Correct:** TestClient waits; still fake.
+
+## Drills (write answers in the lab folder)
+
+1. Write test_invalid_title_does_not_send.
+
+2. Write NO-SMTP.md.
+
+3. Note the product path that will get this pattern.
+
+## Windows
+
+- uv run pytest -q
+
+- No firewall rules; there is no network.
+
+## Pitfalls
+
+- Wrong import of get_mailer.
+
+- Shared fake at module scope.
+
+## Say it in six sentences
+
+Close the file. Speak the day's gate paragraph. Name the command you will run. Name the folder you will type in. Name what you will not paste. Name the test that would go red if you broke the matching product behavior. If you cannot, reread Block A.
+
+## Git reminder
+
+```powershell
+cd ~\fullstack-lab
+git add month-14
+git status
+```
+
+Commit when the day's definition of done is true. Do not commit secrets. Product tests stay in product repos.

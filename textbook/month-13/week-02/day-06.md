@@ -226,3 +226,74 @@ Write `RECITE.txt` with one honest sentence per line.
 - [ ] not OAuth paste  
 
 If a line is mush, re-read this file only.
+
+---
+
+# Extra lecture — inbox proof and recovery
+
+Verify proves the inbox. Reset uses the inbox. Both use hashed expiring tokens. Both are generic on **request**. Both refuse expiry in tests you own.
+
+Product or marina mini. Not a Google clone. Not a dump of the product into the textbook.
+
+Email port is a function. Tests append. Production later. Never log the token. Never store it raw.
+
+If you only built reset, write the verify gap in AUTH.md and still finish expiry tests for reset.
+
+```powershell
+curl.exe -s -D - -X POST http://127.0.0.1:8000/reset/request -H "Content-Type: application/json" --data-binary @req.json
+```
+
+Expect **200** even for a random email. That 200 is a feature.
+
+CONTRACT first. Red tests. Implement. `uv run pytest -q`. Bind `127.0.0.1`.
+
+Stretch: revoke sessions on reset. Stretch: resend verify invalidates old token.
+
+Lab: `~\fullstack-lab\month-13\week-02\day-06\`.
+
+---
+
+# CONTRACT.md must still include
+
+1. Endpoint table.  
+2. Generic strings copied into tests.  
+3. TTLs: verify 24h, reset 30 min — or your numbers.  
+4. Email port: tests use a list; production env later.  
+5. Password policy on new password.  
+6. Session revoke on successful reset: yes/no.  
+7. Persistence: Postgres vs memory for the mini.
+
+**Allowed mini noun:** marina slips. **Forbidden:** Google OAuth from a blog as today’s “verify.”
+
+Minimum tests: register → verify → flag set; unknown email 200 generic; expired verify refused; reset request generic; reset confirm changes password; expired reset leaves old password; Out has no hashes/tokens.
+
+`RED.txt` from first pytest if you wrote tests first.
+
+If HTTP is up, `curl.exe` reset request for a random email → 200. README: how to test without sending mail.
+
+Commit AUTH.md in Project 7 with reset/verify. Commit lab separately.
+
+If verify is missing, AUTH.md says **gap**. Reset expiry tests still ship. Depth beats a social-login clone.
+
+`CONTRACT.md` empty is a fail even if pytest is green on a gist you pasted. Specify first.
+
+`~\fullstack-lab\month-13\week-02\day-06\mini` if not the product. Marina slips, not CRM.
+
+Fake mailbox. Never log tokens. Never store raw. AUTH.md updated the same day.
+
+`uv run pytest -q`. Bind `127.0.0.1` if you demo HTTP. `curl.exe` for generic 200 on unknown email.
+
+CONTRACT first. Tests red. Implement. AUTH.md in the product repo the same day. That order is the independent-day bar.
+
+If you pasted a gist, delete it and type the token consume yourself. Independent day is specification plus your code.
+
+No OAuth clone. No product dump. Verify + reset + expiry tests.
+
+
+
+
+
+
+
+
+

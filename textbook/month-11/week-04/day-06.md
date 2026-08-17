@@ -217,3 +217,65 @@ The spec is not a second assignment. It is a **mirror** held up to **your** repo
 Tomorrow you will teach the month from the exam synthesis and mark the gate. If a heading is MISSING, the honest mark is false. Stay on 6B. Do not start Month 12 on a false row.
 
 Your table names stay yours. This file still does not contain them.
+
+---
+
+## Recite-back checklist
+
+Write `RECITE.txt` in the lab folder.
+
+- [ ] GAP.md has paths or MISSING  
+- [ ] one gap closed today  
+- [ ] `select()` not `Query()`  
+- [ ] `model_dump` not `.dict()`  
+- [ ] Alembic or an honest MISSING  
+- [ ] Redis paragraph or absence  
+- [ ] request id / health / env  
+- [ ] Mongo evidence is the Day 5 folder  
+- [ ] PROGRESS.md is not theater  
+
+**Heading 10 transaction.** If you still have no multi-row write, name the 6B operation that **will** need `session.begin()` (membership + project, transfer, etc. — **your** nouns). Do not invent a fake second table tonight if the gap is “HTTP still RAM.”
+
+**Heading 7 raw SQL.** Link Month 10 files. Do not delete them because SQLAlchemy exists. The spec wanted SQL **before** the ORM. Keep the evidence.
+
+Windows: work in `~/ops-api`. `uv run pytest -q` if tests exist. `uv run alembic current`. `curl.exe` `/health`. Bind 127.0.0.1.
+
+Tomorrow’s exam mini is hangars, not your product. Do not paste 6B into the exam folder. Do not start [Month 12](../../month-12/README.md) on a false gate.
+
+---
+
+## Heading map (copy into GAP.md as a skeleton)
+
+| Heading | Path or MISSING |
+|---|---|
+| 6 DB constraints | |
+| 7 Raw SQL (Month 10) | |
+| 8 SQLAlchemy 2.x | |
+| 9 Alembic | |
+| 10 Transaction | |
+| 11 EXPLAIN notes | |
+| 12 Redis decision | |
+| 13 Tests + test DB | |
+| 14 Request-id logs | |
+| 15 Env config | |
+| 16 Health | |
+| 17 Mongo page (lab) | |
+| 18 Docs | |
+
+Fill paths. One MISSING is a gate risk. Close the highest today.
+
+Windows: `~/ops-api`, `uv run alembic current`, `uv run pytest -q`, `curl.exe` `/health`. Secrets not in git. No `Query()`. `model_dump`. Mongo not in requirements.
+
+PROGRESS.md tells tomorrow’s you the truth. The exam synthesis will not grade attendance.
+
+**If HTTP is still RAM:** wiring one GET list to `select()` beats adding Redis. The gate’s item 1 is mapping **and** Session boundaries, not a cache.
+
+**If Alembic is MISSING:** that is the highest gap. Week 2 Day 6 was the pack. Do it before logging cosmetics.
+
+Hangars tomorrow. 6B tonight. Month 12 only on a true table — [Month 12 README](../../month-12/README.md) from this folder is `textbook/month-12` via `../../month-12`.
+
+Exam evidence goes in `~\fullstack-lab\month-11-exam\`, not inside ops-api. Block 4 tomorrow may open your docs; Blocks 1–3 may not.
+
+If GAP.md is all YES with no paths, it is not a map. Add paths before you sleep.
+
+Definition of done is the spec’s section 19 ticked **honestly**, not a green calendar.

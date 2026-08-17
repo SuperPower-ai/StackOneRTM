@@ -316,3 +316,69 @@ CORS + cookies is explicit origin. Star is done as a myth since Week 1.
 The API 401s. The button hide is courtesy. Hashing, CSRF, RBAC: Month 13.
 
 Your Week 1 client module is why this sketch is ten lines, not twelve copies of fetch.
+
+---
+
+# JUSTIFY.md prompt (write 12–20 lines)
+
+Answer:
+
+1. Is Project 7 a first-party browser app (Vite + FastAPI) as the main client?  
+2. If yes, why a **session cookie** with **HttpOnly** is the default this course respects.  
+3. If you still choose **tokens**, which clients cannot use cookies, and where the token will live (memory vs localStorage) plus the **XSS readability** sentence — no payload.  
+4. How `request()` will send credentials **or** `Authorization` in **one** place.  
+5. How CORS stays `http://127.0.0.1:5173` with `allow_credentials=True` only for the cookie choice — never `*`.
+
+Lab sketch is **not** argon2. Comment `Month 13: hash passwords`. Use `secrets.token_urlsafe(32)` as an **opaque** session id. Do not put email in the cookie value.
+
+```powershell
+curl.exe -s -c jar.txt -X POST http://127.0.0.1:8000/login -H "Content-Type: application/json" --data-binary @login.json
+curl.exe -s -b jar.txt http://127.0.0.1:8000/me
+curl.exe -s -D - http://127.0.0.1:8000/me -o NUL
+```
+
+Expect 401 on the third call (no jar).
+
+Query `["me"]` with `retry: false` so 401 does not retry three times. Do not put passwords in query keys.
+
+**Wrong belief:** “Hiding `/admin` in React Router is authorization.”  
+**Correct:** the API must 401/403. Month 13.
+
+Link: [Month 13 README](../../../month-13/README.md). Defense only. No attack payloads. No complete IdP dump.
+
+## Recite-back
+
+- [ ] authn vs authz
+- [ ] HttpOnly meaning
+- [ ] star + credentials invalid
+- [ ] opaque session id
+- [ ] 401 on /me without cookie
+- [ ] no VITE secrets
+
+---
+
+# Cookie flags you can recite (defense)
+
+HttpOnly: JavaScript cannot read the cookie.  
+Secure: HTTPS only in production; lab HTTP may omit.  
+SameSite=Lax: fewer cross-site sends; CSRF still Month 13.
+
+Opaque id in a server dict. `/logout` deletes cookie and server entry. `/me` 401 if missing.
+
+Token choice: Authorization header from memory store preferred over localStorage; if localStorage, JUSTIFY.md names XSS readability. Never `VITE_JWT_SECRET`.
+
+Client: one `request()` change. Twelve components must not each set credentials.
+
+No attack payloads. No OAuth. No refresh rotation. Month 13.
+
+---
+
+# Recite-back extra
+
+Lab password commented. `secrets.token_urlsafe`. `/logout` clears. Query `["me"]` retry false. CORS explicit if credentials. JUSTIFY.md exists. No payloads. No IdP dump.
+
+---
+
+# Tomorrow
+
+Integration tests: TestClient + RTL, shared fixture, not Playwright yet.

@@ -309,6 +309,70 @@ From memory: a **transfer-like** pair of updates in **one** transaction. Recap i
 
 ---
 
+# Repeatable Read in one paragraph (you may not demo it)
+
+At Repeatable Read, PostgreSQL takes a **snapshot** for the transaction. Your second COUNT would **not** see Sam. Writers who conflict may get an error you must retry. That is not free isolation. This course’s labs stay on Read Committed so the phantom-ish COUNT is visible and the lost-update story is about **application writes**, not snapshot theory. If you `SET TRANSACTION ISOLATION LEVEL REPEATABLE READ` as stretch, write what changed and **set it back**. Do not leave a session on Serializable for the rest of the week.
+
+## Write skew (name only)
+
+Two doctors, two on-call rows, each reads “the other is on call,” both go off call. Each transaction looks valid. Serializable aims at that. You will not construct a write-skew lab that looks like an attack on a hospital. You will write **one sentence** in NOTES: write skew exists; Serializable is a later tool; today lost update is enough.
+
+## SELECT FOR UPDATE OF table
+
+If a JOIN is in the SELECT, `FOR UPDATE` can lock more tables than you meant. Keep today’s FOR UPDATE on a **single** table WHERE name = 'Ada'. That is enough to feel a wait. Do not FOR UPDATE a join of all accounts.
+
+## Timeouts (optional)
+
+```sql
+SET lock_timeout = '2s';
+```
+
+Then B’s UPDATE fails instead of waiting forever if A is stuck. Reset or disconnect after. This is courtesy in a lab, not a production policy class.
+
+Write `WAIT.md`: what you set, if anything, and that you COMMIT/ROLLBACK A promptly.
+
+---
+
+# Isolation SHOW
+
+```sql
+SHOW transaction_isolation;
+```
+
+Expect `read committed`. Paste into NOTES.md. If you changed it, set it back:
+
+```sql
+SET SESSION CHARACTERISTICS AS TRANSACTION ISOLATION LEVEL READ COMMITTED;
+```
+
+## Lost update numbers
+
+Start 100. Two stale writes of 70. Final 70. Should be 40. The missing 30 is the lost debit. LOST-UPDATE.md must contain **70 vs 40**. If you only wrote “it was wrong,” rewrite with numbers.
+
+## FOR UPDATE wait is not a crash
+
+Window B’s `psql` looks hung. Type nothing for a minute if you must — then COMMIT A. B completes. If you Ctrl+C B, you cancelled B, not the lock. A still holds it until A ends.
+
+Write `NOT-A-CRASH.md`: one paragraph.
+
+---
+
+# Two-window dirty-read recap from Day 1 C3
+
+If you skipped C3 yesterday, do the visibility half today: BEGIN UPDATE Ada to 1; other window SELECT still 100; ROLLBACK. That is isolation’s easy win. Lost update is the hard win. Do not confuse them in LOST-UPDATE.md.
+
+Write `NOT-DIRTY.md` if you did not already have NO-DIRTY.md.
+
+---
+
+Write `RR.md`: I did not leave Repeatable Read on (yes/no).
+
+---
+
+Write `TWO-WINDOWS.md`: did B wait, and did A commit? yes/no.
+
+---
+
 ## Optional review links
 
 Isolation stories are explained in this chapter. These pages are for later checking, not for first learning.

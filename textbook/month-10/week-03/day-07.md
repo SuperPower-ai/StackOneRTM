@@ -173,9 +173,147 @@ Week 4 Day 1: **B-tree indexes**, composite indexes, **selectivity**, when **not
 
 ---
 
+# Fluency cards (answers in DRILL.md, then wallets)
+
+1. Autocommit vs BEGIN — which one splits a transfer?  
+2. After `ERROR: division by zero` inside BEGIN, what is the next successful command you can run besides ROLLBACK? (Answer: none until you end the transaction.)  
+3. Does ROLLBACK undo a COMMIT from five minutes ago?  
+4. `SET balance = 70` after reading 100, concurrent debit — name the anomaly.  
+5. `SET balance = balance - 30` twice concurrently — expected final if start 100?  
+6. CHECK fail on statement 2 — does statement 1 stay if you never ROLLBACK and the connection drops? (Server aborts the tx.)  
+7. FOR UPDATE meaning in one sentence.  
+8. Why this course still prefers RESTRICT on FKs inside transactions.  
+9. SAVEPOINT vs atomic transfer.  
+10. Sequence gap after ROLLBACK — data bug or not?
+
+If you miss three, re-read the synthesis before Block 2. The wallet mini will not teach what the cards already asked.
+
+## Wallet mini seed sketch (you still write it)
+
+Ada 500 cents, Lin 500. Transfer 120. Totals remain 1000 after success. Totals remain 1000 after failed 9999. That conservation **is** the exam of atomicity. Write `SUM(cents)` before and after in exam-proof.md.
+
+Do not use FLOAT. INTEGER cents. Week 1 NUMERIC/INTEGER lesson still holds.
+
+## Debug F extra
+
+A forgotten FOR UPDATE is the most common “PostgreSQL is frozen” lab report. It is not frozen. Session A owns a row lock. `\x` and `SELECT * FROM pg_stat_activity` is optional curiosity — do not turn it into an ops rabbit hole. ROLLBACK A.
+
+Write `LOCK-WAIT.md` only if you hit a wait today: which session you committed.
+
+---
+
+# Wallet transfer shape (still not a dump of Day 1 accounts)
+
+You write:
+
+```sql
+BEGIN;
+UPDATE exam_wallets SET cents = cents - 120 WHERE owner = 'Ada' AND cents >= 120
+RETURNING owner, cents;
+UPDATE exam_wallets SET cents = cents + 120 WHERE owner = 'Lin'
+RETURNING owner, cents;
+COMMIT;
+```
+
+If the first RETURNING is empty, ROLLBACK (insufficient funds). If the second is empty, ROLLBACK (Lin missing). Do not COMMIT after a silent no-op.
+
+Failed 9999:
+
+```sql
+BEGIN;
+UPDATE exam_wallets SET cents = cents - 9999 WHERE owner = 'Ada' AND cents >= 9999
+RETURNING owner, cents;
+-- if empty: ROLLBACK immediately
+```
+
+If you omit `AND cents >= 9999` and CHECK fires, you are in the aborted state. ROLLBACK. Ada unchanged. That is a pass.
+
+UNIQUE abort:
+
+```sql
+BEGIN;
+INSERT INTO exam_wallets (owner, cents) VALUES ('Sam', 1);
+INSERT INTO exam_wallets (owner, cents) VALUES ('Sam', 2);
+ROLLBACK;
+```
+
+Neither Sam remains.
+
+## Speak list for Block 1 (if you stall)
+
+Atomicity: two UPDATEs. Consistency: CHECK cents >= 0. Isolation: Lin does not see Ada’s uncommitted debit. Durability: after COMMIT, kill `psql`, reopen, numbers remain. Autocommit: without BEGIN, the debit is already a fact. Lost update: writing `cents = 380` after a SELECT. FOR UPDATE: lock Ada’s row while you think — then still prefer `cents = cents - n` when you can.
+
+Write `SPEAK.md` with those six lines in your wording **before** Block 2, then close it and implement.
+
+## Scoring extra
+
+If you used FLOAT for money, Block 2 fails even if the transfer “worked.” INTEGER or NUMERIC only.
+
+If you used CASCADE to delete Ada’s wallet while you were confused, reset the schema. RESTRICT is the week’s default.
+
+If you opened Day 1 `w3_accounts` SQL and renamed columns, log it in lookups.txt and redo once from this file.
+
+---
+
+# Conservation arithmetic
+
+500+500=1000. After 120 transfer: 380+620=1000. After failed 9999: still 1000. If the sum changes, you autocommitted a half. exam-proof.md must show the three sums.
+
+Write `THOUSAND.md`: the three numbers you measured.
+
+## Debug B remainder
+
+COMMIT after error does not save Ada’s debit **if** you BEGAN. If it does save it, you were not in a transaction. That is debug A and B overlapping. Say which you actually ran.
+
+---
+
+# Closed-book cards extra
+
+11. What SHOW transaction_isolation prints by default.  
+12. SAVEPOINT vs keeping a debit.  
+13. INTEGER cents vs FLOAT.  
+14. UPDATE 0 vs CHECK error for overdraft.  
+15. Who sees uncommitted debit (same session vs other).
+
+If you miss these, re-read the synthesis. Do not start Week 4.
+
+Write `CARDS.md` with your answers, then compare to the synthesis — not to Day 1 files.
+
+## Mini must not use w3_accounts table names
+
+`exam_wallets` only. If `\dt` shows you updated `w3_accounts` in this folder’s SQL, you copied. Redo.
+
+---
+
+# Exam evidence folder
+
+All of today’s files live under `week-03/day-07/`, not `w3_accounts` lab folders. `exam_wallets` tables may live in `month10` beside other labs; prefix `exam_` avoids DROP accidents.
+
+Write `PREFIX.md`: tables created today listed from `\dt exam_*`.
+
+## Sum three times
+
+Before any transfer, after success, after failed 9999. Three numbers in exam-proof.md. If you only have two, rerun.
+
+---
+
+Write `SUMS.md`: three conservation totals copied from exam-proof.md.
+
+---
+
+Write `EXAM-DT.md`: `\dt exam_*` output saved yes/no.
+
+---
+
+## Closing note
+
+INTEGER cents. Conservation 1000. `exam_wallets`, not `w3_accounts`. Week 4 waits on this gate.
+
+---
+
 ## Optional review links
 
-Repair from this synthesis first.
+Repair from this synthesis first. These pages are for later checking, not for first learning.
 
 - [PostgreSQL: Transactions](https://www.postgresql.org/docs/current/tutorial-transactions.html)
 - [PostgreSQL: Transaction isolation](https://www.postgresql.org/docs/current/transaction-iso.html)

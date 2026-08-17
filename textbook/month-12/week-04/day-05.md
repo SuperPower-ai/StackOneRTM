@@ -239,3 +239,67 @@ No Project 7 paste. No `request<any>`.
 The month gate is DB → API → UI → test. `any` on the UI side means the test can pass while the DTO is fiction.
 
 Unknown at `json()`, DTO after parse, Query infers. That is the client you will take into Project 7 tomorrow.
+
+---
+
+# Hunt commands (Windows)
+
+```powershell
+Select-String -Path src\**\*.ts,src\**\*.tsx -Pattern "\bany\b"
+npx tsc --noEmit
+```
+
+Zero matches in the lab `src`. Product: `PRODUCT-HUNT.md` **paths only**, no source dump. Fix one `any` in a client file if you own it.
+
+```ts
+async function request<T>(
+  path: string,
+  init: RequestInit,
+  parse: (json: unknown) => T,
+): Promise<T>
+```
+
+`ApiError.body: unknown`. `catch (e: unknown)` then `instanceof ApiError`.
+
+Zod `.parse` in `queryFn` / client: bad JSON → throw → `isError`. Good.
+
+`useParams()`: parse number; `enabled` when finite. No `as string`.
+
+**Wrong belief:** “`as Label[]` is typing.”  
+**Correct:** it is a lullaby. Parse.
+
+204: do not json(). `useQuery` infers DTO from `queryFn`. Delete `useQuery<any>`.
+
+eslint `@typescript-eslint/no-explicit-any` if you can turn it on.
+
+HUNT.md: lab clean. Recite: unknown at json, DTO after parse, Query infers, no any.
+
+---
+
+# Parse example
+
+```ts
+function parseLabel(json: unknown): LabelDto {
+  const parsed = labelSchema.parse(json);
+  return parsed;
+}
+```
+
+`labelSchema.parse` throws `ZodError`. Query surfaces `isError`. Do not catch and return `{}`.
+
+`tsc --noEmit` in package.json `typecheck` if missing. Run it.
+
+Product hunt: list paths, fix one client `any`. No dump of ops-web.
+
+Recite: unknown, parse, DTO, no any, 204 empty, useParams narrowed.
+
+---
+
+# Recite-back
+
+- [ ] no any in lab src
+- [ ] tsc clean
+- [ ] parse at boundary
+- [ ] ApiError.body unknown
+- [ ] useParams narrowed
+- [ ] PRODUCT-HUNT paths only

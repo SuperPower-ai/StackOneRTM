@@ -249,3 +249,131 @@ Write `RECITE.txt` with one honest sentence per line.
 - [ ] not an attack script  
 
 If a line is mush, re-read this file only.
+
+---
+
+# Extra lecture — deny is a test, not a story
+
+Two users. One id. Mutate as the wrong one. **403 or 404**. Data **unchanged**. **401** is not this test — 401 means B was not logged in.
+
+Comment out the owner check. Tests **must fail**. Restore. Paste the fail in `RED-PROOF.txt`. If pytest stays green, the test never looked at AuthZ.
+
+**Cookies stick.** B still being A is the classic flake. New `TestClient` or logout between users. Fixture **clears** stores.
+
+**Capture `id` from A’s 201.** Do not hardcode `1` across tests without a reset.
+
+Admin exception: only if the **matrix** says so. Do not “fix” a failing member test by making everyone admin.
+
+```powershell
+curl.exe -s -D - -X PATCH http://127.0.0.1:8000/plots/1 -H "Content-Type: application/json" -H "X-User-Id: 2" --data-binary @patch.json
+```
+
+You want deny, not 200. Bind `127.0.0.1`. `uv run uvicorn main:app --reload --host 127.0.0.1 --port 8000`.
+
+Lab: `~\fullstack-lab\month-13\week-04\day-04\`. Product tests in **your** repo if the resource exists; else `PRODUCT-GAP.md`.
+
+This is the month’s unit of proof. The README gate names it. If Day 4 is only a lecture, the gate is false.
+
+Do not loop ids against production. Two fixtures. Your app. Defense.
+
+---
+
+# Worked session — the red-proof loop
+
+1. Tests green with the owner check.  
+2. Comment out the compare.  
+3. `uv run pytest -q` — wrong-user test **red**.  
+4. Restore. Green again.  
+5. `RED-PROOF.txt` holds the fail snippet.
+
+If step 3 is green, rewrite the test until it would catch the missing check.
+
+Two `TestClient`s or logout. Unique emails. Capture id from 201.
+
+Assertions: exact 403 **or** exact 404 (POLICY.txt); A’s GET still original label; B’s list omits A’s item if private.
+
+Unauthenticated PATCH is **401** — a **different** test.
+
+Project 7: one mutating path, same four tests, or `PRODUCT-GAP.md`.
+
+Lab: `~\fullstack-lab\month-13\week-04\day-04\`. Copy **your** Day 3 garden, not the product.
+
+`uv run pytest -q`. Windows: `curl.exe` optional for a deny status line.
+
+The README gate: *tests that deny the wrong user.* This day is that sentence in pytest.
+
+---
+
+# Fixture isolation (Month 9 habit, now with two people)
+
+Shared module dicts leak users between tests. `clear()` users, sessions, and items. Reset ids. Do not assert `id == 1` in two tests without a reset.
+
+If B’s PATCH is 200 because B is still A, the cookie jar lied. New client.
+
+If 404 because you patched `/plots/99` not A’s id, you did not test AuthZ. Use the id from 201.
+
+Admin-allowed tests are **separate**. Do not weaken the member-deny test.
+
+`POLICY.txt`: 403 vs 404. CONTRACT and tests agree.
+
+Commit lab and, if you touched it, Project 7.
+
+`~\fullstack-lab\month-13\week-04\day-04\`.
+
+Tomorrow: least privilege DB user; ABAC-light owner and org attributes.
+
+If RED-PROOF.txt is missing, the day is not done. The gate is a test that **would fail** without the check.
+
+`POLICY.txt` and the test’s expected status must match. Do not assert `in {403, 404}` forever if the contract picked one.
+
+Copy **your** Day 3 garden into this folder if you are not on Project 7 yet. Type the tests yourself. AI may not ship `test_wrong_user_cannot_update`.
+
+When you remove the check and tests stay green, the tests never looked at AuthZ. That is the only interesting failure mode of this day.
+
+`~\fullstack-lab\month-13\week-04\day-04\`. `uv run pytest -q`.
+
+Product repo: same four tests on **one** mutating path. If two users cannot register yet, that is a Week 1 debt — finish users or write `PRODUCT-GAP.md` honestly.
+
+Required test names (or equivalent):
+
+- `test_unauthenticated_patch_401`  
+- `test_wrong_user_cannot_update`  
+- `test_owner_can_update`  
+- `test_wrong_user_does_not_change_stored_label`  
+
+Wrong-user is **403 or 404**, not 401. 401 means B was anonymous.
+
+`~\fullstack-lab\month-13\week-04\day-04\`. Defense tests. No scanner.
+
+Comment out the owner compare. Watch the wrong-user test go red. Restore. That loop is the definition of done, not a green suite you never broke.
+
+If two tests share one cookie, B is A. New client. Fixture `clear()`.
+
+The month gate names this day. If you only clicked the UI as B, you did not test HTTP. TestClient is the control.
+
+Write `RED-PROOF.txt` with the failing assert when the check is removed. If you cannot make pytest fail, the test is theater.
+
+Owner PATCH 200. Wrong user deny. Data unchanged. Unauthenticated 401. Those four claims.
+
+Do not fuzz production. Do not write a loop over ids you do not own. Two fixtures. Your app. pytest.
+
+`curl.exe` optional deny check on `127.0.0.1`. PowerShell `curl` is the wrong program.
+
+Four named tests. RED-PROOF.txt. POLICY.txt. Product test or PRODUCT-GAP.md. That is the lab.
+
+Comment out the check. Tests red. Restore. If that loop did not happen, the gate row is false.
+
+This is defense. Two users you created. One id. One verb. pytest.
+
+
+
+
+
+
+
+
+
+
+
+
+

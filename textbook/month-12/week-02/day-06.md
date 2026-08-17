@@ -190,3 +190,114 @@ Week 2 Days 1–5 in this textbook.
 ## Tomorrow
 
 **Week 2 review.** Mini-build. Debug. Retro. Then Week 3 uploads and dual validation.
+
+---
+
+# Server-side filter is the product
+
+Client `.filter` on a full GET is a demo. Your 6B/Project 7 list should use SQLAlchemy (or equivalent) with the **same** `q`, filter, and page the URL shows.
+
+```text
+GET /items?q=acme&status=open&page=2&limit=10
+```
+
+Pipeline: filter → search → sort **whitelist** → count `total` → slice. Empty page **200**. Cap `limit`. Never interpolate `q` into SQL.
+
+UI: `useSearchParams` from `"react-router"`. Committed `q` in the URL. Draft in `useState` until submit.
+
+```ts
+queryKey: ["items", { q, status, page, limit }]
+placeholderData: keepPreviousData
+```
+
+Create still `invalidateQueries({ queryKey: ["items"] })` — prefix, not only page 1.
+
+**Wrong belief:** “Independent day can skip the URL if Query keys work.”  
+**Correct:** refresh must restore the slice. Keys without URL amnesia the human.
+
+CONTRACT.md must include example URLs and example keys. `curl.exe` with quotes:
+
+```powershell
+curl.exe -s "http://127.0.0.1:8000/YOUR?q=test&page=1&limit=10"
+```
+
+`EVIDENCE.md`: filtered `total`, page 2 URL after refresh, CORS still 5173.
+
+If you only filtered in React, the day is not done unless `BLOCKED.md` says the API cannot change — then the **lab** must still filter on the server.
+
+Do not add uploads this day. Do not add OAuth. Depth on params.
+
+---
+
+# CONTRACT.md minimum tables
+
+**Params**
+
+| Name | Type | Default | Notes |
+|---|---|---|---|
+| q | string | empty | search |
+| status | string | all | whitelist |
+| page | int | 1 | ge=1 |
+| limit | int | 10 | cap 50 |
+
+**Keys**
+
+`["issues", { q, status, page, limit }]`
+
+**Statuses**
+
+GET 200 always for a matching route, including empty `items`. 422 on `limit=nope`.
+
+Write `EVIDENCE.md` with:
+
+- curl URL and `total`
+- browser URL after clicking Next
+- whether refresh kept page
+- CORS header present for 5173
+
+SQL: parameterized. Sort whitelist. No `ORDER BY` from raw user strings.
+
+If Project 7 list is still a dump of 5 rows, still implement the **params** so Week 4 exam is not a surprise. Empty page 2 is 200.
+
+Do not paste ferry tickets into ops-web.
+
+---
+
+# Quality bar paragraph
+
+A classmate implements from CONTRACT.md: exact path, param names, 200 empty, total meaning, queryKey shape, CORS origin, env key. Tests: at least one filtered `total`. UI: Next uses placeholder, not a blank table.
+
+If you client-filtered, rewrite the API. That is the independent day.
+
+`placeholderData: keepPreviousData`. `useSearchParams` from `"react-router"`. `curl.exe` quoted query URLs. Bind 127.0.0.1.
+
+Git: envelope in fullstack-lab; product in product repos.
+
+---
+
+# Recite-back
+
+- [ ] server filter not React slice
+- [ ] URL + queryKey
+- [ ] keepPreviousData
+- [ ] prefix invalidate
+- [ ] CONTRACT first
+- [ ] curl evidence
+
+---
+
+# Closing card
+
+Windows: `curl.exe`. Vite extra `--`. FastAPI `--host 127.0.0.1`. CORS `http://127.0.0.1:5173` not `*`. `VITE_API_BASE` public. Query v5 object API: `useQuery({ queryKey, queryFn })`, `isPending`, `gcTime` not `cacheTime`. `invalidateQueries({ queryKey })` when you write. Pydantic v2 `model_dump()`. No `fetch` in pages. No Project 7 source dump. Bind 127.0.0.1.
+
+---
+
+# Independent git
+
+```powershell
+cd ~\fullstack-lab
+git add month-12\week-02\day-06
+git commit -m "Month 12 Day 6: filter search envelope."
+```
+
+Product commits stay in the product repos.

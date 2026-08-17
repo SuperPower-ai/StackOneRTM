@@ -289,3 +289,93 @@ Strings will carry most of this week. INCR will carry Day 4’s defense concept.
 fakeredis keeps Windows labs honest when 6379 is empty. A skip-run still writes COMMANDS.txt. Docker is optional **if already present**. Month 15 is the Docker course.
 
 PostgreSQL + Alembic + SQLAlchemy remain the spine of 6B. Redis is a rib, or it is absent with a paragraph saying why.
+
+---
+
+## Recite-back checklist
+
+Write `RECITE.txt` with one honest sentence per line.
+
+- [ ] Postgres is the system of record  
+- [ ] Redis is allowed for cache, counter, or ephemeral state  
+- [ ] Losing Redis must not lose users/projects/tasks (or **your** nouns)  
+- [ ] SET/GET is a string; INCR is still a string-shaped number  
+- [ ] fakeredis is a lab double, not production  
+- [ ] skip-run still writes COMMANDS.txt and WHY-NOT-SOR.md  
+- [ ] Docker is not this month’s course  
+- [ ] I did not store 6B rows only in Redis  
+
+---
+
+## More office hours
+
+**Python connects, `redis-cli` does not exist.** That is fine. The lab is the client you have. Write PING via `r.ping()`.
+
+**WSL Redis, Windows Python, connection refused.** WSL2 sometimes binds Redis on a different interface. In WSL `redis-server` and `ss -lntp | grep 6379`. If Windows cannot see it, stay on fakeredis and write the network fact in `CONNECT.txt`. Do not spend three hours on hypervisor networking; the SoR essay is the point.
+
+**`decode_responses=False` and I got `b'ok'`.** Bytes. Set `decode_responses=True` or `.decode()`. Pick one.
+
+**I INCR a key that held JSON.** Redis will error or corrupt the value. Types are per key. Do not reuse `lab:hello` as a counter.
+
+**Memurai vs Redis.** Commands this week use are the common subset. If a command is missing, write it and use fakeredis for the lab.
+
+---
+
+## Lecture: eviction is not a schema
+
+If Redis runs out of memory, it **evicts** keys according to a policy (`allkeys-lru` and friends). That is another way a cache disappears. It is **not** Alembic. It is **not** `ON DELETE CASCADE`. If you stored the only copy of an invoice in Redis, eviction is deletion. That sentence belongs in `WHY-NOT-SOR.md`.
+
+Persistence options (RDB snapshots, AOF) make Redis **more** durable and still **not** your 6B SoR. You would take backups, run migrations-that-are-not-Alembic, and give up constraints. Postgres already does that job.
+
+**Key naming today, TTL tomorrow.** A key without a prefix (`hello`) will collide with a tutorial and with your next lab. `lab:hello` is a namespace. 6B will use `ops:` or your product prefix — you choose in ARCHITECTURE.md on Day 6.
+
+**INCR preview (do not build the 429 lab yet):** `INCR lab:count` returns 1, then 2. The value is a string Redis treats as an integer. Day 4 adds EXPIRE and a limit. Today, if you try INCR once, write the return value in `INCR.txt`. Optional.
+
+**Hash preview:** `HSET lab:item name "hook" qty 3` then `HGET lab:item name`. Still not SoR. A hash is convenient for a **cached** object with fields. Invalidation still deletes the whole key unless you HDEL a field on purpose.
+
+---
+
+## Worked extras — prove the rule, not the résumé
+
+Open `WHY-NOT-SOR.md` and add a table:
+
+| Event | Postgres | Redis cache of a list |
+|---|---|---|
+| Uvicorn reload | rows remain | fakeredis **empty**; real Redis **keeps** keys |
+| `FLUSHALL` | rows remain | keys gone |
+| `alembic upgrade` | schema may change | Redis unaware |
+| laptop sleep | DB still there | Redis may have gone away |
+
+Fill the table with what you **observed** or **predict**. Predictions must say they are predictions.
+
+If Path C skip-run: you still fill the table as predictions. That is allowed. Empty WHY-NOT-SOR.md is not.
+
+Bind Redis to localhost. Do not `CONFIG SET` anything you do not understand. Do not expose 6379.
+
+Windows PowerShell: `uv run py -3 hello.py`. Commit TYPES.md and FORBIDDEN.md. Do not commit a Redis password.
+
+---
+
+## Predicted commands (fill before you run)
+
+| Command | You expect |
+|---|---|
+| `PING` | `True` / `PONG` |
+| `SET lab:hello ok` | `True` |
+| `GET lab:hello` | `ok` |
+| `DEL lab:hello` | 1 then GET None |
+| `INCR lab:count` (optional) | 1 |
+
+If fakeredis: same table. If skip-run: this table **is** the lab, plus WHY-NOT-SOR.md.
+
+**Wrong belief:** “I’ll use Mongo this week because Redis felt optional.”  
+**Correct:** Mongo is Week 4 Day 5, separate, not 6B. Optional is not “pick a different extra database.”
+
+The month gate will ask you to **name** Redis. Naming starts with TYPES.md and FORBIDDEN.md, not with a cluster.
+
+**One more wrong belief:** “I’ll run Redis in Docker Compose because that is how tutorials look.”  
+**Correct:** Compose is Month 15. Today: process you already have, Memurai, WSL, fakeredis, or skip-run notes. A résumé line that you cannot PING is a lie.
+
+Day 2 is TTL and invalidation. Do not skip it because SET felt complete. A key without EX is how “cache” becomes an accidental SoR.
+
+Leave `echo` of SQLAlchemy on in Week 1 labs, not in Redis MONITOR against a shared server. You do not need MONITOR today.

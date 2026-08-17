@@ -362,3 +362,40 @@ Write `RECITE.txt` with one honest sentence per line.
 - [ ] Month 13 only if gate true
 
 If any debug answer says the framework is haunted, rewrite it from the synthesis in this file.
+
+---
+
+# Pots mini — material threading (do not skip)
+
+After list-create works, add `material`: `"clay" | "plastic"`.
+
+| Layer | Change |
+|---|---|
+| Store | new key / column |
+| Pydantic | Create + Out |
+| JSON | `model_dump()` includes it |
+| DTO + Zod | enum/union |
+| Form | select or radio |
+| Test | POST then GET echoes `material` |
+| UI | shows clay/plastic |
+
+If only the form has `material`, curl exposes the lie. That is debug **F**.
+
+exam-01.md must name: typed client, `VITE_API_BASE`, CORS 5173, `useQuery({ queryKey, queryFn })`, `isPending`, `invalidateQueries({ queryKey })`, `gcTime`, `model_dump()`, dual validation. Name `placeholderData: keepPreviousData` even if pots are unpaged — it is a Week 2 skill.
+
+Gate table: honest checkboxes. False row → no Month 13.
+
+[Month 13](../../../month-13/README.md) is passwords, cookies, tokens, authz, threat model. Bring JUSTIFY.md. Defense only.
+
+**Wrong belief:** “The exam is a quiz I can skip if Project 7 exists.”  
+**Correct:** the mini is independent evidence. Project 7 is the long product. Both matter. The gate is eight claims in the README.
+
+```powershell
+cd ~\fullstack-lab\month-12-exam\mini
+uv run pytest -q
+curl.exe -s http://127.0.0.1:8000/pots
+```
+
+No `cacheTime`. No tuple hooks. No `allow_origins=["*"]`. No fetch in pages. No Project 7 paste. `npm create vite@latest pot-web -- --template react-ts`.
+
+If the gate is true, continue with Month 13. If not, this file stays the teacher.

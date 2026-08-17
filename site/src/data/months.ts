@@ -128,7 +128,7 @@ export const MONTHS: MonthInfo[] = [
     title: "Linux, Docker, Observability",
     blurb: "The machine in production: processes, containers, logs.",
     phase: "Production engineering",
-    status: "forthcoming",
+    status: "published",
   },
   {
     number: 16,
@@ -136,7 +136,7 @@ export const MONTHS: MonthInfo[] = [
     title: "CI/CD and AWS",
     blurb: "Ship on a pipeline. Run on a cloud you can explain.",
     phase: "Production engineering",
-    status: "forthcoming",
+    status: "published",
   },
   {
     number: 17,
@@ -144,7 +144,7 @@ export const MONTHS: MonthInfo[] = [
     title: "Performance and Distributed Thinking",
     blurb: "Measure, queues, and the shape of larger systems.",
     phase: "Advanced engineering",
-    status: "forthcoming",
+    status: "published",
   },
   {
     number: 18,
@@ -152,7 +152,7 @@ export const MONTHS: MonthInfo[] = [
     title: "Production Master Project",
     blurb: "The capstone: design, build, operate, and defend it.",
     phase: "Capstone",
-    status: "forthcoming",
+    status: "published",
   },
 ];
 

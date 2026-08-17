@@ -202,3 +202,149 @@ Repair from this recap first.
 ## Tomorrow
 
 **Lab:** lint (ruff / eslint) + format (ruff format / prettier) + **pre-commit as a concept**.
+
+
+<!-- length-pad -->
+# Lecture: flakes without sleep
+
+This section is still the lesson. Read it if a block felt thin. Say each claim aloud before you continue.
+
+## Claims you must still own
+
+1. Flake: fail without product change.
+
+2. Causes: timing, shared DB, sleep, vague locators, parallel workers, clocks.
+
+3. Web-first expects are the wait.
+
+4. Unique data per test.
+
+5. workers 1 is honest for one shared user.
+
+6. networkidle is not a strategy.
+
+7. pytest dirty DB is the backend twin.
+
+8. Headed-only passing is a race.
+
+9. Assert the title you typed, not Created today.
+
+10. Grep waitForTimeout and delete it.
+
+11. Mini: Show then Ready heading, no waitForTimeout.
+
+12. Run the critical spec twice.
+
+## Wrong belief / Correct
+
+**Wrong belief:** “Retries in CI are the fix.”  
+**Correct:** Fix waits and isolation.
+
+**Wrong belief:** “waitForTimeout is a wait.”  
+**Correct:** It is a pause.
+
+**Wrong belief:** “Headed always passes so skip headless.”  
+**Correct:** Find the race.
+
+## Drills (write answers in the lab folder)
+
+1. FLAKES.md five sources
+
+2. AUDIT.md
+
+3. TWICE.md
+
+4. WORKERS.md
+
+## Windows
+
+- npx playwright test
+
+## Pitfalls
+
+- Timeout 60s everywhere.
+
+- Date.now collision with parallel workers.
+
+## Say it in six sentences
+
+Close the file. Speak the day's gate paragraph. Name the command you will run. Name the folder you will type in. Name what you will not paste. Name the test that would go red if you broke the matching product behavior. If you cannot, reread Block A.
+
+## Git reminder
+
+```powershell
+cd ~\fullstack-lab
+git add month-14
+git status
+```
+
+Commit when the day's definition of done is true. Do not commit secrets. Product tests stay in product repos.
+
+<!-- length-pad-2 -->
+# Worked questions: flakes
+
+Write answers in `Q.md` in the day's lab folder before you peek at the sentences under each question. Then compare.
+
+**Q1.** Definition?
+
+Answer: Fail without product change.
+
+**Q2.** Sleep?
+
+Answer: Pause, not a condition.
+
+**Q3.** Shared DB?
+
+Answer: Unique codes; test DB.
+
+**Q4.** Workers?
+
+Answer: 1 if sharing a user.
+
+**Q5.** Strict locator?
+
+Answer: Tighten name.
+
+**Q6.** Created today?
+
+Answer: Assert the title you typed.
+
+**Q7.** Retries?
+
+Answer: Last resort.
+
+**Q8.** Mini?
+
+Answer: Show then Ready, no waitForTimeout.
+
+**Q9.** Twice?
+
+Answer: TWICE.md.
+
+**Q10.** pytest twin?
+
+Answer: Dirty dict/DB.
+
+**Q11.** networkidle?
+
+Answer: Analytics break it.
+
+**Q12.** Headed only?
+
+Answer: Race remains.
+
+## Quick table
+
+| Idea | Honest use | Dishonest use |
+|---|---|---|
+| Wait | expect visible | waitForTimeout |
+| Data | Unique | Shared H1 |
+| Parallel | Collision | workers 1 |
+| Clock | Title typed | Today copy |
+| Trust | Green twice | Retry CI |
+
+## Closing
+
+Name the flake. Fix isolation or the wait. Do not hide it with sleep.
+
+If this page is the only thing you remember tomorrow, you still have the day's gate. Type the lab. Run the command. Do not paste Project 7.

@@ -219,3 +219,84 @@ Write `RECITE.txt`.
 - [ ] CORS 5173
 - [ ] no fetch in pages
 - [ ] not Project 7
+
+---
+
+# Predicted bugs (write answers before you run)
+
+| Symptom | Likely cause |
+|---|---|
+| Next flashes empty | missing `placeholderData: keepPreviousData` or spinner on `isFetching` |
+| Next shows same rows | `page` omitted from `queryKey` |
+| Search shows page 3 of new q | forgot reset `page=1` |
+| Refresh returns to page 1 | `page` only in useState |
+| Create missing on current page | no prefix `invalidateQueries({ queryKey: ["tickets"] })` |
+
+**Wrong belief:** “keepPreviousData means I can omit page from the key.”  
+**Correct:** placeholder is previous **data**, not a license to collapse identity.
+
+Ferry tickets: `route` search, integer `price_cents`, envelope `total`. CORS 5173. Client `URLSearchParams`. `curl.exe` quoted URLs.
+
+```powershell
+curl.exe -s "http://127.0.0.1:8000/tickets?q=north&page=1&limit=5"
+```
+
+If you include POST: 201 + invalidate prefix. If not, pagination alone is the exam.
+
+25-minute lookup rule. `lookups.txt`. No Day 2 copy. No ops-web. Recite v5 names: object hooks, `isPending`, `gcTime`, `placeholderData: keepPreviousData`, `invalidateQueries({ queryKey })`.
+
+---
+
+# Paper keys before code
+
+Write in DRILLS.txt:
+
+```
+["tickets", { q: "", page: 1, limit: 10 }]
+["tickets", { q: "north", page: 2, limit: 10 }]
+```
+
+Those must be **different** cache entries. `keepPreviousData` shows the first while the second loads. It does not merge them.
+
+Uvicorn: `uv run uvicorn main:app --reload --host 127.0.0.1 --port 8000`.  
+Vite: `npm run dev -- --host 127.0.0.1 --port 5173`.  
+Router: `"react-router"`.
+
+If GET `/tickets/abc` exists as id, expect 422 not 404. Pagination query params are not path ids.
+
+Commit after lookups.txt. No Project 7. No Day 2 file copy.
+
+## Recite-back
+
+- [ ] page in URL and key
+- [ ] keepPreviousData function
+- [ ] q resets page
+- [ ] envelope total
+- [ ] CORS 5173
+
+---
+
+# Worked curl (Windows)
+
+```powershell
+curl.exe -s "http://127.0.0.1:8000/tickets?page=1&limit=5"
+curl.exe -s "http://127.0.0.1:8000/tickets?page=2&limit=5"
+```
+
+`total` should match on both if `q` is empty. `items` should differ. If they do not, you sliced in React or forgot `page` on the server.
+
+Write KEYS.txt two keys. Write CURL.txt two bodies' first ids.
+
+No `keepPreviousData: true`. No `cacheTime`. Import `keepPreviousData` from `@tanstack/react-query`.
+
+---
+
+# Definition reminder
+
+Spoke A. URL+key+API agree. keepPreviousData. No Day 2 copy. Commit. Ferry tickets only. `lookups.txt` none or honest.
+
+---
+
+# Closing card
+
+Windows: `curl.exe`. Vite extra `--`. FastAPI `--host 127.0.0.1`. CORS `http://127.0.0.1:5173` not `*`. `VITE_API_BASE` public. Query v5 object API: `useQuery({ queryKey, queryFn })`, `isPending`, `gcTime` not `cacheTime`. `invalidateQueries({ queryKey })` when you write. Pydantic v2 `model_dump()`. No `fetch` in pages. No Project 7 source dump. Bind 127.0.0.1.

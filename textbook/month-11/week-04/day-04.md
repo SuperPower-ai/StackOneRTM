@@ -229,3 +229,52 @@ Postgres holds pledges **and** keys. Redis may cache later; it must not be the o
 `model_dump`, sort_keys, sha256. One `begin`. IntegrityError → replay.
 
 Pledges are the noun. Two curls. One row. Then git.
+
+---
+
+## Recite-back checklist
+
+Write `RECITE.txt`.
+
+- [ ] same key + same body → one row, replayed 201  
+- [ ] same key + different body → 409  
+- [ ] keys stored in Postgres  
+- [ ] hash uses `model_dump` + sort_keys  
+- [ ] commit pledge and key together  
+- [ ] IntegrityError race named  
+- [ ] missing header policy documented  
+- [ ] not ops-api  
+
+**Header spelling.** `Idempotency-Key` is the usual name. FastAPI: `Header(alias="Idempotency-Key")` or read `request.headers`. Be consistent in CONTRACT.md.
+
+**Replay body.** Store the **Out** JSON you already sent, not a new query that might differ. Replay is a **tape**, not a recomputation (recomputation can change `created_at` display). Lab: stored JSON is enough.
+
+Windows: two identical `curl.exe` POSTs. `psql -c "SELECT count(*) FROM pledges;"`. `curl.exe` with body2 → 409. Bind 127.0.0.1. `select()` not `Query()`.
+
+Do not teach bypassing anyone else’s idempotency. This is **your** POST’s reliability after Day 3 timeouts.
+
+---
+
+## Predicted traces
+
+| Request | Expect |
+|---|---|
+| POST no key | 201, new id (if optional header) |
+| POST key K body A | 201, id 1 |
+| POST key K body A again | 201, **id 1**, count still 1 |
+| POST key K body B | 409 |
+| GET `/pledges` | 200 array length 1 |
+
+`RACE.md`: unique on key, IntegrityError → replay.
+
+Hash must be stable: `model_dump()` + `sort_keys`. If curl pretty-print changes spaces, hashing the raw bytes from the wire is an alternative — then document it. Lab default: dump the validated model.
+
+Windows: `body.json` / `body2.json`. `psql` count. Bind 127.0.0.1. Database `month11_w4d4`. `select()` not `Query()`. Request id on responses.
+
+Pledges are not a payments exploit. Amount is lab cents as int.
+
+**Optional GET by id** after replay: same id. If a second id appears, you inserted twice. Fix the unique key and the transaction.
+
+`create_all` is a lab door. 6B still Alembic. SCHEMA.txt one sentence.
+
+Windows PowerShell: do not use `curl` alias. `curl.exe` twice. Then git.

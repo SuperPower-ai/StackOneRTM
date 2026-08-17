@@ -223,3 +223,127 @@ Repair from this recap first.
 ## Tomorrow
 
 **Lab:** fake the email **port**; assert the fake was called; do not hit SMTP.
+
+
+<!-- length-pad -->
+# Lecture: 404 403 422
+
+This section is still the lesson. Read it if a block felt thin. Say each claim aloud before you continue.
+
+## Claims you must still own
+
+1. 422 is schema/types; detail is a list with loc.
+
+2. 404 is missing resource after the route matched.
+
+3. GET /shifts/abc is 422 if id is int.
+
+4. 403 is authenticated but not allowed; 401 is unknown.
+
+5. Do not mock the deny.
+
+6. Lab headers are not production auth.
+
+7. Empty title may need Field(min_length=1).
+
+8. Fixture reset prevents id==1 flakes.
+
+9. Hiding a button is not the 403 test.
+
+10. Some products 404 to hide existence; contract it and still assert no mutation.
+
+## Wrong belief / Correct
+
+**Wrong belief:** “422 is my 404 for bad ids.”  
+**Correct:** Types vs missing rows.
+
+**Wrong belief:** “I'll assert 400 for everything ugly.”  
+**Correct:** This course maps statuses.
+
+**Wrong belief:** “dependency_overrides on the path function tests 403.”  
+**Correct:** You skipped the adapter.
+
+## Drills (write answers in the lab folder)
+
+1. Name five tests from Block 2 from memory.
+
+2. Write AUTHZ.md for the product 401 vs 403.
+
+3. Break 403 expect 200, restore, save fail.txt.
+
+## Windows
+
+- uv run pytest -q --tb=short
+
+## Pitfalls
+
+- Returning 200 null for missing.
+
+- Empty string accepted as title.
+
+## Say it in six sentences
+
+Close the file. Speak the day's gate paragraph. Name the command you will run. Name the folder you will type in. Name what you will not paste. Name the test that would go red if you broke the matching product behavior. If you cannot, reread Block A.
+
+## Git reminder
+
+```powershell
+cd ~\fullstack-lab
+git add month-14
+git status
+```
+
+Commit when the day's definition of done is true. Do not commit secrets. Product tests stay in product repos.
+
+<!-- length-pad-2 -->
+# Worked questions: statuses
+
+Write answers in `Q.md` in the day's lab folder before you peek at the sentences under each question. Then compare.
+
+**Q1.** Why is /shifts/abc 422?
+
+Answer: The path matched; int parsing failed before your 404.
+
+**Q2.** Why is /shifts/999 404?
+
+Answer: The route ran; the store had no row; you raised HTTPException.
+
+**Q3.** Why 403 not 401 for a logged-in member?
+
+Answer: We know who they are; they may not edit.
+
+**Q4.** Why assert loc not msg?
+
+Answer: Pydantic messages change across versions.
+
+**Q5.** Why not mock deny?
+
+Answer: Then you tested the mock, not the adapter.
+
+**Q6.** Lab headers vs JWT?
+
+Answer: Headers are a gym. Production stays Month 13 sessions or tokens.
+
+**Q7.** What if 403 still saved?
+
+Answer: Assert GET still has the original title.
+
+**Q8.** Empty title 201?
+
+Answer: Add min_length or reject in the handler; keep the test.
+
+## Quick table
+
+| Idea | Honest use | Dishonest use |
+|---|---|---|
+| 422 | Schema/types | Using it for missing ids |
+| 404 | Missing row | Using it for bad JSON |
+| 403 | Forbidden | Hiding a button only |
+| 401 | Unknown | Mixing with 403 copy |
+| 409 | Unique conflict | Optional stretch today |
+
+## Closing
+
+Three failing-path tests are a reflex. Happy 201 without them is a demo.
+
+If this page is the only thing you remember tomorrow, you still have the day's gate. Type the lab. Run the command. Do not paste Project 7.

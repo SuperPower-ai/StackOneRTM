@@ -235,3 +235,69 @@ Write `RECITE.txt`.
 - [ ] tests retry false
 - [ ] no fetch in pages
 - [ ] mini not ops-web
+
+---
+
+# Bolts mini — definition of enough
+
+- Seed ≥ 12  
+- GET envelope + `q` + `page` + `limit` + `total`  
+- POST 201 + `invalidateQueries({ queryKey: ["bolts"] })`  
+- `placeholderData: keepPreviousData`  
+- URL `?q=&page=`  
+- CORS 5173  
+- `RISK.txt` one named optimistic risk even if you did not code optimism  
+
+Debug keys after you write A–E:
+
+**A** blank Next → keepPreviousData / do not spinner on isFetching  
+**B** same rows → page in queryKey  
+**C** no GET after POST → invalidateQueries object  
+**D** `id: -1` → phantom id, do not  
+**E** hanging error test → retry: false  
+
+**Wrong belief:** “Review day is notes only.”  
+**Correct:** mini + debug sentences + design.md.
+
+Week 3: multipart, email port, Zod+Pydantic. Do not start it if bolts Next still flashes empty.
+
+```powershell
+curl.exe -s "http://127.0.0.1:8000/bolts?page=2&limit=5"
+```
+
+`npm create vite@latest bolt-web -- --template react-ts`. `npm install @tanstack/react-query react-router`. Import from `"react-router"`. `gcTime` not `cacheTime`. `isPending` first load.
+
+---
+
+# Speak list (Block 1)
+
+Cover without notes: two isPendings; prefix invalidate; URL+key+query string; keepPreviousData not merge; named risk phantom id or 409; 204 no json; tests retry false; CORS 5173; VITE public; gcTime; model_dump.
+
+exam-01.md 15 lines. Mini bolts. design.md: why unique `code` is not optimistic.
+
+If Day 6 product URL and CONTRACT disagree, MATCH.txt. Fix after mini.
+
+Week 3 starts only if Next does not blank the table.
+
+---
+
+# Recite-back
+
+- [ ] invalidateQueries({ queryKey })
+- [ ] page in URL and key
+- [ ] keepPreviousData function
+- [ ] named optimistic risk
+- [ ] retry false in tests
+- [ ] mini not ops-web
+
+---
+
+# Next week link
+
+[Week 3 Day 1 — File uploads](../week-03/day-01.md). Multipart. Untrusted filename. Path not bytes. Email port Day 2. Dual validation Days 3–5.
+
+---
+
+# Closing card
+
+Windows: `curl.exe`. Vite extra `--`. FastAPI `--host 127.0.0.1`. CORS `http://127.0.0.1:5173` not `*`. `VITE_API_BASE` public. Query v5 object API: `useQuery({ queryKey, queryFn })`, `isPending`, `gcTime` not `cacheTime`. `invalidateQueries({ queryKey })` when you write. Pydantic v2 `model_dump()`. No `fetch` in pages. No Project 7 source dump. Bind 127.0.0.1.

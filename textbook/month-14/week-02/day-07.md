@@ -210,3 +210,126 @@ Repair from this synthesis first.
 ## Next week
 
 **Week 3 — Frontend quality:** React Testing Library philosophy (role and name), MSW, loading/empty/error, light a11y checks, then component tests on **your** list/detail.
+
+
+<!-- length-pad -->
+# Lecture: week 2 review extras
+
+This section is still the lesson. Read it if a block felt thin. Say each claim aloud before you continue.
+
+## Claims you must still own
+
+1. Mini needs factory, fake mail, empty-start, 403, 422 no-mail.
+
+2. Factory hardcoded A1 collides.
+
+3. Override instance mismatch.
+
+4. Rollback plus commit leftovers.
+
+5. GET /x/xyz is 422.
+
+6. Regression without red is a souvenir.
+
+7. pytest on live postgres data is forbidden.
+
+8. Week 3 is RTL; do not start if the mini is red.
+
+## Wrong belief / Correct
+
+**Wrong belief:** “Used Project 7 nouns.”  
+**Correct:** Rename to samples.
+
+**Wrong belief:** “Skipped FakeMailer to save time.”  
+**Correct:** Block 2 incomplete.
+
+## Drills (write answers in the lab folder)
+
+1. Speak fixture vs factory.
+
+2. design.md rollback vs truncate for YOUR app.
+
+## Windows
+
+- uv run pytest -q --tb=short
+
+## Pitfalls
+
+- Importing Week 1 apps.
+
+- Calling coverage a layer still.
+
+## Say it in six sentences
+
+Close the file. Speak the day's gate paragraph. Name the command you will run. Name the folder you will type in. Name what you will not paste. Name the test that would go red if you broke the matching product behavior. If you cannot, reread Block A.
+
+## Git reminder
+
+```powershell
+cd ~\fullstack-lab
+git add month-14
+git status
+```
+
+Commit when the day's definition of done is true. Do not commit secrets. Product tests stay in product repos.
+
+<!-- length-pad-2 -->
+# Worked questions: week 2 mini
+
+Write answers in `Q.md` in the day's lab folder before you peek at the sentences under each question. Then compare.
+
+**Q1.** What must the mini show?
+
+Answer: Factory, FakeMailer, empty-start, 403, 422 no-mail.
+
+**Q2.** A1 collision?
+
+Answer: Factory counter or unique override.
+
+**Q3.** lambda FakeMailer()?
+
+Answer: Different instance.
+
+**Q4.** xyz 404?
+
+Answer: 422.
+
+**Q5.** pytest on /postgres?
+
+Answer: Forbidden.
+
+**Q6.** Skip mail?
+
+Answer: Block 2 incomplete.
+
+**Q7.** Week 3?
+
+Answer: Not if mini red.
+
+**Q8.** RAM vs SQL?
+
+Answer: WHY-RAM.md if time-short; Day 6 still Postgres.
+
+**Q9.** Debug F?
+
+Answer: Dedicated *_test plus safety.
+
+**Q10.** Regression without red?
+
+Answer: Souvenir.
+
+## Quick table
+
+| Idea | Honest use | Dishonest use |
+|---|---|---|
+| Factory | Overrides | Hidden 409 retry |
+| Mail | .sent | smtplib patch |
+| Isolation | Second file empty | Hope |
+| 403 | TestClient member | Hidden button |
+| 422 | loc | Frozen msg |
+
+## Closing
+
+Synthesis first. Mini second. Debug third. Then Week 3.
+
+If this page is the only thing you remember tomorrow, you still have the day's gate. Type the lab. Run the command. Do not paste Project 7.

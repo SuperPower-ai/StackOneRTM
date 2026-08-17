@@ -199,9 +199,107 @@ Write `HTTP-MAP.md` (eight sentences): which SQL verb you would use for each of 
 
 ---
 
+# Notes CRUD traps (still in this file)
+
+**Pinned sort.** `ORDER BY pinned DESC, id` puts pinned notes first. `true` sorts after `false` in some contexts — in PostgreSQL, `FALSE < TRUE`, so `pinned DESC` puts `true` first. Predict before you run. If you get unpinned first, you used ASC.
+
+**ILIKE OR.** `WHERE body ILIKE '%todo%' OR color ILIKE '%todo%'` is a different question than body only. Parentheses if you AND with `board_id`.
+
+**UPDATE color to NULL.** `SET color = NULL` is how you clear. `SET color = 'NULL'` is a four-character color. Write that in COLOR.md.
+
+**DELETE board.** Children first, or RESTRICT error. Do not CASCADE to finish the lab faster.
+
+**Duplicate board title.** UNIQUE fail is 409 later. ON CONFLICT DO NOTHING is a seed. Write which you would use in POST in UPSERT.md — the answer is almost certainly not upsert.
+
+Write `TRAPS.md`: five bullets you actually hit or nearly hit.
+
+## Recap table (close this, then type Block 2)
+
+| Verb | Needs WHERE? | Returns |
+|---|---|---|
+| SELECT | filter optional | result table |
+| INSERT | n/a | RETURNING row |
+| UPDATE | **yes** | row count + RETURNING |
+| DELETE | **yes** | row count + RETURNING |
+
+If UPDATE/DELETE WHERE is missing, stop. That pause is the skill.
+
+---
+
+# Color three-valued extra (run it)
+
+After Block 3’s three notes (yellow, blue, NULL):
+
+```sql
+SELECT id, color FROM w2_notes WHERE color <> 'yellow';
+SELECT id, color FROM w2_notes WHERE color IS DISTINCT FROM 'yellow';
+```
+
+Predict: first query **excludes** NULL (unknown). Second includes NULL and blue. Put predictions in COLOR.md **before** running.
+
+## Board unique vs note unique
+
+Board titles UNIQUE globally. Note bodies are **not** unique in the spec — two todos can exist. Do not add UNIQUE(body) to look busy. If you want unique body per board, that is `UNIQUE (board_id, body)` and a different product. Write the choice in NOTES.md.
+
+## curl is not today
+
+No FastAPI. HTTP-MAP.md is a mapping on paper. If you start Uvicorn, you are in the wrong month folder.
+
+Write `NOT-HTTP.md`: one sentence, this folder is SQL only.
+
+## Lookups honesty
+
+If you opened Day 2 RETURNING syntax at minute 5, say so. Redo INSERT RETURNING with the file closed. The gate is transfer, not a clean timer.
+
+---
+
+# Note body seed
+
+Put the word `todo` in exactly one body so ILIKE has a hit and a miss. Predict counts. If ILIKE `%todo%` matches two, you put the word twice. That is still a valid proof if you document it.
+
+Write `ILIKE-COUNT.md`: predicted vs actual.
+
+## RETURNING list
+
+INSERT board RETURNING id. INSERT notes RETURNING id, board_id, color. UPDATE RETURNING pinned. DELETE RETURNING id. If any mutating statement lacks RETURNING in 02-crud.sql, add it. Seeing the row is how you know WHERE hit.
+
+---
+
+# Definition of done extra ticks
+
+- [ ] COLOR.md includes IS DISTINCT FROM prediction  
+- [ ] UPSERT.md says POST should not rename boards  
+- [ ] PROOF.md has ids from RETURNING, not guessed 1  
+- [ ] lookups.txt exists  
+
+If COLOR.md is missing the prediction, rerun Block 3.
+
+## psql quoting on Windows
+
+Use a file, not `psql -c` with nested quotes in PowerShell, for ILIKE. Files avoid escaping hell. That is a Month 1 lesson applied here.
+
+Write `FILE-NOT-C.md`: we ran 02-crud.sql via `-f`.
+
+---
+
+Write `LOOKUPS-NONE.md`: lookups.txt says none, or lists sections.
+
+---
+
+Write `COLOR-PRED.md`: IS DISTINCT FROM count predicted.
+
+---
+
+## Closing note
+
+Do not start Day 4 until PROOF.md has RETURNING ids. Empty notes mean the lab did not happen.
+
+---
+
 ## Optional review links
 
 The recap in this file is the teacher. These pages are for later checking, not for first learning.
 
 - [PostgreSQL: INSERT](https://www.postgresql.org/docs/current/sql-insert.html)
 - [PostgreSQL: SELECT](https://www.postgresql.org/docs/current/sql-select.html)
+- [PostgreSQL: UPDATE](https://www.postgresql.org/docs/current/sql-update.html)

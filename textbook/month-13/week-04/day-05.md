@@ -246,3 +246,54 @@ Write `RECITE.txt` with one honest sentence per line.
 - [ ] docs written  
 
 If a line is mush, re-read this file only.
+
+---
+
+# Extra lecture — small accounts, real attributes
+
+The app is not a superuser. Migrator is not the request path. Owner and org are attributes you check. Roles still exist. Bodies still lie. Look up membership.
+
+RLS is a name you can say. Tests still rule this month. GRANT on paper counts if Postgres is not here.
+
+Lab: `~\fullstack-lab\month-13\week-04\day-05\`. Never commit the app password.
+
+If production `DATABASE_URL` is the superuser, tomorrow’s one-pager must say so as a **gap**.
+
+Binds stop **injection**. A stolen **superuser** URL can still `DROP`. Least privilege shrinks blast radius.
+
+Do not trust `org_id` in JSON. Take org from **membership**.
+
+ABAC-light is `if resource.org_id != membership.org_id: deny`. You do not need a policy engine this month.
+
+Five rules in `ABAC.md` in the form `ALLOW PATCH task IF ...`.
+
+`SPOOF.md`: why body `owner_id` is ignored.
+
+Optional: create role `app_garden`, GRANT DML, expect Alembic to fail as that user — `EXPECTED.txt`.
+
+---
+
+# Three DB roles (names yours)
+
+| Role | Job |
+|---|---|
+| Superuser | Install Postgres, create DBs — humans, rare |
+| Migrator | Alembic `upgrade` — CI or a job |
+| App | DML on needed tables only |
+
+App should not `DROP DATABASE`. Connection string in production uses the **app** user.
+
+GRANT mindset: CONNECT, USAGE on schema, DML on API tables, sequences as needed. Revoke tutorial `GRANT ALL`.
+
+RLS: Postgres can filter rows in the database. Easy to misconfigure. **Literacy this month.** Python checks + tests are the bar.
+
+`DB-USER.md` in lab and copy to Project 7. Confirm production plan is not `postgres:postgres`.
+
+`~\fullstack-lab\month-13\week-04\day-05\`.
+
+Binds ≠ least privilege. You need both.
+
+`ABAC.md` five rules. `SPOOF.md` one page. `DB-USER.md` three roles. No passwords in git.
+
+
+

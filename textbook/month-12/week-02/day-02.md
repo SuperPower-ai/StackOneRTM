@@ -310,3 +310,77 @@ FastAPI slices after filter. `total` is the filtered count. Empty is 200.
 Client builds `URLSearchParams`. Components do not call `fetch`. CORS 5173. `VITE_API_BASE` public.
 
 Tomorrow you rebuild this from the recap without Day 2 open.
+
+---
+
+# Why three copies of `{ q, page }`
+
+| Place | Job |
+|---|---|
+| URL search params | Refresh, share, back button |
+| `queryKey` | Cache identity |
+| FastAPI query string | Server slice |
+
+If the URL has `page=2` and the key does not, Query may show page 1 forever.  
+If the key has `page=2` and FastAPI is not passed `page`, you cache the wrong GET.
+
+```tsx
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useSearchParams } from "react-router";
+
+const list = useQuery({
+  queryKey: ["cards", { q, page, limit }],
+  queryFn: () => api.listCards({ q, page, limit }),
+  placeholderData: keepPreviousData,
+});
+```
+
+v5: **no** `keepPreviousData: true`. The export is a function assigned to **`placeholderData`**.
+
+When `q` changes, set `page` to 1 in the **same** `setSearchParams`. Otherwise you land on page 4 of a two-page search.
+
+**Wrong belief:** “`total` can be `items.length`.”  
+**Correct:** that is the page size, not the archive. FastAPI counts after filter, then slices.
+
+`npm install react-router`. Import `useSearchParams`, `BrowserRouter` from `"react-router"`.
+
+Seed ≥ 15 so page 2 is real. `curl.exe -s "http://127.0.0.1:8000/cards?page=2&limit=5"`.
+
+```mermaid
+flowchart LR
+  CLICK[Next] --> URL["?page=2"]
+  URL --> KEY["key page 2"]
+  KEY --> PH[placeholder page 1 pixels]
+  KEY --> GET[GET page 2]
+  GET --> SWAP[rows become page 2]
+```
+
+Do not concat page 1 and page 2 unless the product is infinite scroll (this course prefers replace).
+
+---
+
+# URL.md example (copy and replace)
+
+```
+q        search on title, committed on submit
+page     1-based
+limit    10, server cap 50
+color    optional exact filter (Block C)
+
+key: ["cards", { q, page, limit, color }]
+```
+
+Refresh `http://127.0.0.1:5173/?page=2&q=blue` must show page 2. If it shows page 1, `page` never left `useState`.
+
+`isPlaceholderData` can disable Next. Do not unmount the table.
+
+---
+
+# Recite-back
+
+- [ ] q and page in URL
+- [ ] same facts in queryKey
+- [ ] placeholderData: keepPreviousData
+- [ ] q change resets page
+- [ ] total is filtered count
+- [ ] prefix invalidate after create
