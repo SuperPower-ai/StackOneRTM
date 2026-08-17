@@ -1,53 +1,60 @@
 # Month 10 · Week 4 · Day 6
-# Independent: Finish the Reporting Pack
+# Finish the Reporting Pack and Justify Indexes
 
 **Program:** Full-Stack Mastery · 18 months  
 **Phase:** 3 — Python and backend  
 **Month index:** [../../README.md](../../README.md)  
 **Week 4:** [1](day-01.md) · [2](day-02.md) · [3](day-03.md) · [4](day-04.md) · [5](day-05.md) · Day 6 (today) · [7](day-07.md)  
-**Week rhythm today:** Independent  
+**Week rhythm today:** Independent implementation  
+**Student state:** Reports exist; indexes are documented. Today the pack is **finished** and every extra index has an EXPLAIN sentence.  
 **Study time:** 3–4 focused hours
 
-Your reports, your schema. This file is a **gate rehearsal**, not a solution. Work in `~/ops-api/sql/` or `~\fullstack-lab\month-10\week-04\day-06\`.
+This textbook will **not** finish Project 6. No API. No SQLAlchemy. No blog. Exam is tomorrow — do not start the exam file early as a cheat.
 
 ---
 
 ## How to use this textbook
 
-1. Run every report on a seed you control. Zero rows usually means seed, not genius SQL.  
-2. AI may review EXPLAIN English; it may not replace your pack.  
-3. Optional review links are for later rechecking.
+1. Close gaps in Day 4 reports first.  
+2. EXPLAIN the ones that matter.  
+3. Drop indexes you cannot justify.  
+4. Optional review links are for later rechecking.
 
 ---
 
 ## How to read this chapter
 
-Month 11 will hide SQL in Python. If the pack is empty, you will debug ORM SQL you never learned to ask for.
+“Finish” means: README complete, 3–5 queries runnable from a cold `psql`, expected notes true, INDEXES.md matches reality, one keyset **or** honest OFFSET-with-warning if you paginate a report. The Month 10 gate asks for reporting queries **you** wrote.
 
 ```mermaid
 flowchart TB
-  GAP[Missing JOIN / CTE / window] --> WRITE[Write it today]
-  WRITE --> EXP[EXPLAIN one JOIN]
-  EXP --> R11[READY-FOR-11.md]
+  GAP[Missing CTE/window/zeros] --> SQL[Fix reports]
+  SQL --> X[EXPLAIN]
+  X --> I[Keep or drop index]
+  I --> R[Pack README]
 ```
 
-**Wrong belief:** “The exam mini-schema tomorrow replaces Project 6 reports.”  
-**Correct:** the exam is extra evidence. Gate item 8 wants **your** reporting work too.
+**Wrong belief:** “I’ll add ten indexes the night before the exam.”  
+**Correct:** unjustified indexes are a gate fail in spirit. Budget.
+
+**Wrong belief:** “The pack must match a tutorial analytics schema.”  
+**Correct:** it must match **your** SCHEMA.md.
 
 ---
 
 ## Today's contract
 
-1. Reporting pack complete (Day 4 envelope).  
-2. SCHEMA.md still matches the tables you query.  
-3. One keyset pagination query on a list you will later expose as HTTP.  
-4. One EXPLAIN of a JOIN translated into three sentences.  
-5. Short `READY-FOR-11.md`: what SQLAlchemy will map; what you refuse to forget.
+By the end of this day you will be able to:
 
-**Gate:** Given a feature, I can show tables, keys, and a report query without a tutorial.
+1. Run the full pack from README instructions.  
+2. Confirm CTE + window + JOIN + GROUP are present.  
+3. Attach EXPLAIN sentences to **at least two** reports.  
+4. Finalize INDEXES.md (keep/drop).  
+5. Write `PACK-STATUS.md`: what is done, what is explicitly out of scope (FastAPI).
 
-**Wrong belief:** “Day 7 will save me if the pack is empty.”  
-**Correct:** the exam assumes you have a schema. Empty pack → stay in Week 4.
+**Today's gate.** Closed-book:
+
+> My reporting pack runs on my schema. Indexes I keep have a reason and, where it matters, a plan. I did not ship SQLAlchemy. I am ready for a closed-book schema design exam tomorrow.
 
 ---
 
@@ -55,54 +62,100 @@ flowchart TB
 
 | Block | Minutes | Work |
 |---|---|---|
-| A | 20 | Gap list vs Day 4 |
-| B | 100 | Fill gaps |
-| C | 30 | EXPLAIN + READY-FOR-11 |
-| D | 15 | Git |
+| A | 20 | Inventory gaps |
+| B | 90 | Finish SQL + expected |
+| C | 50 | EXPLAIN + index keep/drop |
+| D | 20 | PACK-STATUS + git |
 | E | 15 | Recall |
 
 ---
 
-## READY-FOR-11.md prompts (answer in sentences)
+# Block A — Inventory
 
-1. Which classes will map to which tables?  
-2. Which query must stay raw SQL in your head even after the ORM (a report)?  
-3. What will you set `echo=True` for in the first week of Month 11?  
-4. What must never become f-string SQL in a handler?
+Checklist (copy into `PACK-STATUS.md` and tick):
 
-## Recall
+- [ ] 3–5 files  
+- [ ] JOIN  
+- [ ] GROUP BY  
+- [ ] CTE  
+- [ ] Window  
+- [ ] Zero-child parent visible if claimed  
+- [ ] expected notes  
+- [ ] INDEXES.md  
+- [ ] No passwords  
+- [ ] No w4_tickets as the product pack  
 
-1. Keyset vs OFFSET in one product sentence.  
-2. Leftmost prefix.  
-3. Why ANALYZE the table is not EXPLAIN ANALYZE.  
-4. N+1 count for 10 parents.  
-5. Pool in one sentence.
+---
+
+# Block B — Finish SQL
+
+Fill holes. If window was fake (`OVER ()` without PARTITION), fix it. If LEFT JOIN was INNER, zeros die — fix.
+
+Seed script documented. `psql -f` order in README.
+
+Optional: one keyset example on **your** time-ordered table. If you skip, write “reports are full scans / LIMITed samples, pagination later.”
+
+---
+
+# Block C — Justify indexes
+
+For each **non-PK** index:
+
+1. Which report or FK action uses it  
+2. EXPLAIN snippet or honest “small table, planner seq scans anyway — keeping for production size”  
+3. Drop if neither
+
+`JUSTIFY.md` table.
+
+Create missing FK indexes if Day 5 postponed and a join report seq-scans a large child table. If the table is tiny, say tiny.
+
+`ANALYZE your_table;` then EXPLAIN again.
+
+---
+
+# Block D — Git
+
+```powershell
+cd ~\ops-api
+git add sql INDEXES.md PACK-STATUS.md JUSTIFY.md
+git commit -m "Month 10 Week 4 Day 6: reporting pack complete, indexes justified."
+```
+
+---
+
+# Block E — Recall
+
+1. Two reports by English name.  
+2. One index you dropped or refused.  
+3. Seq Scan that is honest.  
+4. What tomorrow’s exam will close (textbook days).  
+5. Why Month 11 still waits.
 
 ## Office hours
 
-**EXPLAIN is a wall of numbers.** Translate **one** node. Cost units are not milliseconds until ANALYZE. Tiny tables seq-scan.
+**Pack is only lab w4_.** Today is **your** schema. If 6B schema is empty, you cannot pass Month 10 gate — finish Week 1 Day 6.
 
-**Window function errors.** `ROW_NUMBER() OVER (PARTITION BY parent_id ORDER BY id)` — both clauses needed for “latest per parent” if you order by a timestamp, include id as tie-break.
+**I started FastAPI+SQLAlchemy.** Stop. Exam is SQL and modeling.
 
 ---
 
 ## Definition of done
 
-- [ ] Pack + README  
-- [ ] Keyset query  
-- [ ] READY-FOR-11.md  
-- [ ] Commit in ops-api or lab  
+- [ ] PACK-STATUS.md all required ticks  
+- [ ] JUSTIFY.md  
+- [ ] Reports rerun this session  
+- [ ] Commit exists  
 
 ---
 
 ## Tomorrow
 
-Month 10 exam + gate. Textbook files stay closed except Day 7.
+**Month 10 exam + gate.** Synthesis in that file. Closed-book schema design. Link to Month 11 only if the gate is true.
 
 ---
 
 ## Optional review links
 
-Your pack is the lesson. These pages are for later checking, not for first learning.
-
-- [PostgreSQL: EXPLAIN](https://www.postgresql.org/docs/current/sql-explain.html)
+- [PostgreSQL: Using EXPLAIN](https://www.postgresql.org/docs/current/using-explain.html)
+- [PostgreSQL: Indexes](https://www.postgresql.org/docs/current/indexes.html)
+- Month 10 index: [../../README.md](../../README.md)
