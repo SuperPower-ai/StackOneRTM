@@ -1327,16 +1327,66 @@ a:hover {
   font-size: 0.88rem;
 }
 
-.day-open {
+.chip-link {
+  text-decoration: none;
+  color: inherit;
+  background: var(--signal-soft);
+  border-color: var(--signal);
+}
+
+.studio-frame {
+  width: 100%;
+  height: 22rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 1rem;
+  background: var(--paper);
+}
+
+.studio-step-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 0.75rem;
+}
+
+.studio-steps {
+  display: grid;
+  gap: 0.22rem;
+  margin-top: 0.85rem;
+}
+
+.studio-steps a {
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  gap: 0.45rem;
+  text-decoration: none;
+  color: inherit;
+  padding: 0.38rem 0.45rem;
+  border-radius: 0.55rem;
+  font-size: 0.86rem;
+}
+
+.studio-steps a span {
+  font-family: var(--mono);
   font-size: 0.72rem;
+  color: var(--signal-ink);
+}
+
+.studio-steps a[aria-current="page"],
+.studio-steps a:hover {
+  background: var(--signal-soft);
+}
+
+.studio-side .month-link {
+  display: block;
   font-weight: 700;
-  font-style: normal;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  background: var(--signal);
-  color: #fff;
-  border-radius: 999px;
-  padding: 0.28rem 0.65rem;
+  margin: 0 0 0.4rem;
+}
+
+.studio-preview-card .studio-frame {
+  margin-top: 0.35rem;
 }
 
 .chapter-week a:hover .day-open {

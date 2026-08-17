@@ -14,6 +14,18 @@ if (fs.existsSync(fixturesSrc)) {
   fs.cpSync(fixturesSrc, fixturesDest, { recursive: true });
 }
 
+const previewSrc = path.join(
+  repoRoot,
+  "project_guidance",
+  "project-01-accessible-responsive-portfolio",
+  "reference",
+);
+const previewDest = path.join(siteDir, "public", "studio", "preview", "project-01");
+if (fs.existsSync(previewSrc)) {
+  fs.mkdirSync(path.dirname(previewDest), { recursive: true });
+  fs.cpSync(previewSrc, previewDest, { recursive: true });
+}
+
 const repo = process.env.GITHUB_REPOSITORY || "";
 const repoName = repo.split("/")[1] || "";
 const isUserSite = repoName.endsWith(".github.io");

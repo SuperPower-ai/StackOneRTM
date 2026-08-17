@@ -1,0 +1,89 @@
+---
+import Base from "../../layouts/Base.astro";
+import Header from "../../components/Header.astro";
+import { loadAllDocs } from "../../lib/catalog";
+
+const base = import.meta.env.BASE_URL;
+const workshop = loadAllDocs().find((doc) => doc.kind === "workshop");
+const steps = loadAllDocs()
+  .filter((doc) => doc.kind === "workshop-step")
+  .sort((a, b) => a.slug.localeCompare(b.slug));
+const start = steps[0] ? `${base}${steps[0].slug}/` : `${base}studio/`;
+---
+
+<Base
+  title="Project studio"
+  description="Step-by-step workshops that take a beginner from installing the environment to a deployed project. Project 1 is in print."
+>
+  <Header current="studio" />
+  <main class="home studio-home" id="content">
+    <section class="hero-split">
+      <div class="hero-home">
+        <p class="eyebrow">Project studio · 2026</p>
+        <h1>Build the project. Then compare the answer key.</h1>
+        <p class="lede">
+          Specifications say what “done” means. Workshops walk a total beginner from
+          Git and a local server to a public HTTPS site — with full code at the end.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href={start}>Start Project 1</a>
+          <a class="btn btn-secondary" href={`${base}studio/preview/project-01/`}>Open live preview</a>
+          <a class="btn btn-ghost" href={`${base}projects/project_01_accessible_responsive_portfolio/`}>Read the spec</a>
+        </div>
+      </div>
+      <aside class="desk-card studio-preview-card" aria-label="Finished Project 1 preview">
+        <p class="desk-kicker">Reference running</p>
+        <h2>Sam Rivera’s example site</h2>
+        <p>This is the exam build. Type yours. Do not deploy this name as yourself.</p>
+        <iframe
+          class="studio-frame"
+          title="Project 1 live preview"
+          src={`${base}studio/preview/project-01/`}
+        ></iframe>
+      </aside>
+    </section>
+
+    {workshop && (
+      <section class="shelf" aria-labelledby="p1">
+        <div class="shelf-head">
+          <div>
+            <p class="eyebrow">In print</p>
+            <h2 class="section-title" id="p1">{workshop.title}</h2>
+          </div>
+          <p class="section-lead shelf-lead">
+            Month 2 companion. HTML and CSS only. Environment through GitHub Pages.
+          </p>
+        </div>
+        <ol class="studio-step-grid">
+          {workshop && (
+            <li>
+              <a class="shelf-card" href={`${base}${workshop.slug}/`}>
+                <span class="shelf-num">Overview</span>
+                <h3>{workshop.title}</h3>
+                <p>How to use the workshop, the folder layout, and the rules.</p>
+                <span class="shelf-cta">Open<span aria-hidden="true">→</span></span>
+              </a>
+            </li>
+          )}
+          {steps.map((step, index) => (
+            <li>
+              <a class="shelf-card" href={`${base}${step.slug}/`}>
+                <span class="shelf-num">Step {String(index + 1).padStart(2, "0")}</span>
+                <h3>{step.title}</h3>
+                <p>{step.description}</p>
+                <span class="shelf-cta">
+                  Open
+                  <span aria-hidden="true">→</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </section>
+    )}
+  </main>
+  <footer class="site-footer">
+    <span>Full-Stack Mastery · Project studio</span>
+    <span>Projects 2–8 workshops come next. Specs are already on Projects.</span>
+  </footer>
+</Base>

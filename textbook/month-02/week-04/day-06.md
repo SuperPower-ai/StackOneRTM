@@ -275,9 +275,7 @@ Do not reuse **Northline Studio** as this landing’s brand. That name is reserv
 
 # Challenge 2 — Start Project 1 (required, no textbook HTML)
 
-Read:
-
-`full_stack_project_requirements_2026/project_01_accessible_responsive_portfolio.md`
+Read the [specification](../../../../full_stack_project_requirements_2026/project_01_accessible_responsive_portfolio.md). After this day’s PLAN exists, build the rest with the [Project 1 workshop](../../../../project_guidance/project-01-accessible-responsive-portfolio/README.md) (environment through HTTPS, complete reference at the end). Today you still only start the repo — do not binge the whole workshop before the independent landing is done.
 
 Create a **new Git repository** (not inside `fullstack-lab` as a dump of the whole lab — its own folder, e.g. `~/portfolio/`).
 

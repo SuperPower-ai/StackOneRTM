@@ -1,0 +1,21 @@
+---
+import Workshop from "../../layouts/Workshop.astro";
+import { loadAllDocs, getDoc } from "../../lib/catalog";
+import { renderMarkdown } from "../../lib/markdown";
+
+export function getStaticPaths() {
+  return loadAllDocs()
+    .filter((doc) => doc.kind === "workshop" || doc.kind === "workshop-step")
+    .map((doc) => ({
+      params: { slug: doc.slug.replace(/^studio\//, "") },
+      props: { slug: doc.slug },
+    }));
+}
+
+const { slug } = Astro.props;
+const doc = getDoc(slug);
+if (!doc) throw new Error(`Missing workshop page: ${slug}`);
+const { html, toc } = await renderMarkdown(doc.body, doc.rel, import.meta.env.BASE_URL);
+---
+
+<Workshop doc={doc} html={html} toc={toc} />

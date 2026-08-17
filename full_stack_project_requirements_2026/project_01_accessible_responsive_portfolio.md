@@ -185,3 +185,11 @@ Only after requirements are complete:
 - [ ] Use Git naturally.
 - [ ] Deploy the site.
 - [ ] Explain every major HTML/CSS decision.
+
+## 13. Workshop (how to build it)
+
+Step-by-step companion, including environment setup and a complete reference after you type:
+
+[`project_guidance/project-01-accessible-responsive-portfolio/README.md`](../project_guidance/project-01-accessible-responsive-portfolio/README.md)
+
+The specification is still the Definition of Done. The workshop is the path.

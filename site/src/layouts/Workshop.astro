@@ -1,0 +1,71 @@
+---
+import Base from "./Base.astro";
+import Header from "../components/Header.astro";
+import WorkshopSidebar from "../components/WorkshopSidebar.astro";
+import Toc from "../components/Toc.astro";
+import PrevNext from "../components/PrevNext.astro";
+import type { DocRecord } from "../lib/catalog";
+import type { TocItem } from "../lib/markdown";
+import { neighbors, readingMinutes } from "../lib/catalog";
+
+type Props = {
+  doc: DocRecord;
+  html: string;
+  toc: TocItem[];
+};
+
+const { doc, html, toc } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const withBase = (slug: string) => `${base}${slug.replace(/^\/+/, "")}/`;
+const minutes = readingMinutes(`${doc.title} ${doc.body}`);
+const { prev, next } = neighbors(doc.slug);
+const crumbs = [
+  { href: base, label: "Home" },
+  { href: withBase("studio"), label: "Studio" },
+  { href: withBase(doc.slug), label: doc.title },
+];
+---
+
+<Base title={doc.title} description={doc.description} kicker={doc.kicker}>
+  <Header current="studio" />
+  <div class="overlay" data-nav-overlay></div>
+  <div class="shell">
+    <WorkshopSidebar currentSlug={doc.slug} />
+    <div class="article-wrap">
+      <article
+        class="article"
+        id="content"
+        data-pagefind-body
+        data-read-slug={doc.slug}
+        data-read-title={doc.kicker || doc.title}
+      >
+        <nav class="crumbs" aria-label="Breadcrumb">
+          {crumbs.map((c, i) => (
+            <>
+              {i > 0 && <span aria-hidden="true">/</span>}
+              <a href={c.href}>{c.label}</a>
+            </>
+          ))}
+        </nav>
+        <header class="hero">
+          {doc.kicker && <p class="kicker">{doc.kicker}</p>}
+          <h1>{doc.title}</h1>
+          {doc.description && <p class="lede">{doc.description}</p>}
+          <div class="chips">
+            <span class="chip">Workshop</span>
+            <span class="chip">{minutes} min read</span>
+            <a class="chip chip-link" href={`${base}studio/preview/project-01/`}>Live preview</a>
+            <a class="chip chip-link" href={`${base}projects/project_01_accessible_responsive_portfolio/`}>Specification</a>
+          </div>
+        </header>
+        <div class="content" set:html={html} />
+        <PrevNext prev={prev} next={next} />
+      </article>
+    </div>
+    <Toc items={toc} />
+  </div>
+  <footer class="site-footer">
+    <span>Full-Stack Mastery · Project studio</span>
+    <span>Type the project. Compare the reference last.</span>
+  </footer>
+</Base>

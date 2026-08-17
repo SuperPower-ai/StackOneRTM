@@ -1,6 +1,6 @@
 # Full-Stack Mastery (2026)
 
-An 18-month full-stack program: a **daily textbook**, eight **project specifications**, and a **roadmap**.
+An 18-month full-stack program: a **daily textbook**, eight **project specifications**, **project workshops**, and a **roadmap**.
 
 Students should read the textbook as a website, not as a folder of raw files.
 
@@ -18,6 +18,7 @@ Months **1–18** are in print. Read them on the website, in order, until each g
 | Month 1 | https://superpower-ai.github.io/StackOneRTM/month-01/ |
 | First study day | https://superpower-ai.github.io/StackOneRTM/month-01/week-01/day-01/ |
 | Project specs | https://superpower-ai.github.io/StackOneRTM/projects/ |
+| Project studio | https://superpower-ai.github.io/StackOneRTM/studio/ |
 | Roadmap | https://superpower-ai.github.io/StackOneRTM/roadmap/ |
 
 If the site 404s, open the repo **Settings → Pages → Source: GitHub Actions**, then wait for the **Deploy textbook site** workflow.
@@ -55,6 +56,7 @@ Months **1–18** are in print. Read them on the website, in order, until each g
 ```
 textbook/                              daily textbook (source of truth)
 full_stack_project_requirements_2026/  the eight project specs
+project_guidance/                      typed project workshops (Studio on the site)
 full_stack_mastery_roadmap_expert_2026.md
 site/                                  the website (Astro)
 .github/workflows/pages.yml            GitHub Pages deploy

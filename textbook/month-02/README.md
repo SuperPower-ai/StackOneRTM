@@ -6,7 +6,9 @@
 **Prereq:** Month 1 gate passed  
 **This month’s job:** Make the browser’s document and visual language *yours* — semantic HTML, accessible forms, CSS you can reason about, responsive layout without a framework.
 
-If you study only this month’s textbook plus `full_stack_project_requirements_2026/project_01_accessible_responsive_portfolio.md`, you must be able to build Project 1 **yourself** and pass the **Month 2 Gate**. This textbook will not give you the portfolio source.
+If you study only this month’s textbook plus the [Project 1 specification](../../full_stack_project_requirements_2026/project_01_accessible_responsive_portfolio.md) and the [Project 1 workshop](../../project_guidance/project-01-accessible-responsive-portfolio/README.md), you must be able to build and deploy the portfolio and pass the **Month 2 Gate**.
+
+**This textbook is the lesson** (HTML, CSS, accessibility). **The workshop is the build companion** (environment → typed files → GitHub Pages, with a complete reference at the end). Do not skip Month 2 theory and only copy the reference identity.
 
 **This textbook is the lesson.** HTML, CSS, accessibility, Flexbox, Grid, and responsive rules are explained in the day files the same way Month 1 explained the machine: slowly, in full sentences, with pictures, then labs. If a day ever feels like a checklist, that day is incomplete — stay on it until you can teach the idea out loud.
 
@@ -113,12 +115,14 @@ No CSS framework. No component library.
 
 Typed labs live under `~/fullstack-lab/month-02/` (or a `month-02` folder in your lab repo).
 
-**Project 1** is its **own Git repository** from the first commit. Follow the project requirements file. The textbook teaches every skill; it does not contain `index.html` of the portfolio.
+**Project 1** is its **own Git repository** from the first commit. Follow the [specification](../../full_stack_project_requirements_2026/project_01_accessible_responsive_portfolio.md). Build it with the [Project 1 workshop](../../project_guidance/project-01-accessible-responsive-portfolio/README.md). The textbook still does not embed `index.html` of *your* portfolio — you type it in **your** repo.
 
 ---
 
 ## Start
 
 Open [week-01/day-01.md](week-01/day-01.md).
+
+When you reach Project 1 (Week 4), open the [Project 1 workshop](../../project_guidance/project-01-accessible-responsive-portfolio/README.md) beside the spec.
 
 When Month 2’s gate is true, continue with [Month 3](../month-03/README.md).

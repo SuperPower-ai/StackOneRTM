@@ -1,0 +1,39 @@
+---
+import { loadAllDocs, type DocRecord } from "../lib/catalog";
+
+type Props = {
+  currentSlug: string;
+};
+
+const { currentSlug } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const workshop = loadAllDocs().find((doc) => doc.kind === "workshop" && currentSlug.startsWith(doc.slug));
+const steps = loadAllDocs()
+  .filter((doc) => doc.kind === "workshop-step" && workshop && doc.slug.startsWith(`${workshop.slug}/`))
+  .sort((a, b) => a.slug.localeCompare(b.slug));
+
+const href = (doc: DocRecord) => `${base}${doc.slug}/`;
+---
+
+<aside class="sidebar studio-side" id="sidebar">
+  <h2>Project studio</h2>
+  <p class="sidebar-note">Type every file. Compare with the reference only after you have built.</p>
+  {workshop ? (
+    <a class="month-link" href={href(workshop)} aria-current={currentSlug === workshop.slug ? "page" : undefined}>
+      {workshop.title}
+    </a>
+  ) : (
+    <a class="month-link" href={`${base}studio/`}>All workshops</a>
+  )}
+  <nav class="studio-steps" aria-label="Workshop steps">
+    {steps.map((step, index) => (
+      <a href={href(step)} aria-current={currentSlug === step.slug ? "page" : undefined}>
+        <span>{String(index + 1).padStart(2, "0")}</span>
+        {step.title}
+      </a>
+    ))}
+  </nav>
+  <p class="sidebar-note">
+    <a href={`${base}studio/preview/project-01/`}>Open live preview</a>
+  </p>
+</aside>

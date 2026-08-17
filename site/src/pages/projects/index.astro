@@ -14,7 +14,7 @@ const cards = loadAllDocs()
       `<li><a href="${base}${item.slug}/"><strong>${item.title}</strong><br /><small>${item.slug.replace("projects/", "")}</small></a></li>`,
   )
   .join("");
-const extra = `<h2 id="open-a-specification">Open a specification</h2><ul class="spec-list">${cards}</ul>`;
+const extra = `<h2 id="open-a-specification">Open a specification</h2><ul class="spec-list">${cards}</ul><h2 id="build-in-the-studio">Build in the studio</h2><p><a href="${base}studio/">Project 1 workshop</a> — environment through HTTPS, with a live preview and complete reference.</p>`;
 ---
 
 <Article doc={doc} html={html + extra} toc={toc} section="projects" />

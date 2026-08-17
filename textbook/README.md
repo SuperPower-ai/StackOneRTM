@@ -16,14 +16,14 @@ Months 1–18 are written to that standard. Do not skip a theory block because a
 2. Type the labs. Do not paste.
 3. Close the file on “from memory” days.
 4. Do not start month N+1 until that month’s gate is true.
-5. Project source is never in this textbook. Specs are in `full_stack_project_requirements_2026/`.
+5. Project **specifications** are in `full_stack_project_requirements_2026/`. Project **workshops** (typed build guides) start in `project_guidance/`. The textbook still does not replace your repo.
 
 ## Months
 
 | Month | Folder | Job |
 |---|---|---|
 | 1 | [month-01](month-01/README.md) | Computer, internet, HTTP, Git, architecture |
-| 2 | [month-02](month-02/README.md) | HTML, CSS, accessibility, responsive UI · Project 1 |
+| 2 | [month-02](month-02/README.md) | HTML, CSS, accessibility, responsive UI · [Project 1 workshop](../project_guidance/project-01-accessible-responsive-portfolio/README.md) |
 | 3 | [month-03](month-03/README.md) | JavaScript fundamentals · Project 2 |
 | 4 | [month-04](month-04/README.md) | JS depth, event loop, tests, Git branches/PRs · broken-app gate |
 | 5 | [month-05](month-05/README.md) | TypeScript, npm, Vite · Project 3 conversion |
@@ -36,6 +36,9 @@ Months 1–18 are written to that standard. Do not skip a theory block because a
 | 12 | [month-12](month-12/README.md) | Full-stack integration · Project 7 start |
 | 13 | [month-13](month-13/README.md) | Authentication, authorization, security |
 | 14 | [month-14](month-14/README.md) | Testing, quality, reliability |
-| 15–18 | *not written yet* | |
+| 15 | [month-15](month-15/README.md) | Linux, Docker, observability |
+| 16 | [month-16](month-16/README.md) | CI/CD and AWS |
+| 17 | [month-17](month-17/README.md) | Performance, jobs, system design |
+| 18 | [month-18](month-18/README.md) | Production master project |
 
 Start: [month-01/week-01/day-01.md](month-01/week-01/day-01.md) if you have not passed Month 1.

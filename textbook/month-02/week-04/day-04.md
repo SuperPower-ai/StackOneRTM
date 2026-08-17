@@ -282,6 +282,7 @@ Media queries and fluid images are explained above. These pages are for later ch
 
 - [MDN: Using media queries](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/Using_media_queries)
 - [MDN: Responsive images](https://developer.mozilla.org/en-US/docs/Web/HTML/Guides/Responsive_images)
+- [Project 1 workshop](../../../../project_guidance/project-01-accessible-responsive-portfolio/README.md) — build the portfolio after this week’s labs; do not paste today’s gallery into `~/portfolio/`
 
 ---
 

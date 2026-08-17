@@ -55,6 +55,26 @@ function rewriteHref(fromRel: string, href: string, base: string): string {
     return `${withBase(base, `projects/${file}`)}${suffix}`;
   }
 
+  if (resolved.includes("project_guidance")) {
+    let studio = resolved.replace(/^.*?project_guidance\//, "").replace(/\.md$/i, "");
+    studio = studio.replace(/\/README$/i, "").replace(/^README$/i, "");
+    const refAt = studio.search(/\/reference(?:\/|$)/);
+    if (refAt !== -1) {
+      let rest = studio.slice(refAt).replace(/^\/reference\/?/, "");
+      rest = rest.replace(/(?:^|\/)index\.html$/i, "").replace(/\/$/, "");
+      if (rest.toLowerCase() === "index.html") rest = "";
+      const ext = path.posix.extname(rest).toLowerCase();
+      const slug = `studio/preview/project-01${rest ? `/${rest}` : ""}`;
+      if (ext && ext !== ".html" && ext !== ".md") {
+        const prefix = base.endsWith("/") ? base : `${base}/`;
+        return `${prefix}${slug}${suffix}`;
+      }
+      return `${withBase(base, slug.replace(/\.html$/i, ""))}${suffix}`;
+    }
+    if (!studio || studio === ".") return `${withBase(base, "studio")}${suffix}`;
+    return `${withBase(base, `studio/${studio}`)}${suffix}`;
+  }
+
   let slug = resolved.replace(/\.md$/i, "");
   slug = slug.replace(/\/README$/i, "").replace(/^README$/i, "");
   slug = slug.replace(/^textbook\//, "");

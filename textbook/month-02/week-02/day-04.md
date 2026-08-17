@@ -375,7 +375,8 @@ The contact pattern is specified in this chapter. These pages recheck element na
 
 - [MDN: `<textarea>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea)
 - [MDN: `<button>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button)
-- [Project 1 will also live in `full_stack_project_requirements_2026/project_01_accessible_responsive_portfolio.md` — read fields there later; do not copy a template]
+- [Project 1 specification](../../../../full_stack_project_requirements_2026/project_01_accessible_responsive_portfolio.md) — fields; do not copy a template
+- [Project 1 workshop](../../../../project_guidance/project-01-accessible-responsive-portfolio/README.md) — you build the portfolio later this month, not today
 
 ---
 

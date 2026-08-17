@@ -117,8 +117,11 @@ function bindSearch() {
     const kindLabel: Record<string, string> = {
       month: "Month",
       day: "Day",
-      project: "Project",
+      project: "Spec",
       "projects-index": "Projects",
+      workshop: "Workshop",
+      "workshop-step": "Studio",
+      "workshop-index": "Studio",
     };
     list.innerHTML = hits
       .map(

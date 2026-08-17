@@ -45,4 +45,12 @@ You may use official documentation, references, and AI for explanations, code re
 
 A project is complete only when you can explain what you built, how data moves through it, why you chose the architecture, how you handle invalid input, how you test/debug/deploy it, what can fail, and what you would improve next.
 
+## Workshops
+
+Project 1 has a full build companion:
+
+[Project 1 workshop](../project_guidance/project-01-accessible-responsive-portfolio/README.md)
+
+On the website: **Studio**. Specs stay in this folder. Workshops live in `project_guidance/`.
+
 **Target loop:** Build → understand → debug → test → secure → deploy → explain → improve.

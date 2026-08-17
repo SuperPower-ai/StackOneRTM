@@ -1,0 +1,41 @@
+@media print {
+  :root {
+    --paper: #fff;
+    --ink: #111;
+    --muted: #333;
+    --accent: #000;
+  }
+
+  body {
+    background: #fff;
+    color: #111;
+    font-size: 12pt;
+  }
+
+  .skip,
+  .theme,
+  .hero-actions,
+  .form-note,
+  .nav-toggle-label {
+    display: none !important;
+  }
+
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+    color: #333;
+  }
+
+  .hero,
+  .about,
+  .skills,
+  .work,
+  .contact {
+    break-inside: avoid;
+  }
+
+  .site-header {
+    position: static;
+    border: 0;
+  }
+}

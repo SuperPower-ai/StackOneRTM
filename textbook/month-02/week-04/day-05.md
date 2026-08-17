@@ -331,6 +331,7 @@ Transitions, keyframes, and reduced motion are explained above.
 - [MDN: `transition`](https://developer.mozilla.org/en-US/docs/Web/CSS/transition)
 - [MDN: `prefers-reduced-motion`](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion)
 - [MDN: Using media queries](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/Using_media_queries)
+- [Project 1 workshop](../../../../project_guidance/project-01-accessible-responsive-portfolio/README.md) — tomorrow you start the repo; the workshop is the typed build after the independent landing
 
 ---
 

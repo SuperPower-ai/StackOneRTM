@@ -8,9 +8,18 @@ const libDir = path.dirname(fileURLToPath(import.meta.url));
 export const REPO_ROOT = path.resolve(libDir, "../../..");
 export const TEXTBOOK_DIR = path.join(REPO_ROOT, "textbook");
 export const PROJECTS_DIR = path.join(REPO_ROOT, "full_stack_project_requirements_2026");
+export const GUIDANCE_DIR = path.join(REPO_ROOT, "project_guidance");
 export const ROADMAP_FILE = path.join(REPO_ROOT, "full_stack_mastery_roadmap_expert_2026.md");
 
-export type DocKind = "month" | "day" | "project" | "projects-index" | "roadmap";
+export type DocKind =
+  | "month"
+  | "day"
+  | "project"
+  | "projects-index"
+  | "roadmap"
+  | "workshop-index"
+  | "workshop"
+  | "workshop-step";
 
 export type DocRecord = {
   kind: DocKind;
@@ -59,7 +68,7 @@ function walkMarkdown(dir: string): string[] {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     const full = path.join(dir, entry.name);
     if (entry.isDirectory()) {
-      if (entry.name === "fixtures" || entry.name === "node_modules") continue;
+      if (entry.name === "fixtures" || entry.name === "node_modules" || entry.name === "reference") continue;
       out.push(...walkMarkdown(full));
     } else if (entry.isFile() && entry.name.toLowerCase().endsWith(".md")) {
       out.push(full);
@@ -135,6 +144,37 @@ export function loadAllDocs(): DocRecord[] {
     );
   }
 
+  if (fs.existsSync(path.join(GUIDANCE_DIR, "README.md"))) {
+    docs.push(
+      fileToDoc(
+        path.join(GUIDANCE_DIR, "README.md"),
+        "workshop-index",
+        "studio",
+        "project_guidance/README.md",
+      ),
+    );
+  }
+
+  if (fs.existsSync(GUIDANCE_DIR)) {
+    for (const entry of fs.readdirSync(GUIDANCE_DIR, { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue;
+      const folder = path.join(GUIDANCE_DIR, entry.name);
+      const readme = path.join(folder, "README.md");
+      if (fs.existsSync(readme)) {
+        docs.push(
+          fileToDoc(readme, "workshop", `studio/${entry.name}`, `project_guidance/${entry.name}/README.md`),
+        );
+      }
+      for (const file of walkMarkdown(folder)) {
+        const base = path.basename(file);
+        if (base.toLowerCase() === "readme.md") continue;
+        const rel = toPosix(path.relative(GUIDANCE_DIR, file));
+        const slug = `studio/${rel.replace(/\.md$/i, "")}`;
+        docs.push(fileToDoc(file, "workshop-step", slug, `project_guidance/${rel}`));
+      }
+    }
+  }
+
   if (fs.existsSync(ROADMAP_FILE)) {
     docs.push(
       fileToDoc(ROADMAP_FILE, "roadmap", "roadmap", "full_stack_mastery_roadmap_expert_2026.md"),
@@ -174,7 +214,25 @@ export function readingOrder(): DocRecord[] {
   return ordered;
 }
 
+export function workshopOrder(): DocRecord[] {
+  const docs = loadAllDocs();
+  const index = docs.filter((d) => d.kind === "workshop-index");
+  const workshops = docs.filter((d) => d.kind === "workshop").sort((a, b) => a.slug.localeCompare(b.slug));
+  const steps = docs.filter((d) => d.kind === "workshop-step").sort((a, b) => a.slug.localeCompare(b.slug));
+  const ordered: DocRecord[] = [...index];
+  for (const workshop of workshops) {
+    ordered.push(workshop);
+    ordered.push(...steps.filter((step) => step.slug.startsWith(`${workshop.slug}/`)));
+  }
+  return ordered;
+}
+
 export function neighbors(slug: string): { prev?: DocRecord; next?: DocRecord } {
+  const studio = workshopOrder();
+  const studioIndex = studio.findIndex((d) => d.slug === slug);
+  if (studioIndex >= 0) {
+    return { prev: studio[studioIndex - 1], next: studio[studioIndex + 1] };
+  }
   const order = readingOrder();
   const i = order.findIndex((d) => d.slug === slug);
   if (i < 0) return {};

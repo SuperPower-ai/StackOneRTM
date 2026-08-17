@@ -257,7 +257,7 @@ React, Tailwind, Bootstrap, layout tables, `outline: none` without replacement, 
 
 # Deploy Project 1 (required to pass the month)
 
-When the portfolio meets the project spec:
+When the portfolio meets the project spec, follow the [Project 1 workshop — ship](../../../../project_guidance/project-01-accessible-responsive-portfolio/08-ship.md) for the typed GitHub Pages steps, then:
 
 1. Push the **portfolio** repo to GitHub.
 2. Enable **GitHub Pages** (Settings → Pages → Deploy from `main` / `/` or `/docs`) **or** Cloudflare Pages / Netlify drop-in. Follow the host’s current docs.
@@ -314,4 +314,5 @@ Repair from this month’s day files, not from a layout tutorial. These pages ar
 
 - [MDN: CSS layout](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout)
 - [GitHub Pages](https://docs.github.com/en/pages)
+- [Project 1 workshop](../../../../project_guidance/project-01-accessible-responsive-portfolio/README.md)
 - [Month 3 README](../../month-03/README.md)
