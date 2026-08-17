@@ -10,45 +10,51 @@ const nav = buildNav();
 const base = import.meta.env.BASE_URL;
 const withBase = (slug: string) => `${base}${slug}/`;
 const currentMonth = Number(currentSlug.match(/^month-(\d+)/)?.[1] || 0);
+const openCount = nav.filter((month) => month.status === "published").length;
 ---
 
 <aside class="sidebar" id="sidebar">
   <h2>Your path</h2>
-  <p class="sidebar-note">One page a day. Stay until the gate is true.</p>
-  {nav.map((month) => (
-    <details class:list={["nav-month", month.status !== "published" && "is-soon"]} open={month.number === currentMonth || (!currentMonth && month.number === 1)}>
-      <summary>
-        <span class="nav-num">{String(month.number).padStart(2, "0")}</span>
-        {month.status === "published" ? (
-          <a
-            class="month-link"
-            href={withBase(month.slug)}
-            aria-current={currentSlug === month.slug ? "page" : undefined}
-          >
-            {month.title}
-          </a>
-        ) : (
-          <span class="forthcoming">{month.title}</span>
+  <p class="sidebar-note">{openCount} months in print. Stay until the gate is true.</p>
+  {nav.map((month) => {
+    const live = month.status === "published";
+    const dayCount = month.weeks.reduce((sum, week) => sum + week.days.length, 0);
+    return (
+      <details class:list={["nav-month", !live && "is-soon"]} open={month.number === currentMonth || (!currentMonth && month.number === 1)}>
+        <summary>
+          <span class:list={["nav-num", live && "is-live"]}>{String(month.number).padStart(2, "0")}</span>
+          {live ? (
+            <a
+              class="month-link"
+              href={withBase(month.slug)}
+              aria-current={currentSlug === month.slug ? "page" : undefined}
+            >
+              {month.title}
+              {dayCount > 0 && <small class="nav-meta">{dayCount} days</small>}
+            </a>
+          ) : (
+            <span class="forthcoming">{month.title}<small class="nav-meta">Not written yet</small></span>
+          )}
+        </summary>
+        {live && month.weeks.length > 0 && (
+          <div class="nav-week">
+            {month.weeks.map((week) => (
+              <div>
+                <p>Week {week.week}</p>
+                {week.days.map((day) => (
+                  <a
+                    href={withBase(day.slug)}
+                    aria-current={currentSlug === day.slug ? "page" : undefined}
+                    title={day.title}
+                  >
+                    D{day.day} · {day.title}
+                  </a>
+                ))}
+              </div>
+            ))}
+          </div>
         )}
-      </summary>
-      {month.weeks.length > 0 && (
-        <div class="nav-week">
-          {month.weeks.map((week) => (
-            <div>
-              <p>Week {week.week}</p>
-              {week.days.map((day) => (
-                <a
-                  href={withBase(day.slug)}
-                  aria-current={currentSlug === day.slug ? "page" : undefined}
-                  title={day.title}
-                >
-                  D{day.day} · {day.title}
-                </a>
-              ))}
-            </div>
-          ))}
-        </div>
-      )}
-    </details>
-  ))}
+      </details>
+    );
+  })}
 </aside>

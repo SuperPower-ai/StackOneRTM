@@ -672,11 +672,15 @@ a:hover {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0.35rem;
   text-decoration: none;
   border-radius: 999px;
   padding: 0.72rem 1.15rem;
   font-weight: 650;
   font-size: 0.95rem;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-family: inherit;
 }
 
 .btn-primary {
@@ -686,13 +690,29 @@ a:hover {
 
 .btn-primary:hover {
   color: #fff;
-  filter: brightness(1.05);
+  filter: brightness(1.06);
+}
+
+.btn-secondary {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.btn-secondary:hover {
+  color: var(--paper);
+  filter: brightness(1.12);
 }
 
 .btn-ghost {
-  border: 1px solid var(--line-strong);
+  border-color: var(--line-strong);
   color: var(--ink);
-  background: transparent;
+  background: var(--paper);
+}
+
+.btn-ghost:hover {
+  border-color: var(--signal);
+  background: var(--signal-soft);
+  color: var(--ink);
 }
 
 .stats {
@@ -737,25 +757,21 @@ a:hover {
 .month-card {
   display: flex;
   flex-direction: column;
-  min-height: 11.5rem;
-  padding: 1.05rem 1.1rem 1.15rem;
-  border-radius: 1.1rem;
+  min-height: 12.5rem;
+  padding: 1.1rem 1.15rem 1.05rem;
+  border-radius: 1.2rem;
   border: 1px solid var(--line);
   background: var(--paper);
   text-decoration: none;
   color: inherit;
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4) inset;
+  cursor: pointer;
 }
 
 .month-card:hover {
   border-color: var(--signal);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   box-shadow: var(--shadow);
-}
-
-.month-card.disabled {
-  opacity: 0.62;
-  pointer-events: none;
 }
 
 .month-card .n {
@@ -778,6 +794,39 @@ a:hover {
   flex: 1;
 }
 
+.card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin-top: 0.95rem;
+}
+
+.card-foot .meta {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-family: var(--sans);
+}
+
+.card-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0.32rem 0.75rem;
+  background: var(--signal);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  font-family: var(--sans);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.month-card:hover .card-btn {
+  filter: brightness(1.06);
+}
+
 .badge {
   align-self: flex-start;
   margin-top: 0.8rem;
@@ -785,10 +834,6 @@ a:hover {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--ok);
-}
-
-.badge.wait {
-  color: var(--muted);
 }
 
 .rules {
@@ -887,6 +932,9 @@ a:hover {
   .toc {
     display: none;
   }
+  .shelf-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 860px) {
@@ -947,6 +995,166 @@ a:hover {
 
 .continue-link {
   font-weight: 650;
+  background: var(--signal-soft);
+  color: var(--signal-ink);
+}
+
+.nav-num.is-live {
+  color: var(--ok);
+}
+
+.nav-meta {
+  display: block;
+  font-weight: 500;
+  font-size: 0.72rem;
+  color: var(--muted);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.month-link {
+  min-width: 0;
+}
+
+.forthcoming {
+  opacity: 1;
+  color: var(--muted);
+}
+
+.shelf {
+  margin: 0 0 2.8rem;
+  padding: 1.35rem 1.25rem 1.4rem;
+  border-radius: 1.5rem;
+  border: 1px solid var(--line);
+  background:
+    radial-gradient(900px 220px at 100% 0%, var(--signal-soft), transparent 55%),
+    color-mix(in srgb, var(--paper-2) 70%, var(--paper));
+}
+
+.shelf-head {
+  display: grid;
+  gap: 0.35rem;
+  margin-bottom: 1.1rem;
+}
+
+.shelf-head .section-title {
+  margin: 0.15rem 0 0;
+}
+
+.shelf-lead {
+  margin: 0.35rem 0 0;
+  max-width: 42rem;
+}
+
+.shelf-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.shelf-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 13.5rem;
+  padding: 1rem 1.05rem 1.05rem;
+  border-radius: 1.15rem;
+  text-decoration: none;
+  color: inherit;
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+}
+
+.shelf-card:hover {
+  border-color: var(--signal);
+  transform: translateY(-3px);
+}
+
+.shelf-num {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--signal-ink);
+  letter-spacing: 0.04em;
+}
+
+.shelf-card h3 {
+  font-family: var(--serif);
+  font-size: 1.12rem;
+  margin: 0.45rem 0 0.4rem;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.shelf-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  flex: 1;
+}
+
+.shelf-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.9rem;
+  align-self: flex-start;
+  border-radius: 999px;
+  padding: 0.42rem 0.8rem;
+  background: var(--signal);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  font-family: var(--sans);
+}
+
+.later {
+  margin-top: 2.4rem;
+  padding-top: 0.4rem;
+}
+
+.later-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.later-list li {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.9rem;
+  align-items: center;
+  padding: 0.9rem 1rem;
+  border-radius: 1rem;
+  border: 1px dashed var(--line-strong);
+  background: color-mix(in srgb, var(--paper-2) 55%, transparent);
+}
+
+.later-num {
+  font-family: var(--mono);
+  color: var(--muted);
+}
+
+.later-list strong {
+  display: block;
+  font-family: var(--serif);
+  font-size: 1.05rem;
+}
+
+.later-list p {
+  margin: 0.15rem 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.later-tag {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
 }
 
 .search-hint {
@@ -1220,6 +1428,24 @@ a:hover {
   .hero-split {
     grid-template-columns: 1fr;
   }
+  .shelf-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .later-list li {
+    grid-template-columns: auto 1fr;
+  }
+  .later-tag {
+    grid-column: 2;
+  }
+}
+
+@media (max-width: 560px) {
+  .shelf-grid {
+    grid-template-columns: 1fr;
+  }
+  .cta-row .btn {
+    width: 100%;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1227,6 +1453,7 @@ a:hover {
     scroll-behavior: auto;
   }
   .month-card,
+  .shelf-card,
   .week-strip a,
   .chapter-week a,
   .sidebar {

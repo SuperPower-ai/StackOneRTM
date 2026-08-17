@@ -2,19 +2,32 @@
 import Base from "../layouts/Base.astro";
 import Header from "../components/Header.astro";
 import { MONTHS } from "../data/months";
-import { firstDaySlug, isPublished, loadAllDocs } from "../lib/catalog";
+import {
+  firstDayOfMonth,
+  firstDaySlug,
+  isPublished,
+  loadAllDocs,
+  monthChapterCount,
+} from "../lib/catalog";
 
 const base = import.meta.env.BASE_URL;
 const start = `${base}${firstDaySlug()}/`;
 const docs = loadAllDocs();
 const dayCount = docs.filter((d) => d.kind === "day").length;
-const monthCount = docs.filter((d) => d.kind === "month").length;
-const phases = [...new Set(MONTHS.map((month) => month.phase))];
+const liveMonths = MONTHS.filter((month) => isPublished(month.number));
+const laterMonths = MONTHS.filter((month) => !isPublished(month.number));
+const newest = liveMonths.filter((month) => month.number >= 10);
+const phases = [...new Set(liveMonths.map((month) => month.phase))];
+
+const hrefFor = (monthNumber: number, slug: string) => {
+  const first = firstDayOfMonth(monthNumber);
+  return `${base}${first || slug}/`;
+};
 ---
 
 <Base
   title="Full-Stack Mastery Textbook"
-  description="An 18-month university-style textbook in the browser. Months 1–14 are in print: from the machine on your desk through tests that catch a real break. One page a day. Type every lab."
+  description="An 18-month university-style textbook in the browser. Months 1–14 are in print and open to read: from the machine on your desk through tests that catch a real break."
 >
   <Header current="home" />
   <main class="home" id="content">
@@ -23,28 +36,27 @@ const phases = [...new Set(MONTHS.map((month) => month.phase))];
         <p class="eyebrow">A calm daily textbook · 18 months</p>
         <h1>Study like a course. Read it like a well-made book.</h1>
         <p class="lede">
-          One URL is one study day. The chapter explains the idea in full sentences,
-          then you type the lab. Months 1–14 are on the shelf. Projects stay in the
-          specifications — this site never pastes those solutions.
+          One URL is one study day. Months 1–14 are on the shelf and ready to open —
+          SQL through tests landed with this edition. Projects stay in the specifications.
         </p>
         <div class="cta-row">
           <a class="btn btn-primary" href={start}>Start with Day 1</a>
-          <a class="btn btn-ghost" href={`${base}projects/`}>Project specs</a>
-          <a class="btn btn-ghost" href={`${base}roadmap/`}>Full roadmap</a>
+          <a class="btn btn-secondary" data-home-continue href={start}>Continue reading</a>
+          <a class="btn btn-ghost" href={`${base}month-10/`}>Open Month 10</a>
+          <button class="btn btn-ghost" type="button" data-search-open>Search the book</button>
         </div>
       </div>
       <aside class="desk-card" aria-label="Your place in the book">
-        <p class="desk-kicker">Your desk</p>
-        <h2>Come back to the same page.</h2>
+        <p class="desk-kicker">On the shelf now</p>
+        <h2>{liveMonths.length} months you can open today.</h2>
         <p>
-          The site remembers the last chapter you opened on this browser.
-          Gates still matter: if a month’s gate is false, stay there.
+          {dayCount} daily chapters are in print. Months 15–18 are listed below as the
+          path ahead — they are not broken buttons; they are not written yet.
         </p>
-        <a class="btn btn-primary" data-home-continue hidden href={start}>Continue where you left off</a>
-        <a class="btn btn-ghost desk-fallback" href={start}>If you are new, open Day 1</a>
+        <a class="btn btn-primary" href={`${base}month-01/`}>Browse Month 1</a>
         <ul class="desk-points">
           <li>Press <kbd>/</kbd> to search any day</li>
-          <li>Light and dark stay on this device</li>
+          <li>Continue always works — Day 1 until you read a page</li>
           <li>Type labs. Do not paste project apps</li>
         </ul>
       </aside>
@@ -52,9 +64,37 @@ const phases = [...new Set(MONTHS.map((month) => month.phase))];
 
     <section class="stats" aria-label="Program size">
       <div class="stat"><b>18</b><span>months in the program</span></div>
-      <div class="stat"><b>{monthCount}</b><span>months you can open now</span></div>
+      <div class="stat"><b>{liveMonths.length}</b><span>months you can open now</span></div>
       <div class="stat"><b>{dayCount}</b><span>daily chapters</span></div>
       <div class="stat"><b>8</b><span>projects you build yourself</span></div>
+    </section>
+
+    <section class="shelf" aria-labelledby="newest">
+      <div class="shelf-head">
+        <div>
+          <p class="eyebrow">Just added</p>
+          <h2 class="section-title" id="newest">Months 10–14 are ready</h2>
+        </div>
+        <p class="section-lead shelf-lead">
+          PostgreSQL, SQLAlchemy, full-stack wiring, security, and tests. Each card is a real link.
+        </p>
+      </div>
+      <div class="shelf-grid">
+        {newest.map((month) => {
+          const chapters = monthChapterCount(month.number);
+          return (
+            <a class="shelf-card" href={hrefFor(month.number, month.slug)}>
+              <span class="shelf-num">Month {String(month.number).padStart(2, "0")}</span>
+              <h3>{month.title}</h3>
+              <p>{month.blurb}</p>
+              <span class="shelf-cta">
+                Read {chapters} days
+                <span aria-hidden="true">→</span>
+              </span>
+            </a>
+          );
+        })}
+      </div>
     </section>
 
     <h2 class="section-title" id="how">How this book treats you</h2>
@@ -81,40 +121,55 @@ const phases = [...new Set(MONTHS.map((month) => month.phase))];
       </article>
     </div>
 
-    <h2 class="section-title" id="months">The eighteen months</h2>
+    <h2 class="section-title" id="months">All months in print</h2>
     <p class="section-lead">
-      Open a month only when the previous gate is true. Forthcoming months stay visible so you can see the path.
+      Every card below is clickable. Open a month when the previous gate is true — the link still works so you can look ahead in the book.
     </p>
     {
       phases.map((phase) => (
         <section class="phase-block" aria-labelledby={`phase-${phase.replace(/\s+/g, "-").toLowerCase()}`}>
           <h3 class="phase-title" id={`phase-${phase.replace(/\s+/g, "-").toLowerCase()}`}>{phase}</h3>
           <div class="month-grid">
-            {MONTHS.filter((month) => month.phase === phase).map((month) => {
-              const live = isPublished(month.number);
-              return live ? (
+            {liveMonths.filter((month) => month.phase === phase).map((month) => {
+              const chapters = monthChapterCount(month.number);
+              return (
                 <a class="month-card" href={`${base}${month.slug}/`}>
                   <span class="n">Month {String(month.number).padStart(2, "0")}</span>
                   <h3>{month.title}</h3>
                   <p>{month.blurb}</p>
-                  <span class="badge">Open the month</span>
+                  <span class="card-foot">
+                    <span class="meta">{chapters} days</span>
+                    <span class="card-btn">Open</span>
+                  </span>
                 </a>
-              ) : (
-                <div class="month-card disabled">
-                  <span class="n">Month {String(month.number).padStart(2, "0")}</span>
-                  <h3>{month.title}</h3>
-                  <p>{month.blurb}</p>
-                  <span class="badge wait">After the current gate</span>
-                </div>
               );
             })}
           </div>
         </section>
       ))
     }
+
+    <section class="later" aria-labelledby="later">
+      <h2 class="section-title" id="later">Still being written</h2>
+      <p class="section-lead">
+        These are the next four months in the program. They are not inactive copies of the cards above — there is no textbook file for them yet.
+      </p>
+      <ol class="later-list">
+        {laterMonths.map((month) => (
+          <li>
+            <span class="later-num">{String(month.number).padStart(2, "0")}</span>
+            <div>
+              <strong>{month.title}</strong>
+              <p>{month.blurb}</p>
+            </div>
+            <span class="later-tag">{month.phase}</span>
+          </li>
+        ))}
+      </ol>
+    </section>
   </main>
   <footer class="site-footer">
     <span>Full-Stack Mastery Textbook · 2026</span>
-    <span>Paper, ink, and one honest next page.</span>
+    <span>Fourteen months in print. Four still ahead.</span>
   </footer>
 </Base>

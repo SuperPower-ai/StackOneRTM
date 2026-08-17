@@ -176,20 +176,23 @@ function rememberPlace() {
 }
 
 function showContinue() {
+  const links = document.querySelectorAll<HTMLAnchorElement>("[data-continue-link], [data-home-continue]");
+  links.forEach((link) => {
+    link.hidden = false;
+    link.removeAttribute("aria-disabled");
+  });
   try {
     const raw = localStorage.getItem("fsm-continue");
     if (!raw) return;
     const saved = JSON.parse(raw) as { slug: string; title: string };
-    document.querySelectorAll<HTMLAnchorElement>("[data-continue-link], [data-home-continue]").forEach((link) => {
-      link.hidden = false;
-      link.href = `${base}${saved.slug}/`;
+    if (!saved.slug) return;
+    links.forEach((link) => {
+      link.href = `${base}${saved.slug.replace(/^\/+/, "")}/`;
       if (link.hasAttribute("data-home-continue")) {
-        link.hidden = false;
         link.textContent = `Continue: ${saved.title}`;
-        document.querySelector(".desk-fallback")?.setAttribute("hidden", "hidden");
       }
     });
   } catch {
-    /* ignore */
+    /* keep the Day 1 fallback */
   }
 }

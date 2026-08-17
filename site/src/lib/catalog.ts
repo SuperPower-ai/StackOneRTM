@@ -208,7 +208,20 @@ export function buildNav(): NavMonth[] {
 }
 
 export function isPublished(month: number): boolean {
+  const listed = MONTHS.find((info) => info.number === month);
+  if (listed?.status === "published") return true;
   return loadAllDocs().some((d) => d.month === month);
+}
+
+export function monthChapterCount(month: number): number {
+  return loadAllDocs().filter((d) => d.kind === "day" && d.month === month).length;
+}
+
+export function firstDayOfMonth(month: number): string | undefined {
+  const days = loadAllDocs()
+    .filter((d) => d.kind === "day" && d.month === month)
+    .sort((a, b) => (a.week || 0) - (b.week || 0) || (a.day || 0) - (b.day || 0));
+  return days[0]?.slug;
 }
 
 export function readingMinutes(text: string): number {
