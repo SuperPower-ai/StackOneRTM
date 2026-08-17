@@ -1,0 +1,20 @@
+---
+import Article from "../../layouts/Article.astro";
+import { getDoc, loadAllDocs } from "../../lib/catalog";
+import { renderMarkdown } from "../../lib/markdown";
+
+export function getStaticPaths() {
+  return loadAllDocs()
+    .filter((doc) => doc.kind === "project")
+    .map((doc) => ({
+      params: { slug: doc.slug.replace(/^projects\//, "") },
+    }));
+}
+
+const slug = Astro.params.slug;
+const doc = getDoc(`projects/${slug}`);
+if (!doc) throw new Error(`Missing project spec: ${slug}`);
+const { html, toc } = await renderMarkdown(doc.body, doc.rel, import.meta.env.BASE_URL);
+---
+
+<Article doc={doc} html={html} toc={toc} section="projects" />

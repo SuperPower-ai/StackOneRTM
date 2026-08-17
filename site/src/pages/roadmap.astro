@@ -1,0 +1,11 @@
+---
+import Article from "../layouts/Article.astro";
+import { getDoc } from "../lib/catalog";
+import { renderMarkdown } from "../lib/markdown";
+
+const doc = getDoc("roadmap");
+if (!doc) throw new Error("Missing roadmap file.");
+const { html, toc } = await renderMarkdown(doc.body, doc.rel, import.meta.env.BASE_URL);
+---
+
+<Article doc={doc} html={html} toc={toc} section="roadmap" />

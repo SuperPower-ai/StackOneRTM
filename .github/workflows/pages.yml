@@ -1,0 +1,61 @@
+name: Deploy textbook site
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - name: Resolve Pages URL
+        id: pages
+        run: |
+          NAME="${GITHUB_REPOSITORY#*/}"
+          OWNER="${GITHUB_REPOSITORY%/*}"
+          if [[ "$NAME" == *.github.io ]]; then
+            echo "base=/" >> "$GITHUB_OUTPUT"
+            echo "site=https://${NAME}" >> "$GITHUB_OUTPUT"
+          else
+            echo "base=/${NAME}/" >> "$GITHUB_OUTPUT"
+            echo "site=https://${OWNER}.github.io" >> "$GITHUB_OUTPUT"
+          fi
+      - run: npm ci
+        working-directory: site
+      - run: npx astro telemetry disable
+        working-directory: site
+      - name: Build
+        working-directory: site
+        env:
+          SITE_URL: ${{ steps.pages.outputs.site }}
+          BASE_PATH: ${{ steps.pages.outputs.base }}
+        run: npm run build
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

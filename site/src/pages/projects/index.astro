@@ -1,0 +1,20 @@
+---
+import Article from "../../layouts/Article.astro";
+import { getDoc, loadAllDocs } from "../../lib/catalog";
+import { renderMarkdown } from "../../lib/markdown";
+
+const doc = getDoc("projects");
+if (!doc) throw new Error("Missing project requirements index.");
+const { html, toc } = await renderMarkdown(doc.body, doc.rel, import.meta.env.BASE_URL);
+const base = import.meta.env.BASE_URL;
+const cards = loadAllDocs()
+  .filter((item) => item.kind === "project")
+  .map(
+    (item) =>
+      `<li><a href="${base}${item.slug}/"><strong>${item.title}</strong><br /><small>${item.slug.replace("projects/", "")}</small></a></li>`,
+  )
+  .join("");
+const extra = `<h2 id="open-a-specification">Open a specification</h2><ul class="spec-list">${cards}</ul>`;
+---
+
+<Article doc={doc} html={html + extra} toc={toc} section="projects" />

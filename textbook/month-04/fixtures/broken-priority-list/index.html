@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Priority list</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to main</a>
+    <header>
+      <p class="brand">Priority list</p>
+      <p>
+        Open tasks: <span id="open-count">—</span>
+        <button type="button" id="refresh-count">Refresh count</button>
+      </p>
+    </header>
+    <main id="main">
+      <h1>Tasks</h1>
+      <form id="add-form">
+        <label for="title">Title</label>
+        <input id="title" name="title" required autocomplete="off">
+        <label for="priority">Priority</label>
+        <select id="priority" name="priority">
+          <option value="1">1 (highest)</option>
+          <option value="2" selected>2</option>
+          <option value="3">3 (lowest)</option>
+        </select>
+        <button type="submit">Add</button>
+      </form>
+      <p>
+        <label for="filter">Show</label>
+        <select id="filter">
+          <option value="all">All</option>
+          <option value="1">Priority 1</option>
+          <option value="2">Priority 2</option>
+          <option value="3">Priority 3</option>
+        </select>
+        <button type="button" id="sort">Sort by priority</button>
+        <button type="button" id="clear-done">Clear completed</button>
+      </p>
+      <ul id="list"></ul>
+    </main>
+    <script type="module" src="./js/main.js"></script>
+  </body>
+</html>

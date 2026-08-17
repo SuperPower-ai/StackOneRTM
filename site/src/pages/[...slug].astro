@@ -1,0 +1,22 @@
+---
+import Article from "../layouts/Article.astro";
+import { getDoc, loadAllDocs, neighbors } from "../lib/catalog";
+import { renderMarkdown } from "../lib/markdown";
+
+export function getStaticPaths() {
+  return loadAllDocs()
+    .filter((doc) => doc.kind === "month" || doc.kind === "day")
+    .map((doc) => ({
+      params: { slug: doc.slug },
+      props: { slug: doc.slug },
+    }));
+}
+
+const { slug } = Astro.props;
+const doc = getDoc(slug);
+if (!doc) throw new Error(`Missing textbook page: ${slug}`);
+const { html, toc } = await renderMarkdown(doc.body, doc.rel, import.meta.env.BASE_URL);
+const { prev, next } = neighbors(slug);
+---
+
+<Article doc={doc} html={html} toc={toc} prev={prev} next={next} />
