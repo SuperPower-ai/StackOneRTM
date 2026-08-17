@@ -14,13 +14,13 @@ const href = (slug: string) => `${base}${slug}/`;
 <nav class="pager" aria-label="Adjacent chapters">
   {prev ? (
     <a href={href(prev.slug)}>
-      <span>Previous</span>
+      <span>Previous chapter</span>
       {prev.title}
     </a>
   ) : <span class="pager-spacer"></span>}
   {next && (
     <a class="next" href={href(next.slug)}>
-      <span>Up next</span>
+      <span>Open next</span>
       {next.title}
     </a>
   )}

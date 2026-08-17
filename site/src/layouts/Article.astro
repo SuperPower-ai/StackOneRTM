@@ -8,7 +8,7 @@ import WeekStrip from "../components/WeekStrip.astro";
 import ChapterGrid from "../components/ChapterGrid.astro";
 import type { DocRecord } from "../lib/catalog";
 import type { TocItem } from "../lib/markdown";
-import { buildNav, readingMinutes } from "../lib/catalog";
+import { buildNav, firstDayOfMonth, readingMinutes } from "../lib/catalog";
 import { monthInfo } from "../data/months";
 
 type Props = {
@@ -42,6 +42,7 @@ if (doc.day) crumbs.push({ href: withBase(doc.slug), label: `Day ${doc.day}` });
 
 const monthDays = monthNav?.weeks.flatMap((week) => week.days) ?? [];
 const dayIndex = monthDays.findIndex((day) => day.slug === doc.slug);
+const startMonth = doc.month ? firstDayOfMonth(doc.month) : undefined;
 const place =
   doc.week && doc.day
     ? `Week ${doc.week} · Day ${doc.day}`
@@ -86,6 +87,14 @@ const chips = [
             <div class="chips">
               {chips.map((chip) => <span class="chip">{chip}</span>)}
             </div>
+          )}
+          {doc.kind === "month" && startMonth && (
+            <p class="month-start">
+              <a class="btn btn-primary" href={withBase(startMonth)}>Start Day 1 of this month</a>
+              {monthDays.length > 0 && (
+                <span class="month-start-meta">{monthDays.length} days in print</span>
+              )}
+            </p>
           )}
           {monthNav && <WeekStrip weeks={monthNav.weeks} currentSlug={doc.slug} />}
         </header>

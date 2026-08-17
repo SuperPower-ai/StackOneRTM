@@ -179,6 +179,13 @@ a:hover {
   color: var(--ink);
 }
 
+.search-open {
+  border: 1px solid var(--line-strong);
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.45) inset;
+}
+
 .search-open kbd {
   font-family: var(--mono);
   font-size: 0.72rem;
@@ -186,7 +193,7 @@ a:hover {
   padding: 0.05rem 0.35rem;
   border-radius: 0.3rem;
   margin-left: 0.35rem;
-  color: var(--muted);
+  color: var(--ink-soft);
 }
 
 .icon-btn {
@@ -306,8 +313,16 @@ a:hover {
 }
 
 .forthcoming {
-  opacity: 0.55;
-  pointer-events: none;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.nav-month.is-soon {
+  opacity: 1;
+}
+
+.nav-month.is-soon summary {
+  cursor: default;
 }
 
 .article-wrap {
@@ -576,11 +591,33 @@ a:hover {
   border-radius: 0.9rem;
   padding: 0.9rem 1rem;
   background: var(--paper);
+  box-shadow: 0 8px 22px rgba(26, 26, 26, 0.05);
+  transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
 }
 
 .pager a:hover {
   border-color: var(--signal);
   background: var(--signal-soft);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.pager .next {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+  text-align: right;
+  grid-column: 2;
+}
+
+.pager .next span {
+  color: color-mix(in srgb, var(--paper) 72%, transparent);
+}
+
+.pager .next:hover {
+  background: var(--signal);
+  border-color: var(--signal);
+  color: #fff;
 }
 
 .pager span {
@@ -590,11 +627,6 @@ a:hover {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   margin-bottom: 0.25rem;
-}
-
-.pager .next {
-  text-align: right;
-  grid-column: 2;
 }
 
 .toc ol {
@@ -675,17 +707,24 @@ a:hover {
   gap: 0.35rem;
   text-decoration: none;
   border-radius: 999px;
-  padding: 0.72rem 1.15rem;
-  font-weight: 650;
+  padding: 0.78rem 1.2rem;
+  font-weight: 700;
   font-size: 0.95rem;
   border: 1px solid transparent;
   cursor: pointer;
   font-family: inherit;
+  line-height: 1.1;
+  transition: transform 0.15s ease, filter 0.15s ease, background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
 }
 
 .btn-primary {
   background: var(--signal);
   color: #fff;
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--signal) 32%, transparent);
 }
 
 .btn-primary:hover {
@@ -696,6 +735,7 @@ a:hover {
 .btn-secondary {
   background: var(--ink);
   color: var(--paper);
+  box-shadow: 0 12px 28px rgba(26, 26, 26, 0.18);
 }
 
 .btn-secondary:hover {
@@ -704,9 +744,10 @@ a:hover {
 }
 
 .btn-ghost {
-  border-color: var(--line-strong);
+  border-color: var(--ink);
   color: var(--ink);
   background: var(--paper);
+  box-shadow: 0 8px 20px rgba(26, 26, 26, 0.06);
 }
 
 .btn-ghost:hover {
@@ -760,11 +801,11 @@ a:hover {
   min-height: 12.5rem;
   padding: 1.1rem 1.15rem 1.05rem;
   border-radius: 1.2rem;
-  border: 1px solid var(--line);
+  border: 1px solid var(--line-strong);
   background: var(--paper);
   text-decoration: none;
   color: inherit;
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4) inset;
+  box-shadow: 0 10px 28px rgba(26, 26, 26, 0.05);
   cursor: pointer;
 }
 
@@ -932,8 +973,8 @@ a:hover {
   .toc {
     display: none;
   }
-  .shelf-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  .hide-sm {
+    display: none;
   }
 }
 
@@ -994,9 +1035,15 @@ a:hover {
 }
 
 .continue-link {
-  font-weight: 650;
-  background: var(--signal-soft);
-  color: var(--signal-ink);
+  font-weight: 700;
+  background: var(--signal) !important;
+  color: #fff !important;
+  box-shadow: 0 8px 18px color-mix(in srgb, var(--signal) 30%, transparent);
+}
+
+.continue-link:hover {
+  filter: brightness(1.06);
+  color: #fff !important;
 }
 
 .nav-num.is-live {
@@ -1017,7 +1064,6 @@ a:hover {
 }
 
 .forthcoming {
-  opacity: 1;
   color: var(--muted);
 }
 
@@ -1048,7 +1094,7 @@ a:hover {
 
 .shelf-grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(13.8rem, 1fr));
   gap: 0.75rem;
 }
 
@@ -1157,6 +1203,146 @@ a:hover {
   white-space: nowrap;
 }
 
+.search-launch {
+  appearance: none;
+  -webkit-appearance: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: min(100%, 34rem);
+  margin-top: 0.15rem;
+  padding: 0.88rem 1.05rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink-soft);
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+  box-shadow: 0 10px 28px rgba(26, 26, 26, 0.07);
+}
+
+.search-launch:hover {
+  border-color: var(--signal);
+  color: var(--ink);
+  background: color-mix(in srgb, var(--paper) 88%, #fff);
+}
+
+.search-launch kbd {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 0.35rem;
+  padding: 0.12rem 0.42rem;
+  color: var(--ink);
+}
+
+.month-jumps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.35rem;
+}
+
+.jump-pill {
+  width: 2.45rem;
+  height: 2.45rem;
+  display: grid;
+  place-items: center;
+  border-radius: 0.75rem;
+  text-decoration: none;
+  font-weight: 700;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  background: var(--signal);
+  color: #fff;
+  box-shadow: 0 8px 18px color-mix(in srgb, var(--signal) 28%, transparent);
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.jump-pill:hover {
+  color: #fff;
+  transform: translateY(-2px);
+  filter: brightness(1.06);
+}
+
+.jump-pill.is-later {
+  background: transparent;
+  color: var(--muted);
+  border: 1px dashed var(--line-strong);
+  box-shadow: none;
+  cursor: default;
+}
+
+.jump-hint {
+  margin: 0.15rem 0 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.resume-box {
+  margin-top: 0.2rem;
+  padding: 1rem 1.05rem 1.05rem;
+  border-radius: 1.05rem;
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+}
+
+.resume-label {
+  margin: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--signal-ink);
+}
+
+.resume-box [data-resume-title] {
+  margin: 0.35rem 0 0;
+  font-family: var(--serif);
+  font-size: 1.12rem;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.resume-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+}
+
+.month-start {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.85rem;
+  margin: 1.05rem 0 0;
+  font-family: var(--sans);
+}
+
+.month-start-meta {
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.day-open {
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-style: normal;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: var(--signal);
+  color: #fff;
+  border-radius: 999px;
+  padding: 0.28rem 0.65rem;
+}
+
+.chapter-week a:hover .day-open {
+  filter: brightness(1.06);
+}
+
 .search-hint {
   margin: 0 0 0.65rem;
   color: var(--muted);
@@ -1196,16 +1382,18 @@ a:hover {
 }
 
 .week-strip a {
-  width: 2rem;
-  height: 2rem;
+  width: 2.05rem;
+  height: 2.05rem;
   display: grid;
   place-items: center;
   text-decoration: none;
-  color: var(--ink-soft);
-  border: 1px solid var(--line);
+  color: var(--ink);
+  border: 1px solid var(--line-strong);
   border-radius: 999px;
   font-size: 0.8rem;
+  font-weight: 650;
   background: var(--paper);
+  box-shadow: 0 1px 2px rgba(26, 26, 26, 0.05);
 }
 
 .week-strip a:hover,
@@ -1250,14 +1438,16 @@ a:hover {
 
 .chapter-week a {
   display: grid;
-  grid-template-columns: 4.2rem 1fr;
+  grid-template-columns: 4.2rem minmax(0, 1fr) auto;
+  align-items: center;
   gap: 0.7rem;
   text-decoration: none;
   color: inherit;
-  border: 1px solid var(--line);
+  border: 1px solid var(--line-strong);
   border-radius: 0.85rem;
   padding: 0.65rem 0.8rem;
-  background: color-mix(in srgb, var(--paper-2) 55%, var(--paper));
+  background: var(--paper);
+  box-shadow: 0 6px 16px rgba(26, 26, 26, 0.04);
 }
 
 .chapter-week a:hover {
@@ -1456,8 +1646,12 @@ a:hover {
   .shelf-card,
   .week-strip a,
   .chapter-week a,
+  .jump-pill,
+  .btn,
+  .pager a,
   .sidebar {
     transition: none;
+    transform: none;
   }
 }
 

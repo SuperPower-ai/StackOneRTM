@@ -109,10 +109,11 @@ function bindSearch() {
 
   const render = (query: string) => {
     const q = query.trim().toLowerCase();
-    const hits = (q
-      ? catalog.filter((item) => `${item.title} ${item.kicker || ""} ${item.href}`.toLowerCase().includes(q))
-      : catalog.filter((item) => item.kind === "month")
-    ).slice(0, 12);
+    const hits = (
+      q
+        ? catalog.filter((item) => `${item.title} ${item.kicker || ""} ${item.href}`.toLowerCase().includes(q))
+        : catalog.filter((item) => item.kind === "month")
+    ).slice(0, 18);
     const kindLabel: Record<string, string> = {
       month: "Month",
       day: "Day",
@@ -124,7 +125,7 @@ function bindSearch() {
         (hit) =>
           `<li><a href="${base}${hit.href}/"><strong>${hit.title}</strong><small>${hit.kicker || kindLabel[hit.kind] || hit.kind}</small></a></li>`,
       )
-      .join("") || `<li class="search-empty">Nothing matches yet. Try “join”, “session”, or “Month 10”.</li>`;
+      .join("") || `<li class="search-empty">Nothing matches yet. Try “postgres”, “session”, or “Month 14”.</li>`;
   };
 
   const open = () => {
@@ -177,21 +178,23 @@ function rememberPlace() {
 
 function showContinue() {
   const links = document.querySelectorAll<HTMLAnchorElement>("[data-continue-link], [data-home-continue]");
+  const resumeTitle = document.querySelector("[data-resume-title]");
   links.forEach((link) => {
     link.hidden = false;
+    link.removeAttribute("hidden");
     link.removeAttribute("aria-disabled");
+    link.removeAttribute("disabled");
   });
   try {
     const raw = localStorage.getItem("fsm-continue");
     if (!raw) return;
     const saved = JSON.parse(raw) as { slug: string; title: string };
     if (!saved.slug) return;
+    const href = `${base}${saved.slug.replace(/^\/+/, "")}/`;
     links.forEach((link) => {
-      link.href = `${base}${saved.slug.replace(/^\/+/, "")}/`;
-      if (link.hasAttribute("data-home-continue")) {
-        link.textContent = `Continue: ${saved.title}`;
-      }
+      link.href = href;
     });
+    if (resumeTitle) resumeTitle.textContent = saved.title;
   } catch {
     /* keep the Day 1 fallback */
   }

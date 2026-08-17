@@ -17,6 +17,8 @@ const dayCount = docs.filter((d) => d.kind === "day").length;
 const liveMonths = MONTHS.filter((month) => isPublished(month.number));
 const laterMonths = MONTHS.filter((month) => !isPublished(month.number));
 const newest = liveMonths.filter((month) => month.number >= 10);
+const latest = liveMonths.at(-1);
+const latestHref = latest ? `${base}${latest.slug}/` : start;
 const phases = [...new Set(liveMonths.map((month) => month.phase))];
 
 const hrefFor = (monthNumber: number, slug: string) => {
@@ -36,24 +38,48 @@ const hrefFor = (monthNumber: number, slug: string) => {
         <p class="eyebrow">A calm daily textbook · 18 months</p>
         <h1>Study like a course. Read it like a well-made book.</h1>
         <p class="lede">
-          One URL is one study day. Months 1–14 are on the shelf and ready to open —
-          SQL through tests landed with this edition. Projects stay in the specifications.
+          One URL is one study day. Months 1–14 are on the shelf — SQL, the ORM,
+          the full stack, security, and tests. Every control below is live.
         </p>
         <div class="cta-row">
           <a class="btn btn-primary" href={start}>Start with Day 1</a>
           <a class="btn btn-secondary" data-home-continue href={start}>Continue reading</a>
-          <a class="btn btn-ghost" href={`${base}month-10/`}>Open Month 10</a>
-          <button class="btn btn-ghost" type="button" data-search-open>Search the book</button>
         </div>
+        <button class="search-launch" type="button" data-search-open>
+          <span>Search any day, month, or project</span>
+          <kbd>/</kbd>
+        </button>
+        <nav class="month-jumps" aria-label="Open a month that is in print">
+          {liveMonths.map((month) => (
+            <a class="jump-pill" href={`${base}${month.slug}/`} title={month.title}>
+              {String(month.number).padStart(2, "0")}
+            </a>
+          ))}
+          {laterMonths.map((month) => (
+            <span class="jump-pill is-later" title={`${month.title} — not written yet`}>
+              {String(month.number).padStart(2, "0")}
+            </span>
+          ))}
+        </nav>
+        <p class="jump-hint">
+          Blue pills open today. Pale numbers are Months 15–18 — still being written, not broken buttons.
+        </p>
       </div>
       <aside class="desk-card" aria-label="Your place in the book">
         <p class="desk-kicker">On the shelf now</p>
         <h2>{liveMonths.length} months you can open today.</h2>
         <p>
-          {dayCount} daily chapters are in print. Months 15–18 are listed below as the
-          path ahead — they are not broken buttons; they are not written yet.
+          {dayCount} daily chapters are in print. The newest volume is
+          Month {latest?.number}: {latest?.title}.
         </p>
-        <a class="btn btn-primary" href={`${base}month-01/`}>Browse Month 1</a>
+        <div class="resume-box">
+          <p class="resume-label">Your bookmark</p>
+          <p data-resume-title>Day 1 · the machine on your desk</p>
+          <div class="resume-actions">
+            <a class="btn btn-primary" data-home-continue href={start}>Continue reading</a>
+            <a class="btn btn-ghost" href={latestHref}>Open Month {latest?.number}</a>
+          </div>
+        </div>
         <ul class="desk-points">
           <li>Press <kbd>/</kbd> to search any day</li>
           <li>Continue always works — Day 1 until you read a page</li>
@@ -76,7 +102,7 @@ const hrefFor = (monthNumber: number, slug: string) => {
           <h2 class="section-title" id="newest">Months 10–14 are ready</h2>
         </div>
         <p class="section-lead shelf-lead">
-          PostgreSQL, SQLAlchemy, full-stack wiring, security, and tests. Each card is a real link.
+          PostgreSQL, SQLAlchemy, full-stack wiring, security, and tests. Each card is a real chapter — tap and read.
         </p>
       </div>
       <div class="shelf-grid">
@@ -123,7 +149,7 @@ const hrefFor = (monthNumber: number, slug: string) => {
 
     <h2 class="section-title" id="months">All months in print</h2>
     <p class="section-lead">
-      Every card below is clickable. Open a month when the previous gate is true — the link still works so you can look ahead in the book.
+      Every card below is an open door. Study in order so the gate stays honest — you may still look ahead in the book.
     </p>
     {
       phases.map((phase) => (
@@ -138,7 +164,7 @@ const hrefFor = (monthNumber: number, slug: string) => {
                   <h3>{month.title}</h3>
                   <p>{month.blurb}</p>
                   <span class="card-foot">
-                    <span class="meta">{chapters} days</span>
+                    <span class="meta">{chapters} days · ready</span>
                     <span class="card-btn">Open</span>
                   </span>
                 </a>
@@ -152,7 +178,7 @@ const hrefFor = (monthNumber: number, slug: string) => {
     <section class="later" aria-labelledby="later">
       <h2 class="section-title" id="later">Still being written</h2>
       <p class="section-lead">
-        These are the next four months in the program. They are not inactive copies of the cards above — there is no textbook file for them yet.
+        Months 15–18 are the path ahead. They are listed so you can see the program — they are not grey copies of the cards above.
       </p>
       <ol class="later-list">
         {laterMonths.map((month) => (
@@ -162,7 +188,7 @@ const hrefFor = (monthNumber: number, slug: string) => {
               <strong>{month.title}</strong>
               <p>{month.blurb}</p>
             </div>
-            <span class="later-tag">{month.phase}</span>
+            <span class="later-tag">Later · {month.phase}</span>
           </li>
         ))}
       </ol>
